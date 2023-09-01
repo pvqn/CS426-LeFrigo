@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "11763551091",
+    "project_id": "recipe-app-57f2c",
+    "storage_bucket": "recipe-app-57f2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11763551091:android:5f063e0598039f50511306",
+        "android_client_info": {
+          "package_name": "com.example.le_frigo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "11763551091-ifmn60qvei37gc9t8ucebufbo50icb2t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfx4fRsp24lDcgAb-3r86DQ2Jb6YxnDUc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11763551091-ifmn60qvei37gc9t8ucebufbo50icb2t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "11763551091-5ltd2msn28i9tai728csvk9e41f2h9j4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.leFrigo.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
