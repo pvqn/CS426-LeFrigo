@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -63,7 +60,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '11763551091',
     projectId: 'recipe-app-57f2c',
     storageBucket: 'recipe-app-57f2c.appspot.com',
-    iosClientId: '11763551091-d390494k74v10gckksgh6h7etagkstqk.apps.googleusercontent.com',
+    iosClientId:
+        '11763551091-d390494k74v10gckksgh6h7etagkstqk.apps.googleusercontent.com',
     iosBundleId: 'com.example.leFrigo',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDmpF8OljSzpg3TYYHlTuIL-QxLzr0yoYo',
+    authDomain: 'recipe-app-57f2c.firebaseapp.com',
+    databaseURL:
+        'https://recipe-app-57f2c-default-rtdb.asia-southeast1.firebasedatabase.app',
+    projectId: 'recipe-app-57f2c',
+    storageBucket: 'recipe-app-57f2c.appspot.com',
+    messagingSenderId: '11763551091',
+    appId: '1:11763551091:ios:57ac1c5166525ce4511306',
   );
 }
