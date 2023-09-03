@@ -1,4 +1,4 @@
-package com.example.le_frigo
+package com.example.cs426final
 
 import io.flutter.embedding.android.FlutterActivity
 
