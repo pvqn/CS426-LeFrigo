@@ -10,11 +10,38 @@ dependencies:
   firebase_core: ^2.15.1
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.5
+  intl: ^0.17.0
+  country_picker: ^2.0.21
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: KaiseiOpti
+      fonts:
+        - asset: fonts/KaiseiOpti-Regular.ttf
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter-Medium.ttf
+    - family: InterBold
+      fonts:
+        - asset: fonts/Inter-Bold.ttf
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf        
+  assets:
+    - assets/welcomeImg1.svg
+    - assets/logo.svg
+    - assets/welcomeImg.png
+    - assets/decor1.svg
+    - assets/google.svg
+    - assets/google.png
+
+
+
