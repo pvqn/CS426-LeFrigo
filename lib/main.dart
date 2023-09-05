@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:cs426final/category.dart';
+import 'package:cs426final/navigation_bar.dart';
+import 'package:cs426final/select_category.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,7 @@ Future main() async {
 
   // If the default initialization fails or you want to use custom options, fall back to custom options
 
-  runApp(Category());
+  runApp(SelectCategoryPage());
 }
 
 class MainApp extends StatelessWidget {
