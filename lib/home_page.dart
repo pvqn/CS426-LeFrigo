@@ -17,81 +17,73 @@ class _HomePageState extends State<HomePage> {
         ),
         Container(
           width: 344,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Bring the',
-                            style: TextStyle(
-                                fontFamily: 'KaiseiOpti',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF202A44)
-                                // Set text direction to left-to-right
-                                ),
-                          ),
-                          Text(
-                            'restaurant',
-                            style: TextStyle(
-                                fontFamily: 'KaiseiOpti',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF202A44)
-                                // Set text direction to left-to-right
-                                ),
-                          ),
-                          Text(
-                            'to your home',
-                            style: TextStyle(
-                                fontFamily: 'KaiseiOpti',
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF202A44)
-                                // Set text direction to left-to-right
-                                ),
-                          ),
-                        ]),
-                  ),
-                ),
-                Column(
-                    // Align to center-right
+          child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Expanded(
+              child: Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey.withOpacity(0.5),
-                            width: 2.0,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 2),
+                      Text(
+                        'Bring the',
+                        style: TextStyle(
+                            fontFamily: 'KaiseiOpti',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF202A44)
+                            // Set text direction to left-to-right
                             ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.notifications_outlined,
-                          color: Colors.black.withOpacity(0.5),
-                          size: 30,
-                        ),
+                      ),
+                      Text(
+                        'restaurant',
+                        style: TextStyle(
+                            fontFamily: 'KaiseiOpti',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF202A44)
+                            // Set text direction to left-to-right
+                            ),
+                      ),
+                      Text(
+                        'to your home',
+                        style: TextStyle(
+                            fontFamily: 'KaiseiOpti',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF202A44)
+                            // Set text direction to left-to-right
+                            ),
                       ),
                     ]),
-              ]),
+              ),
+            ),
+            Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.5),
+                    width: 2.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.black.withOpacity(0.5),
+                  size: 30,
+                ),
+              ),
+            ]),
+          ]),
         ),
         SizedBox(
           height: 25,

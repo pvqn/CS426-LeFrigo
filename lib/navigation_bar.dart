@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cs426final/favorite_page.dart';
 import 'package:cs426final/home_page.dart';
+import 'package:cs426final/fridge.dart';
+import 'package:cs426final/profile.dart';
 
 class MyNavigationBar extends StatelessWidget {
   const MyNavigationBar({Key? key}) : super(key: key);
@@ -18,14 +20,14 @@ class MyNavigationBarApp extends StatefulWidget {
 }
 
 class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
-  int _currentIndex = 3;
+  int _currentIndex = 4;
 
   final screens = [
     HomePage(),
-    SecondScreen(),
+    FridgePage(),
     ThirdScreen(),
     FavoritePage(),
-    FifthScreen()
+    ProfilePage()
   ];
   @override
   Widget build(BuildContext context) {
@@ -124,15 +126,6 @@ class SecondScreen extends StatelessWidget {
 }
 
 class ThirdScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Profile Screen'),
-    );
-  }
-}
-
-class FourthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(

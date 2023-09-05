@@ -11,7 +11,7 @@ class dummy {
 class MyGridView extends StatelessWidget {
   final List<dummy> items = [
     dummy(),
-    dummy(), dummy()
+    dummy(), dummy(), dummy(), dummy(), dummy(), dummy(), dummy()
     // Add more items as needed
   ];
 
