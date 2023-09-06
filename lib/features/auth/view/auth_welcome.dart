@@ -1,5 +1,6 @@
-import 'package:cs426final/config/colors.dart';
+import 'package:cs426final/config/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,7 +54,7 @@ class WelcomePage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 100),
             child: InkWell(
-              onTap: () => context.go('/login'),
+              onTap: () => context.go('/auth/login'),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: size.width - 2 * 20,

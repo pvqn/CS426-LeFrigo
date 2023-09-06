@@ -1,7 +1,9 @@
-import 'dart:developer';
+import 'dart:developer' as developer;
 
+import 'package:cs426final/config/constants/app_colors.dart';
+import 'package:cs426final/features/auth/provider/auth_provider.dart';
 import 'package:flutter/gestures.dart';
-import 'package:cs426final/config/colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +17,19 @@ class LogInPage extends ConsumerStatefulWidget {
 }
 
 class _LogInPageState extends ConsumerState<LogInPage> {
-  String? email;
-  String? password;
+  String? _email;
+  String? _password;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(authNotifierProvider.notifier);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final auth = ref.watch(authNotifierProvider.notifier);
+
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
@@ -33,68 +43,77 @@ class _LogInPageState extends ConsumerState<LogInPage> {
                     Icons.arrow_back_ios,
                     size: 23,
                   ),
-                  onPressed: () => context.go('/'),
+                  onPressed: () => context.go('/auth'),
                 )),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const _SloganWidget(),
-                const SizedBox(height: 56),
-                _CustomTextInput(
-                  title: 'Email',
-                  onChange: (email) => setState(() => this.email = email),
-                  placeHolder: 'Enter your email',
-                ),
-                const SizedBox(height: 17),
-                _CustomTextInput(
-                  title: 'Password',
-                  isPassword: true,
-                  onChange: (password) =>
-                      setState(() => this.password = password),
-                  placeHolder: 'min. 8 characters',
-                ),
-                const SizedBox(height: 55),
-                GestureDetector(
-                  onTap: null,
-                  child: Container(
-                    width: double.infinity,
-                    height: 40,
-                    margin: const EdgeInsets.symmetric(horizontal: 25),
-                    decoration: const BoxDecoration(
-                      color: AppColors.orange,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Log In",
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.white,
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const _SloganWidget(),
+                  const SizedBox(height: 56),
+                  _CustomTextInput(
+                    title: 'Email',
+                    onChange: (email) => setState(() => _email = email),
+                    placeHolder: 'Enter your email',
+                  ),
+                  const SizedBox(height: 17),
+                  _CustomTextInput(
+                    title: 'Password',
+                    isPassword: true,
+                    onChange: (password) =>
+                        setState(() => _password = password),
+                    placeHolder: 'min. 8 characters',
+                  ),
+                  const SizedBox(height: 55),
+                  GestureDetector(
+                    onTap: () {
+                      if (_email != null && _password != null) {
+                        auth.login(_email!, _password!);
+                      } else {
+                        developer.log('invalid info');
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 40,
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      decoration: const BoxDecoration(
+                        color: AppColors.orange,
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Log In",
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                RichText(
-                  text: TextSpan(
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15,
-                      color: Colors.black,
+                  const SizedBox(height: 20),
+                  RichText(
+                    text: TextSpan(
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        const TextSpan(text: 'Don\'t have an account yet? '),
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: const TextStyle(color: AppColors.orange),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.go('/auth/signup'),
+                        )
+                      ],
                     ),
-                    children: [
-                      const TextSpan(text: 'Don\'t have an account yet? '),
-                      TextSpan(
-                        text: 'Sign Up',
-                        style: const TextStyle(color: AppColors.orange),
-                        recognizer: TapGestureRecognizer()..onTap = null,
-                      )
-                    ],
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -104,7 +123,7 @@ class _LogInPageState extends ConsumerState<LogInPage> {
 }
 
 class _SloganWidget extends StatelessWidget {
-  const _SloganWidget({super.key});
+  const _SloganWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -143,12 +162,12 @@ class _CustomTextInput extends StatefulWidget {
   final String? placeHolder;
 
   const _CustomTextInput({
-    super.key,
+    Key? key,
     this.isPassword = false,
     required this.title,
     this.placeHolder = 'Input text here...',
     this.onChange,
-  });
+  }) : super(key: key);
 
   @override
   State<_CustomTextInput> createState() => _CustomTextInputState();
