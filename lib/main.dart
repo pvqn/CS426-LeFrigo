@@ -1,8 +1,10 @@
+import 'package:cs426final/forgot_password/password.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cs426final/navigation_bar.dart';
 import 'package:cs426final/category.dart';
+import 'package:cs426final/forgot_password/verify_code.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +16,7 @@ Future main() async {
 
   // If the default initialization fails or you want to use custom options, fall back to custom options
 
-  runApp(Category());
+  runApp(VerifyCode());
 }
 
 class MainApp extends StatelessWidget {

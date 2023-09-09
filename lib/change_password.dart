@@ -84,7 +84,7 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                 height: 50,
               ),
               Container(
-                  width: 310,
+                  margin: EdgeInsets.only(left: 20, right: 29),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,9 +135,9 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                       ),
                     ],
                   )),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               Container(
-                  width: 310,
+                  margin: EdgeInsets.only(left: 20, right: 29),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,9 +188,9 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                       ),
                     ],
                   )),
-              SizedBox(height: 16),
+              SizedBox(height: 25),
               Container(
-                  width: 310,
+                  margin: EdgeInsets.only(left: 20, right: 29),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,6 +240,36 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                         ),
                       ),
                     ],
+                  )),
+              SizedBox(
+                height: 40,
+              ),
+              Container(
+                  margin: EdgeInsets.only(left: 20, right: 29),
+                  width: double.infinity,
+                  height: 43,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your button's onPressed behavior here
+                    },
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(customColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              25.0), // Adjust the radius as needed
+                        ),
+                      ),
+                    ),
                   )),
             ],
           ),
