@@ -1,19 +1,9 @@
-import 'package:cs426final/views/routes/routes.dart';
-import 'package:flutter/material.dart';
+import 'package:cs426final/app/app.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'LeFrigo',
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
-    );
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = const AppBlocObserver();
+  runApp(const LeFrigo());
 }

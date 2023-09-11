@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user_full.g.dart';
+part 'user.g.dart';
 
 class ApiDateTimeConverter implements JsonConverter<DateTime?, String?> {
   const ApiDateTimeConverter();
@@ -17,8 +17,8 @@ class ApiDateTimeConverter implements JsonConverter<DateTime?, String?> {
 
 @immutable
 @JsonSerializable()
-class UserFull extends Equatable {
-  const UserFull({
+class User extends Equatable {
+  const User({
     required this.id,
     required this.email,
     this.avatar,
@@ -52,12 +52,12 @@ class UserFull extends Equatable {
   @ApiDateTimeConverter()
   final DateTime? createdAt;
 
-  factory UserFull.fromJson(Map<String, dynamic> json) =>
-      _$UserFullFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) =>
+      _$UserFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserFullToJson(this);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  UserFull copyWith({
+  User copyWith({
     String? id,
     String? email,
     String? avatar,
@@ -68,7 +68,7 @@ class UserFull extends Equatable {
     List<String>? likes,
     DateTime? createdAt,
   }) {
-    return UserFull(
+    return User(
       id: id ?? this.id,
       email: email ?? this.email,
       avatar: avatar ?? this.avatar,
@@ -81,7 +81,7 @@ class UserFull extends Equatable {
     );
   }
 
-  static const guest = UserFull(
+  static const guest = User(
     id: 'guest',
     email: 'guest',
     avatar: null,

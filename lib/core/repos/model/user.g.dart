@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_full.dart';
+part of 'user.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserFull _$UserFullFromJson(Map<String, dynamic> json) => UserFull(
+User _$UserFromJson(Map<String, dynamic> json) => User(
       id: json['_id'] as String,
       email: json['email'] as String,
       avatar: json['avatar'] as String?,
@@ -19,7 +19,7 @@ UserFull _$UserFullFromJson(Map<String, dynamic> json) => UserFull(
           const ApiDateTimeConverter().fromJson(json['created_at'] as String?),
     );
 
-Map<String, dynamic> _$UserFullToJson(UserFull instance) => <String, dynamic>{
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       '_id': instance.id,
       'email': instance.email,
       'avatar': instance.avatar,
