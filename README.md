@@ -1,3 +1,3 @@
-# le_frigo
+# cs426final
 
-A final project for CS486
+A new Flutter project.
