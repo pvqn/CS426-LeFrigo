@@ -1,5 +1,5 @@
-name: cs426final
-description: A new Flutter project.
+name: lefrigo
+description: Final project
 publish_to: 'none'
 version: 0.1.0
 
@@ -7,7 +7,6 @@ environment:
   sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
-  firebase_core: ^2.15.1
   flutter:
     sdk: flutter
 
