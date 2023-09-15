@@ -21,12 +21,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const HomeScreen(),
       );
     },
-    LogInRoute.name: (routeData) {
-      final args = routeData.argsAs<LogInRouteArgs>(
-          orElse: () => const LogInRouteArgs());
+    LoginRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LogInScreen(key: args.key),
+        child: const LoginScreen(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -59,31 +57,17 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [LogInScreen]
-class LogInRoute extends PageRouteInfo<LogInRouteArgs> {
-  LogInRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          LogInRoute.name,
-          args: LogInRouteArgs(key: key),
+/// [LoginScreen]
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'LogInRoute';
+  static const String name = 'LoginRoute';
 
-  static const PageInfo<LogInRouteArgs> page = PageInfo<LogInRouteArgs>(name);
-}
-
-class LogInRouteArgs {
-  const LogInRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'LogInRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

@@ -1,158 +1,129 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/routes/routes.dart';
 import 'package:lefrigo/utils/app_colors.dart';
 
-// @RoutePage()
-// class LogInScreen extends StatelessWidget {
-//   String email = '';
-//   String password = '';
+part 'login_form.dart';
 
-//   LogInScreen({super.key});
+@RoutePage()
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           const _TextWelcome(),
-//           const SizedBox(height: 55),
-//           _UsernameTextInput(email: email),
-//           const SizedBox(height: 15),
-//           _PasswordTextInput(
-//             password: password,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-// class _TextWelcome extends StatelessWidget {
-//   const _TextWelcome({super.key});
+class _LoginScreenState extends State<LoginScreen> {
+  String email = '';
+  String password = '';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 175,
-//       child: Align(
-//         alignment: Alignment.bottomCenter,
-//         child: RichText(
-//           textAlign: TextAlign.center,
-//           text: TextSpan(
-//             text: 'Resume ',
-//             style: GoogleFonts.inter(
-//               fontSize: 24,
-//               fontWeight: FontWeight.bold,
-//               color: AppColors.orange,
-//             ),
-//             children: const [
-//               TextSpan(
-//                   text: 'your\nculinary adventure',
-//                   style: TextStyle(
-//                     color: AppColors.black,
-//                     fontWeight: FontWeight.w600,
-//                   )),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
 
-// class _UsernameTextInput extends StatefulWidget {
-//   _UsernameTextInput({super.key, required this.email});
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const _LoginSlogan(),
+            const SizedBox(height: 55),
+            _EmailInput(
+                onChanged: (email) => setState(() => this.email = email)),
+            const SizedBox(height: 15),
+            _PasswordInput(
+                onChanged: (password) =>
+                    setState(() => this.password = password)),
 
-//   String email;
+            // Login Button
+            const SizedBox(height: 35),
+            Text(
+              'Forgot Password?',
+              style: GoogleFonts.poppins(
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 40),
+                width: double.infinity,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: AppColors.orange,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Center(
+                  child: Text(
+                    'Login',
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            RichText(
+              text: TextSpan(
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+                children: [
+                  const TextSpan(text: 'Don\'t have an account yet? '),
+                  TextSpan(
+                    text: 'Sign Up',
+                    style: const TextStyle(color: AppColors.orange),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap =
+                          () => context.router.replace(const LoginRoute()),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-//   @override
-//   State<_UsernameTextInput> createState() => _UsernameTextInputState();
-// }
+class _LoginSlogan extends StatelessWidget {
+  const _LoginSlogan();
 
-// class _UsernameTextInputState extends State<_UsernameTextInput> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(horizontal: 40),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(
-//             'Email address',
-//             style: GoogleFonts.inter(
-//               fontSize: 14,
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//           const SizedBox(height: 15),
-//           SizedBox(
-//             height: 45,
-//             width: double.infinity,
-//             child: TextField(
-//               onChanged: (value) => widget.email = value,
-//               decoration: InputDecoration(
-//                 contentPadding: const EdgeInsets.only(left: 15),
-//                 hintText: 'Input your email address',
-//                 hintStyle: GoogleFonts.poppins(fontSize: 14),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderSide:
-//                       const BorderSide(color: AppColors.gray, width: 2.0),
-//                   borderRadius:
-//                       BorderRadius.circular(25.0),
-//                 ),
-//                 focusedBorder: OutlineInputBorder(
-//                   borderSide:
-//                       const BorderSide(color: AppColors.black, width: 2.0),
-//                   borderRadius:
-//                       BorderRadius.circular(25.0),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class _PasswordTextInput extends StatefulWidget {
-//   _PasswordTextInput({super.key, required this.password});
-
-//   String password;
-
-//   @override
-//   State<_PasswordTextInput> createState() => _PasswordTextInputState();
-// }
-
-// class _PasswordTextInputState extends State<_PasswordTextInput> {
-//   final _controller = TextEditingController();
-//   bool _isObscure = true;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(horizontal: 40),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(
-//             'Password',
-//             style: GoogleFonts.inter(
-//               fontSize: 14,
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//           const SizedBox(height: 15),
-
-//         ],
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 140,
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            text: 'Resume ',
+            style: GoogleFonts.inter(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.orange,
+            ),
+            children: const [
+              TextSpan(
+                  text: 'your\nculinary adventure',
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.w600,
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

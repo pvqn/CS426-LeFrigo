@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,7 +42,7 @@ class WelcomePage extends StatelessWidget {
           Expanded(
             child: Center(
               child: GestureDetector(
-                onTap: () => context.router.replace(LogInRoute()),
+                onTap: () => context.router.replace(const LoginRoute()),
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   width: double.infinity,

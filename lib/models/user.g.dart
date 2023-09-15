@@ -18,11 +18,3 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       createdAt:
           const ApiDateTimeConverter().fromJson(json['created_at'] as String?),
     );
-
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'email': instance.email,
-      'avatar': instance.avatar,
-      'username': instance.username,
-      'dob': const ApiDateTimeConverter().toJson(instance.dob),
-      'country': instance.country,
-    };

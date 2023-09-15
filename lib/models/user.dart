@@ -6,7 +6,7 @@ import 'package:lefrigo/models/api_datetime_converter.dart';
 part 'user.g.dart';
 
 @immutable
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class User extends Equatable {
   const User({
     required this.id,
@@ -20,7 +20,7 @@ class User extends Equatable {
     this.createdAt,
   });
 
-  @JsonKey(name: '_id', includeToJson: false)
+  @JsonKey(name: '_id')
   final String id;
 
   final String email;
@@ -34,19 +34,15 @@ class User extends Equatable {
 
   final String? country;
 
-  @JsonKey(includeToJson: false)
   final List<String> posts;
 
-  @JsonKey(includeToJson: false)
   final List<String> likes;
 
-  @JsonKey(name: 'created_at', includeToJson: false)
+  @JsonKey(name: 'created_at')
   @ApiDateTimeConverter()
   final DateTime? createdAt;
 
   factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
-
-  Map<String, Object?> toJson() => _$UserToJson(this);
 
   User copyWith({
     String? id,
