@@ -27,6 +27,7 @@ class AuthProviderMessage {
 class AuthProvider extends ChangeNotifier {
   final DioService _dioService;
   final UserService _userService;
+  final AuthService _authService;
   final CredentialService _credentialService;
 
   AuthProviderMessage _currentStatus = const AuthProviderMessage(
@@ -38,6 +39,7 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider()
       : _dioService = getIt<DioService>(),
         _userService = getIt<UserService>(),
+        _authService = getIt<AuthService>(),
         _credentialService = getIt<CredentialService>();
 
   void onAppStarted() async {
@@ -72,7 +74,7 @@ class AuthProvider extends ChangeNotifier {
     );
     notifyListeners();
 
-    final loginRes = await _userService.login(
+    final loginRes = await _authService.login(
       email: email,
       password: password,
     );
@@ -125,7 +127,7 @@ class AuthProvider extends ChangeNotifier {
     );
     notifyListeners();
 
-    final registerRes = await _userService.register(
+    final registerRes = await _authService.register(
       email: email,
       password: password,
     );

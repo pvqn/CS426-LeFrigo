@@ -8,6 +8,10 @@ class ApiEndPoints {
   static const register = '/user/register';
   static String infoById(id) => '/user/$id';
   static const currentUser = '/user/profile';
+  static const updatePassword = '/user/changepassword';
+
+  static const categories = '/categories';
+  static String recipeById(id) => '/recipe/$id';
 }
 
 class DioMessage<T extends Object> {
