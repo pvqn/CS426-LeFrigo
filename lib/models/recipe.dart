@@ -22,7 +22,7 @@ class Recipe {
 
   final Nutrition nutrition;
 
-  final List<Ingredients> ingredients;
+  // final List<Ingredients> ingredients;
 
   final List<String> directions;
 
@@ -37,7 +37,7 @@ class Recipe {
     required this.category,
     required this.details,
     required this.nutrition,
-    required this.ingredients,
+    // required this.ingredients,
     required this.directions,
     required this.imageId,
   });
@@ -49,18 +49,18 @@ class Recipe {
 
 @JsonSerializable()
 class Details {
-  @JsonKey(name: 'Cook Time')
-  final String cookTime;
-  @JsonKey(name: 'Prep Time')
-  final String prepTime;
+  // @JsonKey(name: 'Cook Time')
+  // final String cookTime;
+  // @JsonKey(name: 'Prep Time')
+  // final String prepTime;
   @JsonKey(name: 'Servings')
   final String servings;
   @JsonKey(name: 'Total Time')
   final String totalTime;
 
   Details({
-    required this.cookTime,
-    required this.prepTime,
+    // required this.cookTime,
+    // required this.prepTime,
     required this.servings,
     required this.totalTime,
   });
@@ -97,20 +97,17 @@ class Nutrition {
 
 @JsonSerializable()
 class Ingredients {
-  @JsonKey(name: 'comment')
-  final String comment;
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'quantity')
   final String quantity;
   @JsonKey(name: 'unit')
-  final String unit;
+  final String? unit;
 
   Ingredients({
-    required this.comment,
     required this.name,
     required this.quantity,
-    required this.unit,
+    this.unit,
   });
 
   factory Ingredients.fromJson(Map<String, dynamic> json) =>

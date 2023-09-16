@@ -1,67 +1,62 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:lefrigo/services/get_it.dart';
 
-enum AuthProviderStatus {
-  unknown,
-  loading,
+enum AuthNotifierStatus {
   authenticated,
-  authenticatedFailed,
-  loggedOut,
-  signupSuccess,
-  signupFailed,
+  inauthenticated,
+  unknown,
 }
 
 @immutable
-class AuthProviderMessage {
-  final AuthProviderStatus status;
+class AuthNotifierMessage {
+  final AuthNotifierStatus status;
   final String? message;
 
-  const AuthProviderMessage({
+  const AuthNotifierMessage({
     required this.status,
     this.message,
   });
 }
 
 class AuthProvider extends ChangeNotifier {
-  final DioService _dioService;
-  final UserService _userService;
-  final AuthService _authService;
   final CredentialService _credentialService;
-
-  AuthProviderMessage _currentStatus = const AuthProviderMessage(
-    status: AuthProviderStatus.unknown,
-  );
-
-  AuthProviderMessage get currentStatus => _currentStatus;
+  final AuthService _authService;
+  final UserService _userService;
 
   AuthProvider()
-      : _dioService = getIt<DioService>(),
+      : _authService = getIt<AuthService>(),
+        _credentialService = getIt<CredentialService>(),
         _userService = getIt<UserService>(),
-        _authService = getIt<AuthService>(),
-        _credentialService = getIt<CredentialService>();
+        _currentStatus = const AuthNotifierMessage(
+          status: AuthNotifierStatus.unknown,
+        );
 
-  void onAppStarted() async {
+  AuthNotifierMessage _currentStatus;
+
+  AuthNotifierMessage get currentStatus => _currentStatus;
+
+  Future<void> onAppStarted() async {
     final token = await _credentialService.getToken();
 
-    _dioService.setToken(token ?? "");
-
-    final user = await _userService.getCurrentUser();
-
-    user.fold(
-      (success) => _currentStatus = const AuthProviderMessage(
-        status: AuthProviderStatus.authenticated,
-      ),
-      (failed) async {
-        _currentStatus = const AuthProviderMessage(
-          status: AuthProviderStatus.loggedOut,
-        );
-        _dioService.setToken("");
+    if (token != null) {
+      _authService.token = token;
+      try {
+        await _userService.getCurrentUser();
+      } catch (e) {
+        _authService.token = '';
         await _credentialService.deleteToken();
-      },
-    );
+      }
+    }
 
+    await Future.delayed(const Duration(seconds: 2));
+
+    _currentStatus = _authService.token.isEmpty
+        ? const AuthNotifierMessage(
+            status: AuthNotifierStatus.inauthenticated,
+          )
+        : const AuthNotifierMessage(
+            status: AuthNotifierStatus.authenticated,
+          );
     notifyListeners();
   }
 
@@ -69,52 +64,43 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    _currentStatus = const AuthProviderMessage(
-      status: AuthProviderStatus.loading,
-    );
-    notifyListeners();
+    try {
+      final token = await _authService.login(
+        email: email,
+        password: password,
+      );
 
-    final loginRes = await _authService.login(
-      email: email,
-      password: password,
-    );
+      _authService.token = token;
+      await _credentialService.setToken(token: token);
 
-    loginRes.fold(
-      (success) async {
-        _dioService.setToken(success.data);
-        await _credentialService.setToken(token: success.data);
-        _currentStatus = const AuthProviderMessage(
-          status: AuthProviderStatus.signupSuccess,
-        );
-      },
-      (failed) {
-        _currentStatus = AuthProviderMessage(
-          status: AuthProviderStatus.signupFailed,
-          message: failed.message,
-        );
-      },
-    );
-
-    notifyListeners();
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.authenticated,
+      );
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.inauthenticated,
+        message: e.toString(),
+      );
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<void> logout() async {
-    _currentStatus = const AuthProviderMessage(
-      status: AuthProviderStatus.loading,
-    );
-    notifyListeners();
+    try {
+      await _authService.logout();
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.authenticated,
+        message: e.toString(),
+      );
+    }
 
-    // final logoutRes = await _userService.logout();
-
-    // Whether the logout is success or not,
-    // we always remove the token from the storage.
-    // This means that the user will always be logged out successfully.
-
+    _authService.token = '';
     await _credentialService.deleteToken();
-    _currentStatus = const AuthProviderMessage(
-      status: AuthProviderStatus.loggedOut,
+    _currentStatus = const AuthNotifierMessage(
+      status: AuthNotifierStatus.inauthenticated,
     );
-
     notifyListeners();
   }
 
@@ -122,31 +108,18 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    _currentStatus = const AuthProviderMessage(
-      status: AuthProviderStatus.loading,
-    );
-    notifyListeners();
-
-    final registerRes = await _authService.register(
-      email: email,
-      password: password,
-    );
-
-    registerRes.fold(
-      (success) async {
-        _currentStatus = AuthProviderMessage(
-          status: AuthProviderStatus.loggedOut,
-          message: success.data,
-        );
-      },
-      (failed) {
-        _currentStatus = AuthProviderMessage(
-          status: AuthProviderStatus.loggedOut,
-          message: failed.message,
-        );
-      },
-    );
-
-    notifyListeners();
+    try {
+      await _authService.register(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.inauthenticated,
+        message: e.toString(),
+      );
+    } finally {
+      notifyListeners();
+    }
   }
 }

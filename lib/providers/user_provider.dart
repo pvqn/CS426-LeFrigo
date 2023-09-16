@@ -1,59 +1,46 @@
-/// Precautions:
-/// Only use this Provider when the authentication is complete
-
 import 'dart:convert';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lefrigo/models/user.dart';
 import 'package:lefrigo/services/get_it.dart';
 
-enum UserStatus {
-  initial,
-  loading,
-  complete,
-  incomplete,
-  updateComplete,
-  updateFailed,
-}
-
 class UserProvider extends ChangeNotifier {
-  UserService _service;
+  final UserService _userService;
 
-  UserProvider() : _service = getIt<UserService>();
+  UserProvider() : _userService = getIt<UserService>();
 
-  UserStatus _status = UserStatus.initial;
-  UserStatus get status => _status;
+  bool _isLoading = false;
 
-  Future<Either<User, String>> getUser() async {
-    _status = UserStatus.loading;
-    notifyListeners();
+  bool get isLoading => _isLoading;
 
-    final result = await _service.getCurrentUser();
+  User _user = User.empty;
 
-    return result.fold(
-      (user) {
-        _status = UserStatus.complete;
-        notifyListeners();
-        return left(user.data);
-      },
-      (error) {
-        _status = UserStatus.incomplete;
-        notifyListeners();
-        return right(error.message);
-      },
-    );
+  User get user => _user;
+
+  bool get isUserInfoComplete {
+    return _user.country != null && _user.dob != null && _user.username != null;
   }
 
-  Future<Either<User, String>> updateUser({
+  Future<void> refreshUser() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final newUser = await _userService.getCurrentUser();
+    _user = newUser;
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> updateUser({
     String? username,
     String? email,
     String? country,
     DateTime? dob,
     XFile? avatar,
   }) async {
-    _status = UserStatus.loading;
+    _isLoading = true;
     notifyListeners();
 
     String? base64Image;
@@ -64,25 +51,16 @@ class UserProvider extends ChangeNotifier {
       base64Image = base64Encode(bytes);
     }
 
-    final result = await _service.updateUser(
+    final newUser = await _userService.updateUser(
       username: username,
       email: email,
       country: country,
       dob: dob,
       encodedAvatar: base64Image,
     );
+    _user = newUser;
 
-    return result.fold(
-      (user) {
-        _status = UserStatus.updateComplete;
-        notifyListeners();
-        return left(user.data);
-      },
-      (error) {
-        _status = UserStatus.updateFailed;
-        notifyListeners();
-        return right(error.message);
-      },
-    );
+    _isLoading = false;
+    notifyListeners();
   }
 }

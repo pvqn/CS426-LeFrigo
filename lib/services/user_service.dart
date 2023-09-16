@@ -1,64 +1,60 @@
-import 'package:fpdart/fpdart.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:lefrigo/models/partial_user.dart';
 import 'package:lefrigo/models/user.dart';
-import 'package:lefrigo/services/dio_service.dart';
+import 'package:lefrigo/services/api_service.dart';
+
+class UserServiceException implements Exception {
+  final String message;
+
+  UserServiceException({required this.message});
+}
 
 class UserService {
-  final DioService _dioService;
+  final ApiService _apiService;
 
-  UserService({required DioService dioService}) : _dioService = dioService;
+  UserService({required ApiService apiService}) : _apiService = apiService;
 
-  Future<Either<DioMessage<String>, DioFailed>> getUserInfo({
-    required String id,
-  }) async {
-    final response = await _dioService.dio.get(
-      ApiEndPoints.infoById(id),
-    );
+  Future<User> getUserById({required String id}) async {
+    final response = await _apiService.get(path: '/user/$id');
 
-    if (response.statusCode != 200) {
-      return right(DioFailed('Internet connection error'));
+    if (response.type == ApiResponseType.success) {
+      final user = User.fromJson(jsonDecode(response.message ?? '{}'));
+      return user;
     } else {
-      final Map<String, dynamic> userInfoResBody = response.data;
-
-      if (userInfoResBody['success'] == true) {
-        return left(DioMessage(userInfoResBody['message']));
-      } else {
-        return right(DioFailed(userInfoResBody['message']));
-      }
+      throw const HttpException('Internet connection error');
     }
   }
 
-  // Using the current token from the DioService
-  Future<Either<DioMessage<User>, DioFailed>> getCurrentUser() async {
-    final response = await _dioService.dio.get(
-      ApiEndPoints.currentUser,
-    );
+  Future<User> getCurrentUser() async {
+    assert(_apiService.token != '');
 
-    if (response.statusCode != 200) {
-      return right(DioFailed('Internet connection error'));
-    } else {
-      final Map<String, dynamic> currentUserResBody = response.data;
+    final response = await _apiService.get(path: '/user');
 
-      if (currentUserResBody.containsKey('_id')) {
-        return left(DioMessage(User.fromJson(currentUserResBody)));
-      } else {
-        return right(DioFailed(currentUserResBody['message']));
+    if (response.type == ApiResponseType.success) {
+      try {
+        final user = User.fromJson(jsonDecode(response.message!));
+        return user;
+      } catch (e) {
+        throw UserServiceException(message: 'Invalid token');
       }
+    } else {
+      throw const HttpException('Internet connection error');
     }
   }
 
-  // Update user using the ApiEndPoints.currentUser and incomplete
-  // model for PartialUser
-
-  Future<Either<DioMessage<User>, DioFailed>> updateUser({
+  Future<User> updateUser({
     String? username,
     String? email,
     String? country,
     DateTime? dob,
     String? encodedAvatar,
   }) async {
-    final response = await _dioService.dio.post(
-      ApiEndPoints.currentUser,
+    assert(_apiService.token != '');
+
+    final response = await _apiService.post(
+      path: '/user',
       data: PartialUser(
         username: username,
         email: email,
@@ -68,16 +64,17 @@ class UserService {
       ).toJson(),
     );
 
-    if (response.statusCode != 200) {
-      return right(DioFailed('Internet connection error'));
-    } else {
-      final Map<String, dynamic> currentUserResBody = response.data;
+    if (response.type == ApiResponseType.success) {
+      final decode = jsonDecode(response.message!);
 
-      if (currentUserResBody['success'] == true) {
-        return left(DioMessage(User.fromJson(currentUserResBody)));
+      if (decode['success'] == true) {
+        final user = User.fromJson(decode['user']);
+        return user;
       } else {
-        return right(DioFailed(currentUserResBody['message']));
+        throw UserServiceException(message: decode['message']);
       }
+    } else {
+      throw const HttpException('Internet connection error');
     }
   }
 }

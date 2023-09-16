@@ -1,0 +1,62 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+enum ApiResponseType { success, failed }
+
+class ApiResponse {
+  final ApiResponseType type;
+  final String? message;
+
+  ApiResponse(this.type, [this.message]);
+}
+
+class ApiService {
+  final String _baseUrl = '52.195.170.49:8888';
+
+  String token = '';
+
+  Future<ApiResponse> get({required String path}) async {
+    final url = Uri.http(_baseUrl, path);
+
+    final response = await http.get(
+      url,
+      headers: {
+        if (token != '') 'Authorization': token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return ApiResponse(ApiResponseType.success, response.body);
+    } else {
+      return ApiResponse(ApiResponseType.failed);
+    }
+  }
+
+  Future<ApiResponse> post({required String path, Map? data}) async {
+    final url = Uri.http(_baseUrl, path);
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(data ?? "{}"),
+    );
+
+    if (response.statusCode == 200) {
+      return ApiResponse(ApiResponseType.success, response.body);
+    } else {
+      return ApiResponse(ApiResponseType.failed);
+    }
+  }
+
+  Future<http.Response> getImageFromId({required String id}) async {
+    final url = Uri.http(_baseUrl, '/asset/$id');
+
+    final response = await http.get(url);
+
+    return response;
+  }
+}

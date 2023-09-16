@@ -24,12 +24,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-
-    if (authProvider.currentStatus.status == AuthProviderStatus.unknown) {
-      authProvider.onAppStarted();
-    }
-
     return MaterialApp.router(
       routerConfig: _router.config(),
       debugShowCheckedModeBanner: false,

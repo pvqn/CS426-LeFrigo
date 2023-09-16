@@ -18,16 +18,19 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).onAppStarted();
   }
-
+  
   @override
   void didChangeDependencies() {
     final authProvider = Provider.of<AuthProvider>(context);
-    if (authProvider.currentStatus.status == AuthProviderStatus.authenticated) {
-      context.router.replace(const HomeRoute());
-    } else if (authProvider.currentStatus.status ==
-        AuthProviderStatus.loggedOut) {
-      context.router.replace(const WelcomeRoute());
+
+    final status = authProvider.currentStatus.status;
+
+    if (status == AuthNotifierStatus.authenticated) {
+      AutoRouter.of(context).replace(const HomeRoute());
+    } else if (status == AuthNotifierStatus.inauthenticated) {
+      AutoRouter.of(context).replace(const WelcomeRoute());
     }
+
     super.didChangeDependencies();
   }
 
