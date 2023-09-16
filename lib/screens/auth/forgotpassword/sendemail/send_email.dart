@@ -7,9 +7,7 @@ import 'package:lefrigo/routes/routes.dart';
 class SendingEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SendingEmailPage(),
-    );
+    return SendingEmailPage();
   }
 }
 

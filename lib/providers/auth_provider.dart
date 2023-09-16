@@ -4,6 +4,9 @@ import 'package:lefrigo/services/get_it.dart';
 enum AuthNotifierStatus {
   authenticated,
   inauthenticated,
+  logInSucess,
+  logInFailed,
+  logOut,
   unknown,
 }
 
@@ -74,11 +77,11 @@ class AuthProvider extends ChangeNotifier {
       await _credentialService.setToken(token: token);
 
       _currentStatus = const AuthNotifierMessage(
-        status: AuthNotifierStatus.authenticated,
+        status: AuthNotifierStatus.logInSucess,
       );
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
-        status: AuthNotifierStatus.inauthenticated,
+        status: AuthNotifierStatus.logInFailed,
         message: e.toString(),
       );
     } finally {

@@ -7,9 +7,7 @@ import 'package:lefrigo/routes/routes.dart';
 class SuccessfulChangedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SuccessfulChangedPage(),
-    );
+    return SuccessfulChangedPage();
   }
 }
 

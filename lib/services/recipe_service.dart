@@ -128,4 +128,40 @@ class RecipeService {
       throw const HttpException('Internet connection error');
     }
   }
+
+  Future<void> uploadRecipe({
+    required String name,
+    required String description,
+    required String category,
+    required Details details,
+    required Nutrition nutrition,
+    required List<Ingredients> ingredients,
+    required List<String> steps,
+    required String encodedImage,
+  }) async {
+    final response = await _apiService.post(
+        path: '/recipe/upload',
+        data: Recipe(
+          name: name,
+          description: description,
+          category: category,
+          details: details,
+          nutrition: nutrition,
+          ingredients: ingredients,
+          directions: steps,
+          image: encodedImage,
+        ).toJson());
+
+    if (response.type == ApiResponseType.success) {
+      final decode = jsonDecode(response.message ?? '{}');
+
+      if (decode['success'] == true) {
+        return;
+      } else {
+        throw RecipeServiceException(message: decode['message']);
+      }
+    } else {
+      throw const HttpException('Internet connection error');
+    }
+  }
 }

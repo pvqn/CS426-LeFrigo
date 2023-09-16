@@ -13,10 +13,8 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: WelcomeContent(),
-      ),
+    return Scaffold(
+      body: WelcomeContent(),
     );
   }
 }
@@ -31,7 +29,9 @@ class WelcomeContent extends StatelessWidget {
         WelcomeImage(),
         WelcomeLogo(),
         WelcomeText(),
-        WelcomeButton(),
+        Expanded(
+          child: Center(child: WelcomeButton()),
+        ),
       ],
     );
   }
@@ -92,7 +92,6 @@ class WelcomeButton extends StatelessWidget {
     return Container(
       width: 310,
       height: 43,
-      margin: EdgeInsets.only(top: 130.0),
       child: ElevatedButton(
         onPressed: () {
           context.replaceRoute(LoginRoute());

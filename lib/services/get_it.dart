@@ -31,13 +31,15 @@ Future<void> configureDependencies() async {
     UserService(apiService: getIt<ApiService>()),
   );
 
-  getIt.registerSingleton<UserService>(
-    UserService(dioService: getIt<DioService>()),
+  getIt.registerSingleton<AuthService>(
+    AuthService(
+      apiService: getIt<ApiService>(),
+    ),
   );
 
-  getIt.registerSingleton<AuthService>(
-      AuthService(dioService: getIt<DioService>()));
+  getIt.registerSingleton<RecipeService>(
+    RecipeService(apiService: getIt<ApiService>()),
+  );
 
-  getIt.registerSingleton<RecipeServices>(
-      RecipeServices(dioService: getIt<DioService>()));
+  await getIt.allReady();
 }

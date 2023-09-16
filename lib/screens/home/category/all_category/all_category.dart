@@ -6,9 +6,7 @@ import 'category_item_list.dart';
 class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CategoryPage(),
-    );
+    return CategoryPage();
   }
 }
 

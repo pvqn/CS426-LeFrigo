@@ -7,9 +7,7 @@ import 'package:lefrigo/screens/home/custom_grid_view.dart';
 class SelectCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SelectCategory(),
-    );
+    return  SelectCategory();
   }
 }
 

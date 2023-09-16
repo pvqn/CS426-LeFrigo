@@ -27,43 +27,45 @@ class _SummaryTabState extends State<SummaryTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 2),
-          ImageUploadWidget(),
-          SizedBox(height: 15),
-          InputField(
-            controller: recipeName,
-            hintText: 'Enter recipe name',
-            maxLines: 1,
-            labelText: 'Recipe Name',
-          ),
-          SizedBox(height: 15),
-          InputField(
-            controller: description,
-            hintText: 'Enter description',
-            maxLines: 3,
-            labelText: 'Description',
-          ),
-          SizedBox(height: 15),
-          InputFieldHorizontal(
-              controller: totalTime, labelText: 'Total time (minutes): '),
-          SizedBox(height: 15),
-          InputFieldHorizontal(controller: serving, labelText: 'Servings: '),
-          SizedBox(height: 20),
-          Text('Category',
-              style: GoogleFonts.poppins(
-                  fontSize: 14, fontWeight: FontWeight.w500)),
-          SizedBox(height: 5),
-          CategoryDropdown(
-            selectedCategory: selectedCategory,
-            categories: categories,
-            onChanged: _onCategoryChanged,
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 2),
+            ImageUploadWidget(),
+            SizedBox(height: 15),
+            InputField(
+              controller: recipeName,
+              hintText: 'Enter recipe name',
+              maxLines: 1,
+              labelText: 'Recipe Name',
+            ),
+            SizedBox(height: 15),
+            InputField(
+              controller: description,
+              hintText: 'Enter description',
+              maxLines: 3,
+              labelText: 'Description',
+            ),
+            SizedBox(height: 15),
+            InputFieldHorizontal(
+                controller: totalTime, labelText: 'Total time (minutes): '),
+            SizedBox(height: 15),
+            InputFieldHorizontal(controller: serving, labelText: 'Servings: '),
+            SizedBox(height: 20),
+            Text('Category',
+                style: GoogleFonts.poppins(
+                    fontSize: 14, fontWeight: FontWeight.w500)),
+            SizedBox(height: 5),
+            CategoryDropdown(
+              selectedCategory: selectedCategory,
+              categories: categories,
+              onChanged: _onCategoryChanged,
+            ),
+          ],
+        ),
       ),
     );
   }

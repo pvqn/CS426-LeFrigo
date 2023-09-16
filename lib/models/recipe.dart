@@ -4,13 +4,14 @@ part 'recipe.g.dart';
 
 @JsonSerializable()
 class Recipe {
-  @JsonKey(name: '_id')
-  final String id;
+  @JsonKey(name: '_id', includeToJson: false)
+  final String? id;
 
-  final String author;
+  @JsonKey(includeToJson: false)
+  final String? author;
 
-  @JsonKey(name: 'num_liked')
-  final int numLiked;
+  @JsonKey(name: 'num_liked', includeToJson: false)
+  final int? numLiked;
 
   final String name;
 
@@ -22,24 +23,29 @@ class Recipe {
 
   final Nutrition nutrition;
 
-  // final List<Ingredients> ingredients;
+  final List<Ingredients> ingredients;
 
   final List<String> directions;
 
-  final String imageId;
+  @JsonKey(includeToJson: false)
+  final String? imageId;
+
+  @JsonKey(includeFromJson: false)
+  final String? image;
 
   Recipe({
-    required this.id,
-    required this.author,
-    required this.numLiked,
+    this.id,
+    this.author,
+    this.numLiked,
     required this.name,
     required this.description,
     required this.category,
     required this.details,
     required this.nutrition,
-    // required this.ingredients,
+    required this.ingredients,
     required this.directions,
-    required this.imageId,
+    this.imageId,
+    this.image,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

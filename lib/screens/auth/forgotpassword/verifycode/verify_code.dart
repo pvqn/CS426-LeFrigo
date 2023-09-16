@@ -7,9 +7,7 @@ import 'package:lefrigo/routes/routes.dart';
 class VerifyCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: VerifyCodePage(),
-    );
+    return VerifyCodePage();
   }
 }
 

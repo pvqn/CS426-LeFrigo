@@ -81,7 +81,7 @@ class QuantityAndUnitInput extends StatelessWidget {
   final Function(String) onUnitChanged;
   final VoidCallback onAddButtonPressed;
 
-  QuantityAndUnitInput({
+  const QuantityAndUnitInput({
     required this.quantityController,
     required this.selectedUnit,
     required this.unitList,

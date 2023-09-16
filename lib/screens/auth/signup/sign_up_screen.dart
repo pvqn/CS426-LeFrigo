@@ -8,9 +8,7 @@ import 'package:lefrigo/routes/routes.dart';
 class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SignUpPage(),
-    );
+    return SignUpPage();
   }
 }
 
@@ -46,7 +44,7 @@ class _SignUpState extends State<SignUpPage> {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               SignUpTitleText(),

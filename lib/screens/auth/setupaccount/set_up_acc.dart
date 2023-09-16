@@ -10,9 +10,7 @@ import 'package:lefrigo/routes/routes.dart';
 class SetAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SetAccountPage(),
-    );
+    return SetAccountPage();
   }
 }
 

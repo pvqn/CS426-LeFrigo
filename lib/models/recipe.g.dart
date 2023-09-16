@@ -7,31 +7,31 @@ part of 'recipe.dart';
 // **************************************************************************
 
 Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
-      id: json['_id'] as String,
-      author: json['author'] as String,
-      numLiked: json['num_liked'] as int,
+      id: json['_id'] as String?,
+      author: json['author'] as String?,
+      numLiked: json['num_liked'] as int?,
       name: json['name'] as String,
       description: json['description'] as String,
       category: json['category'] as String,
       details: Details.fromJson(json['details'] as Map<String, dynamic>),
       nutrition: Nutrition.fromJson(json['nutrition'] as Map<String, dynamic>),
+      ingredients: (json['ingredients'] as List<dynamic>)
+          .map((e) => Ingredients.fromJson(e as Map<String, dynamic>))
+          .toList(),
       directions: (json['directions'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      imageId: json['imageId'] as String,
+      imageId: json['imageId'] as String?,
     );
 
 Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
-      '_id': instance.id,
-      'author': instance.author,
-      'num_liked': instance.numLiked,
       'name': instance.name,
       'description': instance.description,
       'category': instance.category,
       'details': instance.details,
       'nutrition': instance.nutrition,
+      'ingredients': instance.ingredients,
       'directions': instance.directions,
-      'imageId': instance.imageId,
     };
 
 Details _$DetailsFromJson(Map<String, dynamic> json) => Details(

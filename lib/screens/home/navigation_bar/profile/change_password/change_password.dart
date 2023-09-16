@@ -6,9 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ChangePasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ChangePasswordPage(),
-    );
+    return ChangePasswordPage();
   }
 }
 

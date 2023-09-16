@@ -10,9 +10,7 @@ import 'package:lefrigo/routes/routes.dart';
 class UpdateProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: UpdateProfilePage(),
-    );
+    return UpdateProfilePage();
   }
 }
 
