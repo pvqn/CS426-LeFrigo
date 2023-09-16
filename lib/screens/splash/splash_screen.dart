@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void didChangeDependencies() {
     final authProvider = Provider.of<AuthProvider>(context);
     if (authProvider.currentStatus.status == AuthProviderStatus.authenticated) {
-      context.router.replace(const HomeRoute());
+      context.router.replace(const NavigationBarRoute());
     } else if (authProvider.currentStatus.status ==
         AuthProviderStatus.loggedOut) {
       context.router.replace(const WelcomeRoute());

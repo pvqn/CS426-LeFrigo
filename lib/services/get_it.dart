@@ -29,18 +29,13 @@ Future<void> configureDependencies() async {
     DioService(),
   );
 
-  getIt.registerSingletonWithDependencies<UserService>(
-    () => UserService(dioService: getIt<DioService>()),
-    dependsOn: [DioService],
+  getIt.registerSingleton<UserService>(
+    UserService(dioService: getIt<DioService>()),
   );
 
-  getIt.registerSingletonWithDependencies<AuthService>(
-    () => AuthService(dioService: getIt<DioService>()),
-    dependsOn: [DioService],
-  );
+  getIt.registerSingleton<AuthService>(
+      AuthService(dioService: getIt<DioService>()));
 
-  getIt.registerSingletonWithDependencies<RecipeServices>(
-    () => RecipeServices(dioService: getIt<DioService>()),
-    dependsOn: [DioService],
-  );
+  getIt.registerSingleton<RecipeServices>(
+      RecipeServices(dioService: getIt<DioService>()));
 }
