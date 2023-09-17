@@ -17,8 +17,6 @@ class FavoritePage extends StatelessWidget {
           ),
           const PageTitle(),
           const SizedBox(height: 25),
-          SearchBar(controller: _searchController),
-          const SizedBox(height: 30),
           Expanded(child: FavoriteGridView()),
         ],
       ),

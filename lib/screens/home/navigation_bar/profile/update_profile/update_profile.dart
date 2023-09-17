@@ -4,6 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:lefrigo/routes/routes.dart';
+import 'dart:io' show File;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart';
+import 'package:universal_html/html.dart' as html;
 
 @RoutePage()
 class UpdateProfileScreen extends StatelessWidget {
@@ -25,6 +29,7 @@ class UpdateProfilePage extends StatefulWidget {
 class UpdateProfileState extends State<UpdateProfilePage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
+  File? _selectedImage;
 
   static const Color customColor = Color(0xFFE25E3E);
   final TextEditingController _fullNameController = TextEditingController();
@@ -84,6 +89,8 @@ class UpdateProfileState extends State<UpdateProfilePage> {
             const SizedBox(height: 40),
             _buildConfirmButton(),
             const SizedBox(height: 10),
+            _buildLogOutButton(),
+            const SizedBox(height: 10),
             _buildChangePasswordLink(),
           ],
         ),
@@ -116,12 +123,17 @@ class UpdateProfileState extends State<UpdateProfilePage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 70,
-          backgroundImage: AssetImage('assets/welcomeImg.png'),
+          backgroundImage: _selectedImage == null
+              ? const AssetImage(
+                  'assets/images/welcome_bg.png') // Fallback image
+              : kIsWeb
+                  ? NetworkImage(_selectedImage!.path) as ImageProvider
+                  : FileImage(_selectedImage!),
         ),
         InkWell(
-          onTap: () {},
+          onTap: _pickImage,
           child: const Icon(
             Icons.edit_outlined,
             size: 40,
@@ -130,6 +142,28 @@ class UpdateProfileState extends State<UpdateProfilePage> {
         ),
       ],
     );
+  }
+
+  Future<void> _pickImage() async {
+    if (kIsWeb) {
+      final input = html.FileUploadInputElement()..accept = 'image/*';
+      input.click();
+      input.onChange.listen((event) {
+        final file = input.files!.first;
+        setState(() {
+          _selectedImage = File(html.Url.createObjectUrlFromBlob(file));
+        });
+      });
+    } else {
+      final picker = ImagePicker();
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedImage != null) {
+        setState(() {
+          _selectedImage = File(pickedImage.path);
+        });
+      }
+    }
   }
 
   Widget _buildTextField(String labelText, TextEditingController controller) {
@@ -297,6 +331,32 @@ class UpdateProfileState extends State<UpdateProfilePage> {
         ),
         child: Text(
           'Confirm',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(fontSize: 15, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogOutButton() {
+    return SizedBox(
+      width: 350,
+      height: 43,
+      child: ElevatedButton(
+        onPressed: () {
+          // Add your button's onPressed behavior here
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(customColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+          ),
+        ),
+        child: Text(
+          'Log out',
           style: GoogleFonts.inter(
             textStyle: const TextStyle(fontSize: 15, color: Colors.white),
           ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/models/category.dart';
 
 import 'package:lefrigo/services/api_service.dart';
 
@@ -16,18 +17,51 @@ class RecipeService {
 
   RecipeService({required ApiService apiService}) : _apiService = apiService;
 
-  Future<List<String>> getListOfCategories() async {
+  Future<List<String>> getPopularRecipes() async {
+    final response = await _apiService.get(path: '/recipes');
+
+    if (response.type == ApiResponseType.success) {
+      final recipes = jsonDecode(response.message!) as List<dynamic>;
+      final recipesList = recipes.map((e) => e.toString()).toList();
+
+      return recipesList;
+    } else {
+      throw const HttpException('Internet connection error');
+    }
+  }
+
+  Future<List<RecipeCategory>> getListOfCategories() async {
     final response = await _apiService.get(path: '/categories');
 
     if (response.type == ApiResponseType.success) {
-      final categories = jsonDecode(response.message ?? '[]') as List<dynamic>;
-      final categoriesList = categories.map((e) => e.toString()).toList();
+      final categories = jsonDecode(response.message!) as List<dynamic>;
+
+      print('categoriesList: $categories');
+
+      final categoriesList = categories
+          .map((e) => RecipeCategory.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      print('categoriesList: $categoriesList');
 
       return categoriesList;
     } else {
       throw const HttpException('Internet connection error');
     }
   }
+
+  // Future<List<String>> getListOfCategories() async {
+  //   final response = await _apiService.get(path: '/categories');
+
+  //   if (response.type == ApiResponseType.success) {
+  //     final categories = jsonDecode(response.message ?? '[]') as List<dynamic>;
+  //     final categoriesList = categories.map((e) => e.toString()).toList();
+
+  //     return categoriesList;
+  //   } else {
+  //     throw const HttpException('Internet connection error');
+  //   }
+  // }
 
   Future<List<String>> getListOfRecipesByCategory(
       {required String category}) async {
@@ -59,6 +93,23 @@ class RecipeService {
 
     if (response.type == ApiResponseType.success) {
       final recipes = jsonDecode(response.message ?? '[]') as List<dynamic>;
+      final recipesList = recipes.map((e) => e.toString()).toList();
+
+      return recipesList;
+    } else {
+      throw const HttpException('Internet connection error');
+    }
+  }
+
+  Future<List<String>> suggestRecipe(
+      {required List<String> ingredients}) async {
+    final response = await _apiService.post(
+      path: '/suggestrecipe',
+      data: {'ingredients': ingredients},
+    );
+
+    if (response.type == ApiResponseType.success) {
+      final recipes = jsonDecode(response.message!) as List<dynamic>;
       final recipesList = recipes.map((e) => e.toString()).toList();
 
       return recipesList;

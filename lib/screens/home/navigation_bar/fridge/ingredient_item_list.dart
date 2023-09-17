@@ -3,15 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/screens/home/navigation_bar/fridge/ingredient_item.dart';
 
 class IngredientListView extends StatefulWidget {
-  const IngredientListView({super.key});
+  final List<String> itemList;
+
+  const IngredientListView({required this.itemList});
 
   @override
-  _IngredientListViewState createState() => _IngredientListViewState();
+  IngredientListViewState createState() => IngredientListViewState();
 }
 
-class _IngredientListViewState extends State<IngredientListView> {
+class IngredientListViewState extends State<IngredientListView> {
   final TextEditingController _ingredientController = TextEditingController();
-  List<String> itemList = [];
+  late final List<String> itemList = widget.itemList;
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +89,8 @@ class _IngredientListViewState extends State<IngredientListView> {
             child: Text(
               'Current Ingredients',
               style: GoogleFonts.poppins(
-                  textStyle:
-                      const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  textStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold)),
             ),
           ),
           SizedBox(

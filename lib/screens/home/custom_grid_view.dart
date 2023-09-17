@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
 import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
 
 class dummy {
@@ -67,8 +68,8 @@ class GridItem extends StatelessWidget {
                     BlendMode.darken,
                   ),
                   image: snapshot.data!.imageId != null
-                      ? NetworkImage(
-                              'http://52.195.170.49:8888/asset/${snapshot.data!.imageId}')
+                      ? NetworkImage(getIt.get<ApiService>().getImageFromId(
+                              id: snapshot.data!.imageId.toString()))
                           as ImageProvider
                       : const AssetImage('assets/images/food.png'),
                   fit: BoxFit.cover,

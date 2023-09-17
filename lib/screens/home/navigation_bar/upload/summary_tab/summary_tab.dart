@@ -1,10 +1,13 @@
-import 'dart:io';
-
+import 'dart:io' show File;
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_html/html.dart'
+    as html; // Import the universal_html package
 
 class SummaryTab extends StatefulWidget {
   const SummaryTab({super.key});
@@ -14,7 +17,7 @@ class SummaryTab extends StatefulWidget {
 }
 
 class SummaryTabState extends State<SummaryTab> {
-  // string image?
+  File? _selectedImage;
   TextEditingController recipeName = TextEditingController();
   TextEditingController description = TextEditingController();
 
@@ -32,7 +35,8 @@ class SummaryTabState extends State<SummaryTab> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false).refreshCategory();
+      Provider.of<RecipeProvider>(context, listen: false)
+          .refreshListOfCategories();
     });
   }
 
@@ -68,7 +72,9 @@ class SummaryTabState extends State<SummaryTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 2),
-            const ImageUploadWidget(),
+            ImageUploadWidget(
+              selectedImage: _selectedImage,
+            ),
             const SizedBox(height: 15),
             InputField(
               controller: recipeName,
@@ -129,10 +135,7 @@ class SummaryTabState extends State<SummaryTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InputFieldHorizontal(
-                  controller: cal,
-                  labelText: 'Calories: ',
-                  hintText: ' ',
-                ),
+                    controller: cal, labelText: 'Calories: ', hintText: ' '),
                 const SizedBox(width: 5),
                 InputFieldHorizontal(
                     controller: carb, hintText: ' ', labelText: 'Carbs: '),
@@ -255,30 +258,56 @@ class InputField extends StatelessWidget {
 }
 
 class ImageUploadWidget extends StatefulWidget {
-  const ImageUploadWidget({super.key});
+  ImageUploadWidget({required this.selectedImage});
+
+  final File? selectedImage;
 
   @override
-  ImageUploadWidgetState createState() => ImageUploadWidgetState();
+  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
 }
 
-class ImageUploadWidgetState extends State<ImageUploadWidget> {
+class _ImageUploadWidgetState extends State<ImageUploadWidget> {
   File? _selectedImage;
+  @override
+  void initState() {
+    _selectedImage = widget.selectedImage;
+  }
+
+  Future<void> _pickImage() async {
+    if (kIsWeb) {
+      final input = html.FileUploadInputElement()..accept = 'image/*';
+      input.click();
+      input.onChange.listen((event) {
+        final file = input.files!.first;
+        setState(() {
+          _selectedImage = File(html.Url.createObjectUrlFromBlob(file));
+        });
+      });
+    } else {
+      final picker = ImagePicker();
+      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedImage != null) {
+        setState(() {
+          _selectedImage = File(pickedImage.path);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            //_getImage
-          },
+          onTap: _pickImage,
           child: DottedBorder(
             color: Colors.grey,
             borderType: BorderType.RRect,
             radius: const Radius.circular(20),
             padding: const EdgeInsets.all(6),
             strokeWidth: 2,
-            dashPattern: const [6, 3], // Adjust the dash pattern as needed
+            dashPattern: const [6, 3],
             child: SizedBox(
               width: double.infinity,
               height: 200,
@@ -286,12 +315,17 @@ class ImageUploadWidgetState extends State<ImageUploadWidget> {
                 child: _selectedImage != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(18.0),
-                        child: Image.file(
-                          _selectedImage!,
-                          width: 196, // Adjust the size as needed
-                          height: 196, // Adjust the size as needed
-                          fit: BoxFit.cover,
-                        ),
+                        child: kIsWeb
+                            ? Image.network(
+                                width: double.infinity,
+                                _selectedImage!.path,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                width: double.infinity,
+                                _selectedImage!,
+                                fit: BoxFit.cover,
+                              ),
                       )
                     : const Column(
                         mainAxisAlignment: MainAxisAlignment.center,

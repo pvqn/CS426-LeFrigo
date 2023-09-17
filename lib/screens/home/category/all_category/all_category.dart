@@ -27,7 +27,8 @@ class CategoryState extends State<CategoryPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false).refreshCategory();
+      Provider.of<RecipeProvider>(context, listen: false)
+          .refreshListOfCategories();
     });
   }
 
@@ -61,7 +62,7 @@ class CategoryState extends State<CategoryPage> {
           Expanded(
             child: Consumer<RecipeProvider>(
               builder: (context, recipeProvider, child) {
-                if (recipeProvider.isLoading) {
+                if (recipeProvider.isLoading == true) {
                   return const CircularProgressIndicator(); // Show loading indicator
                 } else {
                   // print('ok');

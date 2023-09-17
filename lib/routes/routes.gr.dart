@@ -49,14 +49,30 @@ abstract class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<RecipeRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecipeScreen(recipeid: args.recipeid),
+        child: RecipeScreen(
+          key: args.key,
+          recipeid: args.recipeid,
+        ),
+      );
+    },
+    ResultRoute.name: (routeData) {
+      final args = routeData.argsAs<ResultRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ResultScreen(
+          text: args.text,
+          ingredients: args.ingredients,
+        ),
       );
     },
     SelectCategoryRoute.name: (routeData) {
       final args = routeData.argsAs<SelectCategoryRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SelectCategoryScreen(category: args.category),
+        child: SelectCategoryScreen(
+          key: args.key,
+          category: args.category,
+        ),
       );
     },
     SendingEmailRoute.name: (routeData) {
@@ -190,11 +206,15 @@ class NewPasswordRoute extends PageRouteInfo<void> {
 /// [RecipeScreen]
 class RecipeRoute extends PageRouteInfo<RecipeRouteArgs> {
   RecipeRoute({
+    Key? key,
     required String recipeid,
     List<PageRouteInfo>? children,
   }) : super(
           RecipeRoute.name,
-          args: RecipeRouteArgs(recipeid: recipeid),
+          args: RecipeRouteArgs(
+            key: key,
+            recipeid: recipeid,
+          ),
           initialChildren: children,
         );
 
@@ -204,13 +224,55 @@ class RecipeRoute extends PageRouteInfo<RecipeRouteArgs> {
 }
 
 class RecipeRouteArgs {
-  const RecipeRouteArgs({required this.recipeid});
+  const RecipeRouteArgs({
+    this.key,
+    required this.recipeid,
+  });
+
+  final Key? key;
 
   final String recipeid;
 
   @override
   String toString() {
-    return 'RecipeRouteArgs{recipeid: $recipeid}';
+    return 'RecipeRouteArgs{key: $key, recipeid: $recipeid}';
+  }
+}
+
+/// generated route for
+/// [ResultScreen]
+class ResultRoute extends PageRouteInfo<ResultRouteArgs> {
+  ResultRoute({
+    required String text,
+    required List<String> ingredients,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ResultRoute.name,
+          args: ResultRouteArgs(
+            text: text,
+            ingredients: ingredients,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ResultRoute';
+
+  static const PageInfo<ResultRouteArgs> page = PageInfo<ResultRouteArgs>(name);
+}
+
+class ResultRouteArgs {
+  const ResultRouteArgs({
+    required this.text,
+    required this.ingredients,
+  });
+
+  final String text;
+
+  final List<String> ingredients;
+
+  @override
+  String toString() {
+    return 'ResultRouteArgs{text: $text, ingredients: $ingredients}';
   }
 }
 
@@ -218,11 +280,15 @@ class RecipeRouteArgs {
 /// [SelectCategoryScreen]
 class SelectCategoryRoute extends PageRouteInfo<SelectCategoryRouteArgs> {
   SelectCategoryRoute({
+    Key? key,
     required String category,
     List<PageRouteInfo>? children,
   }) : super(
           SelectCategoryRoute.name,
-          args: SelectCategoryRouteArgs(category: category),
+          args: SelectCategoryRouteArgs(
+            key: key,
+            category: category,
+          ),
           initialChildren: children,
         );
 
@@ -233,13 +299,18 @@ class SelectCategoryRoute extends PageRouteInfo<SelectCategoryRouteArgs> {
 }
 
 class SelectCategoryRouteArgs {
-  const SelectCategoryRouteArgs({required this.category});
+  const SelectCategoryRouteArgs({
+    this.key,
+    required this.category,
+  });
+
+  final Key? key;
 
   final String category;
 
   @override
   String toString() {
-    return 'SelectCategoryRouteArgs{category: $category}';
+    return 'SelectCategoryRouteArgs{key: $key, category: $category}';
   }
 }
 

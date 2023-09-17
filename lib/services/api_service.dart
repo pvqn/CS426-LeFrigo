@@ -12,7 +12,7 @@ class ApiResponse {
 }
 
 class ApiService {
-  final String _baseUrl = '52.195.170.49:8888';
+  final String _baseUrl = '52.192.217.234:8888';
 
   String token = '';
 

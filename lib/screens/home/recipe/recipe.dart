@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:lefrigo/services/api_service.dart';
+import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
 import 'summary_tab.dart';
 import 'directions_tab.dart';
@@ -75,9 +77,8 @@ class RecipeHeader extends StatelessWidget {
                   BlendMode.darken,
                 ),
                 image: recipe.imageId != null
-                    ? NetworkImage(
-                        'http://52.195.170.49:8888/asset/${recipe.imageId}',
-                      )
+                    ? NetworkImage(getIt.get<ApiService>().getImageFromId(
+                        id: recipe.imageId.toString())) as ImageProvider
                     : const AssetImage('assets/images/food.png')
                         as ImageProvider,
                 fit: BoxFit.cover,

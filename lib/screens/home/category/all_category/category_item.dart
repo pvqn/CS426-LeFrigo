@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/services/get_it.dart';
 
 class CategoryItem extends StatelessWidget {
   final String text;
-  final String image;
+  final String? image;
   final String id;
 
   const CategoryItem({
     super.key,
     this.id = '',
     required this.text,
-    this.image = 'assets/images/welcome_bg.png',
+    this.image,
   });
 
   @override
@@ -29,8 +30,12 @@ class CategoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: AssetImage(
-                    image), // Replace 'your_image.png' with your image asset path
+                image: image != null
+                    ? NetworkImage(getIt
+                        .get<ApiService>()
+                        .getImageFromId(id: image.toString())) as ImageProvider
+                    : const AssetImage('assets/images/food.png')
+                        as ImageProvider, // Replace 'your_image.png' with your image asset path
                 fit: BoxFit.cover,
               ),
             ),

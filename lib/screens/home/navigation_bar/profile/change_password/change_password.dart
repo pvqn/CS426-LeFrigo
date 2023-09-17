@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/providers.dart';
+import 'package:lefrigo/routes/routes.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class ChangePasswordScreen extends StatelessWidget {
@@ -43,9 +46,37 @@ class ChangePasswordState extends State<ChangePasswordPage> {
 
   void updatePassword() {
     if (_passwordController1.text != _passwordController2.text) {
-      // Show snackbar to retype
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords do not match'),
+        ),
+      );
     } else {
-      //Provider.of<AuthProvider>(context, listen = false).update
+      Provider.of<AuthProvider>(context, listen: false)
+          .updatePassword(_passwordController.text, _passwordController1.text)
+          .then((_) {
+        if (Provider.of<AuthProvider>(context, listen: false)
+                .currentStatus
+                .status ==
+            AuthNotifierStatus.logOut) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Password updated successfully. Please login again'),
+            ),
+          );
+          context.router.pushAndPopUntil(
+            const WelcomeRoute(),
+            predicate: (_) => false,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Password update failed'),
+            ),
+          );
+        }
+      });
     }
   }
 

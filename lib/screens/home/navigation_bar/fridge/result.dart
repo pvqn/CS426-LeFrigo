@@ -6,37 +6,31 @@ import 'package:provider/provider.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
 
 @RoutePage()
-class SelectCategoryScreen extends StatelessWidget {
-  final String category;
-
-  const SelectCategoryScreen({super.key, required this.category});
+class ResultScreen extends StatelessWidget {
+  final String text;
+  final List<String> ingredients;
+  const ResultScreen({required this.text, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
-    return SelectCategory(
-      category: category,
+    return Result(
+      text: text,
+      ingredients: ingredients,
     );
   }
 }
 
-class SelectCategory extends StatefulWidget {
-  final String category;
-  const SelectCategory({super.key, required this.category});
+class Result extends StatefulWidget {
+  final String text;
+  final List<String> ingredients;
+
+  const Result({required this.text, required this.ingredients});
 
   @override
-  SelectCategoryState createState() => SelectCategoryState();
+  ResultState createState() => ResultState();
 }
 
-class SelectCategoryState extends State<SelectCategory> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false)
-          .refreshListOfRecipesByCategory(category: widget.category);
-    });
-  }
-
+class ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +63,7 @@ class SelectCategoryState extends State<SelectCategory> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  widget.category,
+                  widget.text,
                   style: GoogleFonts.inter(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
@@ -80,17 +74,21 @@ class SelectCategoryState extends State<SelectCategory> {
             height: 20,
           ),
           Expanded(
-            child: Consumer<RecipeProvider>(
-              builder: (context, recipeProvider, child) {
-                if (recipeProvider.isLoading == true) {
-                  return const CircularProgressIndicator(); // Show loading indicator
+            child: FutureBuilder(
+              future: Provider.of<RecipeProvider>(context, listen: false)
+                  .suggestRecipes(ingredients: widget.ingredients),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    final recipes = snapshot.data as List<String>;
+                    return MyGridView(
+                      itemIdList: recipes,
+                    );
+                  } else {
+                    return const Text('No data');
+                  }
                 } else {
-                  final recipes =
-                      recipeProvider.recipesByCategory(widget.category);
-
-                  return MyGridView(
-                    itemIdList: recipes,
-                  );
+                  return const CircularProgressIndicator();
                 }
               },
             ),

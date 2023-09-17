@@ -1,204 +1,123 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'pass_input.dart';
+import 'verify_input.dart';
 import 'package:lefrigo/routes/routes.dart';
 
 @RoutePage()
-class VerifyCodeScreen extends StatelessWidget {
-  const VerifyCodeScreen({super.key});
+class VerifyCodeScreen extends StatefulWidget {
+  const VerifyCodeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const VerifyCodePage();
-  }
+  State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
 }
 
-class VerifyCodePage extends StatefulWidget {
-  static const Color customColor = Color(0xFFE25E3E);
-
-  const VerifyCodePage({super.key});
-
-  @override
-  VerifyCodeState createState() => VerifyCodeState();
-}
-
-class VerifyCodeState extends State<VerifyCodePage> {
-  final List<TextEditingController> _verifyController = List.generate(
-    8, // Replace with the desired number of controllers
-    (_) => TextEditingController(),
-  );
-
+class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Scaffold(
-        body: Center(
-          child: Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              children: [
-                const SizedBox(height: 40),
-                const VerifyCodeCustomBackButton(),
-                const SizedBox(height: 100),
-                const VerifyCodeHeading(),
-                const VerifyCodeDescription(),
-                const SizedBox(height: 40),
-                VerificationCodeFields(controllers: _verifyController),
-                const SizedBox(height: 20),
-                const ResendCodeText(),
-                const SizedBox(height: 50),
-                const ContinueButton(),
-              ],
-            ),
-          ),
-        ),
-      ),
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController passwordController1 = TextEditingController();
+    final List<TextEditingController> verificationCodeControllers =
+        List.generate(
+      8,
+      (_) => TextEditingController(),
     );
-  }
-}
+    bool isObscured = true;
+    bool isObscured1 = true;
 
-class VerifyCodeCustomBackButton extends StatelessWidget {
-  const VerifyCodeCustomBackButton({super.key});
+    void togglePasswordVisibility() {
+      isObscured = !isObscured;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            context.router.pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            size: 24,
-          ),
-        )
-      ],
-    );
-  }
-}
+    void togglePasswordVisibility1() {
+      isObscured1 = !isObscured1;
+    }
 
-class VerifyCodeHeading extends StatelessWidget {
-  const VerifyCodeHeading({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Verification',
-      style: GoogleFonts.inter(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
-
-class VerifyCodeDescription extends StatelessWidget {
-  const VerifyCodeDescription({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 5),
-        Text(
-          'We have sent you a code to verify',
-          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
-        ),
-        Text(
-          'your email address',
-          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
-}
-
-class VerificationCodeFields extends StatelessWidget {
-  final List<TextEditingController> controllers;
-
-  const VerificationCodeFields({super.key, required this.controllers});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(8, (index) {
-        return SizedBox(
-          width: 40,
-          child: TextField(
-            controller: controllers[index],
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            maxLength: 1,
-            cursorColor: const Color(0xFFE25E3E),
-            decoration: const InputDecoration(
-              counterText: '',
-              border: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFE25E3E), width: 2.0),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.router.pop();
+                    },
+                    child: const Icon(
+                      Icons.arrow_back,
+                      size: 24,
+                    ),
+                  )
+                ],
               ),
-            ),
+              const SizedBox(height: 100),
+              Text(
+                'Reset Password',
+                style: GoogleFonts.inter(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                'Please enter your new password and verification code to continue',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 40),
+              VerificationCodeFields(
+                controllers: verificationCodeControllers,
+              ),
+              const SizedBox(height: 20),
+              PasswordInput(
+                controller: passwordController,
+                labelText: 'New password',
+                hintText: 'Enter new password',
+                isObscured: isObscured,
+                togglePasswordVisibility: togglePasswordVisibility,
+              ),
+              const SizedBox(height: 25),
+              PasswordInput(
+                controller: passwordController1,
+                labelText: 'Retype new password',
+                hintText: 'Retype new password',
+                isObscured: isObscured1,
+                togglePasswordVisibility: togglePasswordVisibility1,
+              ),
+              const SizedBox(height: 60),
+              SizedBox(
+                height: 43,
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.router.push(const SuccessfulChangedRoute());
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xFFE25E3E)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                  ),
+                  child: const Text('Continue',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      )),
+                ),
+              )
+            ],
           ),
-        );
-      }),
-    );
-  }
-}
-
-class ResendCodeText extends StatelessWidget {
-  const ResendCodeText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Didn\'t receive the code?',
-          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
         ),
-        GestureDetector(
-          onTap: () {},
-          child: Text(
-            ' Resend code',
-            style: GoogleFonts.inter(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFFE25E3E)),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ContinueButton extends StatelessWidget {
-  const ContinueButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 43,
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          context.router.push(const NewPasswordRoute());
-        },
-        style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all<Color>(VerifyCodePage.customColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-          ),
-        ),
-        child: Text('Continue',
-            style: GoogleFonts.poppins(
-                textStyle: const TextStyle(fontSize: 15, color: Colors.white))),
       ),
     );
   }
