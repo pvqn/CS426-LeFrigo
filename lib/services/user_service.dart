@@ -30,7 +30,7 @@ class UserService {
   Future<User> getCurrentUser() async {
     assert(_apiService.token != '');
 
-    final response = await _apiService.get(path: '/user');
+    final response = await _apiService.get(path: '/user/profile');
 
     if (response.type == ApiResponseType.success) {
       try {

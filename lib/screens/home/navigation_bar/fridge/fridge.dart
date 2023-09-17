@@ -9,9 +9,7 @@ class Fridge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: FridgePage(),
-    );
+    return const FridgePage();
   }
 }
 
@@ -32,8 +30,8 @@ class _FridgePageState extends State<FridgePage> {
     return Scaffold(
       body: Column(
         children: [
-          const FridgeAppBar(),
-          const SizedBox(height: 24),
+          // const FridgeAppBar(),
+          const SizedBox(height: 88),
           Expanded(
             child: IngredientListView(itemList: ingredients),
           ),

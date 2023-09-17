@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lefrigo/models/recipe.dart';
 import 'post_grid_item.dart';
-import 'model.dart';
 
 class PostGridView extends StatelessWidget {
-  final List<dummy> items;
+  final List<String> items;
   final ValueChanged<int> onRemove;
 
-  const PostGridView({super.key, required this.items, required this.onRemove});
+  const PostGridView({
+    super.key,
+    required this.items,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {

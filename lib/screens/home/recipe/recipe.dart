@@ -19,35 +19,31 @@ class RecipeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          body: FutureBuilder<Recipe>(
-            future: recipeProvider.getRecipeById(recipeid),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: [
-                    RecipeHeader(
-                        recipe: snapshot.data != null
-                            ? snapshot.data!
-                            : dummyRecipe),
-                    RecipeTabsContent(
-                        recipe: snapshot.data != null
-                            ? snapshot.data!
-                            : dummyRecipe),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: FutureBuilder<Recipe>(
+          future: recipeProvider.getRecipeById(recipeid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: [
+                  RecipeHeader(
+                      recipe:
+                          snapshot.data != null ? snapshot.data! : dummyRecipe),
+                  RecipeTabsContent(
+                      recipe:
+                          snapshot.data != null ? snapshot.data! : dummyRecipe),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
       ),
     );

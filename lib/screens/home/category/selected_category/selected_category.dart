@@ -31,9 +31,11 @@ class SelectCategoryState extends State<SelectCategory> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false)
-          .refreshListOfRecipesByCategory(category: widget.category);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final recipeProvider =
+          Provider.of<RecipeProvider>(context, listen: false);
+      recipeProvider.refreshListOfRecipesByCategory(category: widget.category);
     });
   }
 
@@ -83,7 +85,12 @@ class SelectCategoryState extends State<SelectCategory> {
             child: Consumer<RecipeProvider>(
               builder: (context, recipeProvider, child) {
                 if (recipeProvider.isLoading == true) {
-                  return const CircularProgressIndicator(); // Show loading indicator
+                  return const Center(
+                      child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(),
+                  )); // Show loading indicator
                 } else {
                   final recipes =
                       recipeProvider.recipesByCategory(widget.category);

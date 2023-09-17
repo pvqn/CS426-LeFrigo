@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
+import 'package:lefrigo/services/get_it.dart';
+import 'package:provider/provider.dart';
 
 class CategoryList extends StatefulWidget {
   final List<String> categories;
@@ -14,6 +17,8 @@ class CategoryList extends StatefulWidget {
 class _CategoryListState extends State<CategoryList> {
   @override
   Widget build(BuildContext context) {
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+
     return SizedBox(
       height: 180,
       child: ListView.builder(
@@ -27,6 +32,7 @@ class _CategoryListState extends State<CategoryList> {
             },
             child: CategoryItem(
               text: widget.categories[index],
+              id: recipeProvider.imageIdsOfCategory(widget.categories[index]),
             ),
           );
         },
@@ -37,14 +43,12 @@ class _CategoryListState extends State<CategoryList> {
 
 class CategoryItem extends StatelessWidget {
   final String text;
-  final String image;
   final String id;
 
   const CategoryItem({
     super.key,
-    this.id = '',
     required this.text,
-    this.image = 'assets/images/welcome_bg.png',
+    this.id = '',
   });
 
   @override
@@ -63,8 +67,12 @@ class CategoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: AssetImage(
-                    image), // Replace 'your_image.png' with your image asset path
+                image: id != ''
+                    ? NetworkImage(getIt
+                        .get<ApiService>()
+                        .getImageFromId(id: id.toString()))
+                    : const AssetImage('assets/images/food.png')
+                        as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),
@@ -102,7 +110,6 @@ class CategoryItem extends StatelessWidget {
     );
   }
 }
-
 
 // class CategoryItem {
 //   String image = 'assets/images/welcome_bg.png';

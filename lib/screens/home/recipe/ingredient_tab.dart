@@ -59,18 +59,27 @@ class IngredientsTabState extends State<IngredientsTab> {
                     )))
               ],
             )),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(''),
-                Text(ingredients[index].quantity,
-                    style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500))),
-                const Text(''),
-              ],
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     const Text(''),
+            //     Text(ingredients[index].quantity,
+            //         style: GoogleFonts.poppins(
+            //             textStyle: const TextStyle(
+            //                 color: Colors.black,
+            //                 fontSize: 14,
+            //                 fontWeight: FontWeight.w500))),
+            //     const Text(''),
+            //   ],
+            // ),
+            Expanded(child: Container()),
+            Center(
+              child: Text(ingredients[index].quantity,
+                  style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500))),
             ),
             const SizedBox(
               width: 10,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'ingredient_item_list.dart';
+import 'model.dart';
 
 class IngredientTab extends StatefulWidget {
-  const IngredientTab({super.key});
+  IngredientTab({super.key, required this.itemList});
+  List<ingredient> itemList;
 
   @override
   IngredientState createState() => IngredientState();
@@ -11,8 +13,10 @@ class IngredientTab extends StatefulWidget {
 class IngredientState extends State<IngredientTab> {
   @override
   Widget build(BuildContext context) {
-    return const Column(children: [
-      IngredientListView(),
+    return Column(children: [
+      IngredientListView(
+        itemList: widget.itemList,
+      ),
     ]);
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/screens/home/custom_grid_view.dart';
+import 'package:provider/provider.dart';
 
 class FavoritePage extends StatelessWidget {
-  final TextEditingController _searchController = TextEditingController();
+  // final TextEditingController _searchController = TextEditingController();
 
-  FavoritePage({super.key});
+  const FavoritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +109,11 @@ class FavoriteGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+
     return Expanded(
       child: MyGridView(
-        itemIdList: dummy,
+        itemIdList: userProvider.user.likes,
       ),
     );
   }

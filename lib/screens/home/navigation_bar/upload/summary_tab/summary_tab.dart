@@ -10,27 +10,51 @@ import 'package:universal_html/html.dart'
     as html; // Import the universal_html package
 
 class SummaryTab extends StatefulWidget {
-  const SummaryTab({super.key});
+  late final File? selectedImage;
+  // TextEditingController recipeName = TextEditingController();
+  // TextEditingController description = TextEditingController();
+
+  // TextEditingController totalTime = TextEditingController();
+  // TextEditingController serving = TextEditingController();
+  // TextEditingController prepTime = TextEditingController();
+  // TextEditingController cookTime = TextEditingController();
+
+  // TextEditingController cal = TextEditingController();
+  // TextEditingController fat = TextEditingController();
+  // TextEditingController carb = TextEditingController();
+  // TextEditingController protein = TextEditingController();
+  // String selectedCategory = 'Dinner Recipes';
+
+  TextEditingController recipeName,
+      description,
+      totalTime,
+      serving,
+      prepTime,
+      cookTime,
+      cal,
+      fat,
+      carb,
+      protein;
+  String selectedCategory;
+  SummaryTab(
+      {required this.recipeName,
+      required this.description,
+      required this.totalTime,
+      required this.serving,
+      required this.prepTime,
+      required this.cookTime,
+      required this.cal,
+      required this.fat,
+      required this.carb,
+      required this.protein,
+      required this.selectedImage,
+      required this.selectedCategory});
 
   @override
   SummaryTabState createState() => SummaryTabState();
 }
 
 class SummaryTabState extends State<SummaryTab> {
-  File? _selectedImage;
-  TextEditingController recipeName = TextEditingController();
-  TextEditingController description = TextEditingController();
-
-  TextEditingController totalTime = TextEditingController();
-  TextEditingController serving = TextEditingController();
-  TextEditingController prepTime = TextEditingController();
-  TextEditingController cookTime = TextEditingController();
-
-  TextEditingController cal = TextEditingController();
-  TextEditingController fat = TextEditingController();
-  TextEditingController carb = TextEditingController();
-  TextEditingController protein = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -40,26 +64,10 @@ class SummaryTabState extends State<SummaryTab> {
     });
   }
 
-  @override
-  void dispose() {
-    recipeName.dispose();
-    description.dispose();
-    totalTime.dispose();
-    serving.dispose();
-    prepTime.dispose();
-    cookTime.dispose();
-    cal.dispose();
-    fat.dispose();
-    carb.dispose();
-    protein.dispose();
-    super.dispose();
-  }
-
-  String selectedCategory = 'Dinner Recipes'; // Set the default category
-
   void _onCategoryChanged(String? newValue) {
     setState(() {
-      selectedCategory = newValue ?? 'Dinner Recipes'; // Handle null case
+      widget.selectedCategory =
+          newValue ?? 'Dinner Recipes'; // Handle null case
     });
   }
 
@@ -73,18 +81,18 @@ class SummaryTabState extends State<SummaryTab> {
           children: [
             const SizedBox(height: 2),
             ImageUploadWidget(
-              selectedImage: _selectedImage,
+              selectedImage: widget.selectedImage,
             ),
             const SizedBox(height: 15),
             InputField(
-              controller: recipeName,
+              controller: widget.recipeName,
               hintText: 'Enter recipe name',
               maxLines: 1,
               labelText: 'Recipe Name',
             ),
             const SizedBox(height: 15),
             InputField(
-              controller: description,
+              controller: widget.description,
               hintText: 'Enter description',
               maxLines: 3,
               labelText: 'Description',
@@ -94,10 +102,10 @@ class SummaryTabState extends State<SummaryTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InputFieldHorizontal(
-                    controller: totalTime, labelText: 'Total time: '),
+                    controller: widget.totalTime, labelText: 'Total time: '),
                 const SizedBox(width: 5),
                 InputFieldHorizontal(
-                    controller: serving,
+                    controller: widget.serving,
                     hintText: ' ',
                     labelText: 'Servings: '),
               ],
@@ -107,10 +115,10 @@ class SummaryTabState extends State<SummaryTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InputFieldHorizontal(
-                    controller: cookTime, labelText: 'Cook time: '),
+                    controller: widget.cookTime, labelText: 'Cook time: '),
                 const SizedBox(width: 5),
                 InputFieldHorizontal(
-                    controller: prepTime, labelText: 'Prep time: '),
+                    controller: widget.prepTime, labelText: 'Prep time: '),
               ],
             ),
             const SizedBox(height: 20),
@@ -121,7 +129,7 @@ class SummaryTabState extends State<SummaryTab> {
             Consumer<RecipeProvider>(builder: (context, recipeProvider, child) {
               final categories = recipeProvider.categories;
               return CategoryDropdown(
-                selectedCategory: selectedCategory,
+                selectedCategory: widget.selectedCategory,
                 categories: categories,
                 onChanged: _onCategoryChanged,
               );
@@ -135,10 +143,14 @@ class SummaryTabState extends State<SummaryTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InputFieldHorizontal(
-                    controller: cal, labelText: 'Calories: ', hintText: ' '),
+                    controller: widget.cal,
+                    labelText: 'Calories: ',
+                    hintText: ' '),
                 const SizedBox(width: 5),
                 InputFieldHorizontal(
-                    controller: carb, hintText: ' ', labelText: 'Carbs: '),
+                    controller: widget.carb,
+                    hintText: ' ',
+                    labelText: 'Carbs: '),
               ],
             ),
             const SizedBox(height: 20),
@@ -146,10 +158,12 @@ class SummaryTabState extends State<SummaryTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InputFieldHorizontal(
-                    controller: protein, labelText: 'Protein: ', hintText: ' '),
+                    controller: widget.protein,
+                    labelText: 'Protein: ',
+                    hintText: ' '),
                 const SizedBox(width: 5),
                 InputFieldHorizontal(
-                    controller: fat, labelText: 'Fat: ', hintText: ' '),
+                    controller: widget.fat, labelText: 'Fat: ', hintText: ' '),
               ],
             ),
             const SizedBox(height: 50),

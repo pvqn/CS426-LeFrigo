@@ -33,7 +33,7 @@ class CategoryItem extends StatelessWidget {
                 image: image != null
                     ? NetworkImage(getIt
                         .get<ApiService>()
-                        .getImageFromId(id: image.toString())) as ImageProvider
+                        .getImageFromId(id: image.toString()))
                     : const AssetImage('assets/images/food.png')
                         as ImageProvider, // Replace 'your_image.png' with your image asset path
                 fit: BoxFit.cover,

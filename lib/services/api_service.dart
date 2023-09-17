@@ -11,8 +11,8 @@ class ApiResponse {
   ApiResponse(this.type, [this.message]);
 }
 
-class ApiService {
-  final String _baseUrl = '52.192.217.234:8888';
+class ApiService {  
+  final String _baseUrl = '52.192.217.234:8888'; //'43.207.138.171:8888';
 
   String token = '';
 

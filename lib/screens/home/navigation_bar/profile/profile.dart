@@ -1,7 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/models/user.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
+import 'package:lefrigo/services/get_it.dart';
+import 'package:provider/provider.dart';
 import 'post_grid_view.dart';
 import 'model.dart';
 
@@ -13,25 +19,34 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
+  late User user;
+
+  @override
+  void didChangeDependencies() {
+    final userProvider = Provider.of<UserProvider>(context);
+    user = userProvider.user;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         children: [
-          SizedBox(height: 40),
-          ProfileHeader(),
-          SizedBox(height: 30),
-          UserStatistics(),
-          SizedBox(height: 10),
-          Divider(
+          const SizedBox(height: 40),
+          ProfileHeader(user: user),
+          const SizedBox(height: 30),
+          UserStatistics(user: user),
+          const SizedBox(height: 10),
+          const Divider(
             height: 8,
             thickness: 2,
             indent: 20,
             endIndent: 20,
             color: Colors.grey,
           ),
-          SizedBox(height: 15),
-          Text(
+          const SizedBox(height: 15),
+          const Text(
             'Posts',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -39,8 +54,8 @@ class ProfilePageState extends State<ProfilePage> {
               color: Color(0xFF173F4E),
             ),
           ),
-          SizedBox(height: 5),
-          Expanded(child: PostGridPage()),
+          const SizedBox(height: 5),
+          Expanded(child: PostGridPage(user: user)),
         ],
       ),
     );
@@ -48,7 +63,9 @@ class ProfilePageState extends State<ProfilePage> {
 }
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({super.key});
+  final User user;
+
+  const ProfileHeader({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +74,13 @@ class ProfileHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(width: 20),
-        const CircleAvatar(
+        CircleAvatar(
           radius: 45,
-          backgroundImage: AssetImage('assets/images/welcome_bg.png'),
+          backgroundImage: user.avatar != null
+              ? NetworkImage(
+                  getIt<ApiService>().getImageFromId(id: user.avatar!),
+                ) as ImageProvider
+              : const AssetImage('assets/images/avaStar.png'),
         ),
         const SizedBox(width: 15),
         Expanded(
@@ -67,7 +88,7 @@ class ProfileHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'antihcmus',
+                user.username!,
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -78,7 +99,7 @@ class ProfileHeader extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                'Vietnam',
+                user.country ?? 'Vietnam',
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 14,
@@ -138,20 +159,24 @@ class EditProfileButton extends StatelessWidget {
 }
 
 class UserStatistics extends StatelessWidget {
-  const UserStatistics({super.key});
+  final User user;
+
+  const UserStatistics({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
-        UserStat(label: 'Post', value: '1'),
-        UserStat(label: 'Likes', value: '10'),
-        UserStat(label: 'Join From', value: 'August 2023'),
-        SizedBox(
+        UserStat(label: 'Post', value: '${user.posts.length}'),
+        UserStat(label: 'Likes', value: '${user.likes.length}'),
+        UserStat(
+            label: 'Join From',
+            value: DateFormat('MMMM yyyy').format(user.createdAt!)),
+        const SizedBox(
           width: 5,
         )
       ],
@@ -195,23 +220,22 @@ class UserStat extends StatelessWidget {
 }
 
 class PostGridPage extends StatefulWidget {
-  const PostGridPage({super.key});
+  final User user;
+
+  const PostGridPage({super.key, required this.user});
 
   @override
   PostGridPageState createState() => PostGridPageState();
 }
 
 class PostGridPageState extends State<PostGridPage> {
-  List<dummy> items = [
-    dummy(),
-    // Add more items as needed
-  ];
+  late List<String> items;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PostGridView(
-        items: items,
+        items: widget.user.posts,
         onRemove: (int index) {
           setState(() {
             items.removeAt(index);

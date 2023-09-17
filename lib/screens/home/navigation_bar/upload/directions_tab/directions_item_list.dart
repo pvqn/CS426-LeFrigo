@@ -4,7 +4,9 @@ import 'directions_item.dart';
 import 'model.dart';
 
 class DirectionListView extends StatefulWidget {
-  const DirectionListView({super.key});
+  DirectionListView({super.key, required this.itemList});
+
+  List<Direction> itemList;
 
   @override
   DirectionListViewState createState() => DirectionListViewState();
@@ -13,12 +15,13 @@ class DirectionListView extends StatefulWidget {
 class DirectionListViewState extends State<DirectionListView> {
   final TextEditingController _descriptionController = TextEditingController();
   int order = 1;
-  final List<Direction> _itemList = [];
+  late List<Direction> _itemList;
 
   @override
   void dispose() {
     _descriptionController.dispose();
     super.dispose();
+    _itemList = widget.itemList;
   }
 
   @override

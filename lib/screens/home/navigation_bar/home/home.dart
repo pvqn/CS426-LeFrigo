@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
 import 'package:lefrigo/routes/routes.dart';
 import 'package:provider/provider.dart';
@@ -18,13 +19,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false)
-          .refreshListOfCategories();
-    });
-    Future.delayed(Duration.zero, () {
-      Provider.of<RecipeProvider>(context, listen: false)
-          .refreshListOfPopularRecipes();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final recipeProvider =
+          Provider.of<RecipeProvider>(context, listen: false);
+      recipeProvider.refreshListOfCategories();
+      recipeProvider.refreshListOfPopularRecipes();
+
+      final UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      userProvider.refreshUser();
     });
   }
 
@@ -100,7 +104,7 @@ class HeaderSection extends StatelessWidget {
           Expanded(
             child: HeaderText(),
           ),
-          NotificationIcon(),
+          // NotificationIcon(),
         ],
       ),
     );

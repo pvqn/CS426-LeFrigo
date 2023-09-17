@@ -36,13 +36,10 @@ class RecipeService {
     if (response.type == ApiResponseType.success) {
       final categories = jsonDecode(response.message!) as List<dynamic>;
 
-      print('categoriesList: $categories');
-
       final categoriesList = categories
+          .where((element) => element['recipes'].length > 0)
           .map((e) => RecipeCategory.fromJson(e as Map<String, dynamic>))
           .toList();
-
-      print('categoriesList: $categoriesList');
 
       return categoriesList;
     } else {

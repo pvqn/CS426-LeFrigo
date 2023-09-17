@@ -7,18 +7,15 @@ import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
 
-class dummy {
-  String image = 'assets/images/food.png';
-  String name = 'antihcmus';
-  String nameRecipe = 'Greek Yogurt with Chia Pudding';
-  String avatar = 'assets/images/welcome_bg.png';
-  int likes = 2000;
-}
-
-class MyGridView extends StatelessWidget {
+class MyGridView extends StatefulWidget {
   final List<String> itemIdList;
   const MyGridView({super.key, required this.itemIdList});
 
+  @override
+  State<MyGridView> createState() => _MyGridViewState();
+}
+
+class _MyGridViewState extends State<MyGridView> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -29,13 +26,15 @@ class MyGridView extends StatelessWidget {
         // Spacing between rows
         // Spacing between columns
       ),
-      itemCount: itemIdList.length, // Use the length of your dynamic list
+      itemCount:
+          widget.itemIdList.length, // Use the length of your dynamic list
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
-            context.router.push(RecipeRoute(recipeid: itemIdList[index]));
+            context.router
+                .push(RecipeRoute(recipeid: widget.itemIdList[index]));
           },
-          child: GridItem(item: itemIdList[index]),
+          child: GridItem(item: widget.itemIdList[index]),
         );
       },
     );
@@ -154,7 +153,13 @@ class GridItem extends StatelessWidget {
             return const SizedBox(
               width: 158,
               height: 280, // Set a fixed height
-              child: CircularProgressIndicator(),
+              child: Center(
+                child: SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             );
           }
         });

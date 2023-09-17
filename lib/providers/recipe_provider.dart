@@ -149,7 +149,7 @@ class RecipeProvider extends ChangeNotifier {
       final recipes =
           await _service.getListOfRecipesByCategory(category: category);
 
-      _popularRecipesId = recipes;
+      _recipeCache[category]['recipes'] = recipes;
 
       _logging.info('Fetched Recipes: $recipes');
 
@@ -160,6 +160,7 @@ class RecipeProvider extends ChangeNotifier {
         RecipeProviderState.fetchRecipesListFailure,
         error.toString(),
       );
+    } finally {
       notifyListeners();
     }
   }

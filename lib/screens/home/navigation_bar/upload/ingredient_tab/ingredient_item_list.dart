@@ -4,19 +4,22 @@ import 'ingredient_item.dart';
 import 'model.dart';
 
 class IngredientListView extends StatefulWidget {
-  const IngredientListView({super.key});
+  List<ingredient> itemList;
+
+  IngredientListView({required this.itemList});
 
   @override
   IngredientListViewState createState() => IngredientListViewState();
 }
 
 class IngredientListViewState extends State<IngredientListView> {
+  late List<ingredient> itemList = widget.itemList;
+
   final TextEditingController _ingredientController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   String _selectedUnit = 'ounce';
   final List<String> unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
-  List<ingredient> itemList = [];
 
   @override
   Widget build(BuildContext context) {

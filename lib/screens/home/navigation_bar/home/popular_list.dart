@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class RecipeList extends StatefulWidget {
   final List<String> itemIdList;
 
-  RecipeList({required this.itemIdList});
+  const RecipeList({super.key, required this.itemIdList});
 
   @override
   State<RecipeList> createState() => _RecipeListState();
@@ -44,25 +44,36 @@ class _RecipeListState extends State<RecipeList> {
   }
 }
 
-class RecipeItemWidget extends StatelessWidget {
+class RecipeItemWidget extends StatefulWidget {
   final String item;
 
   const RecipeItemWidget({super.key, required this.item});
 
   @override
-  Widget build(BuildContext context) {
-    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+  State<RecipeItemWidget> createState() => _RecipeItemWidgetState();
+}
 
-    return FutureBuilder<Recipe>(
-      future: recipeProvider.getRecipeById(item),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            margin: const EdgeInsets.only(left: 15),
-            width: 306,
-            height: 460,
-            decoration: const BoxDecoration(),
-            child: Stack(
+class _RecipeItemWidgetState extends State<RecipeItemWidget> {
+  Future<Recipe>? _recipe;
+
+  @override
+  void initState() {
+    super.initState();
+    _recipe = Provider.of<RecipeProvider>(context, listen: false)
+        .getRecipeById(widget.item);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15),
+      width: 306,
+      height: 460,
+      child: FutureBuilder<Recipe>(
+        future: _recipe,
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Stack(
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -92,7 +103,7 @@ class RecipeItemWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         const SizedBox(width: 5),
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 20,
                           backgroundImage:
                               AssetImage('assets/images/welcome_bg.png'),
@@ -157,9 +168,7 @@ class RecipeItemWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Cook time: ' +
-                              snapshot.data!.details.cookTime.toString() +
-                              ' min',
+                          'Cook time: ${snapshot.data!.details.cookTime} min',
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.white,
@@ -172,16 +181,18 @@ class RecipeItemWidget extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          );
-        } else {
-          return const SizedBox(
-            width: 158,
-            height: 280, // Set a fixed height
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+            );
+          } else {
+            return const Center(
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        }),
+      ),
     );
   }
 }

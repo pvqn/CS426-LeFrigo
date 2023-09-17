@@ -12,9 +12,7 @@ class NavigationBarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyNavigationBarApp(),
-    );
+    return const MyNavigationBarApp();
   }
 }
 
@@ -37,7 +35,7 @@ class MyNavigationBarAppState extends State<MyNavigationBarApp> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(                                                                        
       body: screens[_currentIndex],
       bottomNavigationBar: buildMyNavigationBar(context),
     );
