@@ -8,10 +8,10 @@ class CategoryListView extends StatefulWidget {
 
   const CategoryListView({super.key, required this.categories}); // Constructor
   @override
-  _CategoryListViewState createState() => _CategoryListViewState();
+  CategoryListViewState createState() => CategoryListViewState();
 }
 
-class _CategoryListViewState extends State<CategoryListView> {
+class CategoryListViewState extends State<CategoryListView> {
   @override
   Widget build(BuildContext context) {
     return Column(

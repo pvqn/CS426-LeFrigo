@@ -1,7 +1,5 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lefrigo/routes/routes.dart';
 import 'model.dart';
 
 class PostGridItem extends StatelessWidget {
@@ -90,7 +88,7 @@ class PostGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.router.push(RecipeRoute());
+        //context.router.push(RecipeRoute());
       },
       child: Container(
         margin: const EdgeInsets.all(10),

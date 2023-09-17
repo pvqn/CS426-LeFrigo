@@ -232,7 +232,7 @@ class RecipeList extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               // Replace with the event you want to trigger when an item is clicked
-              context.router.push(RecipeRoute());
+              // context.router.push(RecipeRoute());
             },
             child: RecipeItemWidget(item: itemList[index]),
           );

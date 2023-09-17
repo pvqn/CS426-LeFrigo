@@ -1,28 +1,50 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:provider/provider.dart';
 import 'summary_tab.dart';
-import 'model.dart';
 import 'directions_tab.dart';
 import 'ingredient_tab.dart';
+import 'package:lefrigo/models/recipe.dart';
 
 @RoutePage()
 class RecipeScreen extends StatelessWidget {
-  final dummy recipe = dummy();
+  final String recipeid;
 
-  RecipeScreen({super.key});
+  const RecipeScreen({super.key, required this.recipeid});
 
   @override
   Widget build(BuildContext context) {
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
     return MaterialApp(
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-          body: Column(
-            children: [
-              RecipeHeader(recipe: recipe),
-              const RecipeTabsContent(),
-            ],
+          body: FutureBuilder<Recipe>(
+            future: recipeProvider.getRecipeById(recipeid),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    RecipeHeader(
+                        recipe: snapshot.data != null
+                            ? snapshot.data!
+                            : dummyRecipe),
+                    RecipeTabsContent(
+                        recipe: snapshot.data != null
+                            ? snapshot.data!
+                            : dummyRecipe),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),
@@ -31,7 +53,7 @@ class RecipeScreen extends StatelessWidget {
 }
 
 class RecipeHeader extends StatelessWidget {
-  final dummy recipe;
+  final Recipe recipe;
 
   const RecipeHeader({super.key, required this.recipe});
 
@@ -45,12 +67,24 @@ class RecipeHeader extends StatelessWidget {
             bottomRight: Radius.circular(20.0),
           ),
           child: Container(
-            child: Image.asset(
-              'assets/images/food.png',
-              fit: BoxFit.cover,
-              height: 280,
-              width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  Colors.black
+                      .withOpacity(0.5), // Adjust opacity to control darkness
+                  BlendMode.darken,
+                ),
+                image: recipe.imageId != null
+                    ? NetworkImage(
+                        'http://52.195.170.49:8888/asset/${recipe.imageId}',
+                      )
+                    : const AssetImage('assets/images/food.png')
+                        as ImageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
+            height: 280,
+            width: double.infinity,
           ),
         ),
         Align(
@@ -91,10 +125,13 @@ class RecipeHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildTimeInfo('Prep Time:', recipe.prepTime),
-                    _buildTimeInfo('Cook Time:', recipe.cookTime),
-                    _buildTimeInfo('Ref Time:', recipe.refTime),
-                    _buildTimeInfo('Total Time:', recipe.totalTime),
+                    _buildTimeInfo(
+                        'Prep Time:', '${recipe.details.prepTime} min'),
+                    _buildTimeInfo(
+                        'Cook Time:', '${recipe.details.cookTime} min'),
+                    _buildTimeInfo(
+                        'Total Time:', '${recipe.details.totalTime} min'),
+                    _buildTimeInfo('Servings:', '${recipe.details.servings}'),
                   ],
                 )
               ],
@@ -107,6 +144,7 @@ class RecipeHeader extends StatelessWidget {
 
   Widget _buildTimeInfo(String label, String value) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           label,
@@ -133,7 +171,9 @@ class RecipeHeader extends StatelessWidget {
 }
 
 class RecipeTabsContent extends StatelessWidget {
-  const RecipeTabsContent({super.key});
+  final Recipe recipe;
+
+  const RecipeTabsContent({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +203,9 @@ class RecipeTabsContent extends StatelessWidget {
           Expanded(
             child: TabBarView(
               children: [
-                SummaryTab(),
-                const IngredientsTab(),
-                const DirectionsTab(),
+                SummaryTab(recipe: recipe),
+                IngredientsTab(recipe: recipe),
+                DirectionsTab(recipe: recipe),
               ],
             ),
           ),
@@ -174,3 +214,38 @@ class RecipeTabsContent extends StatelessWidget {
     );
   }
 }
+
+final dummyRecipe = Recipe(
+  id: '1',
+  author: 'John Doe',
+  numLiked: 42,
+  name: 'Delicious Pasta',
+  description: 'A mouth-watering pasta recipe',
+  category: 'Italian',
+  details: Details(
+    cookTime: 30,
+    prepTime: 15,
+    servings: 4,
+    totalTime: 45,
+  ),
+  nutrition: Nutrition(
+    calories: '350',
+    carbs: '45g',
+    fat: '12g',
+    protein: '18g',
+  ),
+  ingredients: [
+    Ingredients(name: 'Pasta', quantity: '200g', unit: 'grams'),
+    Ingredients(name: 'Tomatoes', quantity: '4', unit: 'pieces'),
+    Ingredients(name: 'Olive Oil', quantity: '2 tbsp'),
+    Ingredients(name: 'Salt', quantity: '1 tsp'),
+  ],
+  directions: [
+    'Boil the pasta in a large pot of salted water until al dente.',
+    'Meanwhile, heat olive oil in a pan and sauté tomatoes until soft.',
+    'Drain pasta and toss with sautéed tomatoes.',
+    'Serve hot and enjoy!',
+  ],
+  imageId: '12345',
+  image: 'https://example.com/recipe-image.jpg',
+);

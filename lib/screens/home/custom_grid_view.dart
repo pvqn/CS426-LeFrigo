@@ -15,26 +15,26 @@ class dummy {
 }
 
 class MyGridView extends StatelessWidget {
-  final List<String> items_id;
-  MyGridView({required this.items_id});
+  final List<String> itemIdList;
+  const MyGridView({super.key, required this.itemIdList});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         childAspectRatio: 158 / 222,
 
         crossAxisCount: 2, // Number of columns in the grid
         // Spacing between rows
         // Spacing between columns
       ),
-      itemCount: items_id.length, // Use the length of your dynamic list
+      itemCount: itemIdList.length, // Use the length of your dynamic list
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
-            context.router.push(RecipeRoute());
+            context.router.push(RecipeRoute(recipeid: itemIdList[index]));
           },
-          child: GridItem(item: items_id[index]),
+          child: GridItem(item: itemIdList[index]),
         );
       },
     );
@@ -44,18 +44,18 @@ class MyGridView extends StatelessWidget {
 class GridItem extends StatelessWidget {
   final String item;
 
-  GridItem({required this.item});
+  const GridItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
 
     return FutureBuilder<Recipe>(
-        future: recipeProvider.refreshRecipeById(item),
+        future: recipeProvider.getRecipeById(item),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               width: 158,
               height: 280, // Set a fixed height
               decoration: BoxDecoration(
@@ -75,20 +75,20 @@ class GridItem extends StatelessWidget {
                 ),
               ),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                         child: Container(
-                      margin: EdgeInsets.only(bottom: 130),
+                      margin: const EdgeInsets.only(bottom: 130),
                       width: double.infinity, // Expand to full width
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(child: Text('')),
+                          const Expanded(child: Text('')),
                           const Icon(
                             Icons.favorite,
                             size: 20,
@@ -109,7 +109,7 @@ class GridItem extends StatelessWidget {
                         ],
                       ),
                     )),
-                    Container(
+                    SizedBox(
                       // Wrap text with a Container
                       width: double.infinity, // Expand to full width
                       child: Text(snapshot.data!.name,
@@ -117,12 +117,12 @@ class GridItem extends StatelessWidget {
                               textStyle: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w500))),
+                                  fontWeight: FontWeight.w800))),
                     ),
                     const SizedBox(
                       height: 3,
                     ),
-                    Container(
+                    SizedBox(
                       // Wrap text with a Container
                       width: double.infinity, // Expand to full width
                       child: Row(
@@ -150,10 +150,10 @@ class GridItem extends StatelessWidget {
               ),
             );
           } else {
-            return Container(
+            return const SizedBox(
               width: 158,
               height: 280, // Set a fixed height
-              child: const CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           }
         });

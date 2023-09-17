@@ -16,10 +16,10 @@ class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
 
   @override
-  _ChangePasswordState createState() => _ChangePasswordState();
+  ChangePasswordState createState() => ChangePasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePasswordPage> {
+class ChangePasswordState extends State<ChangePasswordPage> {
   static const Color customColor = Color(0xFFE25E3E);
 
   final TextEditingController _passwordController = TextEditingController();
@@ -113,8 +113,8 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
             ),
             Text('Change your password',
                 style: GoogleFonts.inter(
-                    textStyle:
-                        const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold))),
           ],
         ));
   }
@@ -150,7 +150,8 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                 hintText: 'At least 8 characters',
                 hintStyle: GoogleFonts.poppins(fontSize: 13),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(

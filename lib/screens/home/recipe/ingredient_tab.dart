@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'model.dart';
+import 'package:lefrigo/models/recipe.dart';
 
 class IngredientsTab extends StatefulWidget {
-  const IngredientsTab({super.key});
+  const IngredientsTab({super.key, required this.recipe});
+
+  final Recipe recipe;
 
   @override
-  _IngredientsTabState createState() => _IngredientsTabState();
+  IngredientsTabState createState() => IngredientsTabState();
 }
 
-class _IngredientsTabState extends State<IngredientsTab> {
-  List<ingredient> ingredients = [
-    ingredient(),
-    ingredient(),
-    ingredient(),
-    ingredient(),
-    ingredient(),
-    ingredient(),
-  ];
+class IngredientsTabState extends State<IngredientsTab> {
+  late List<Ingredients> ingredients = [];
+
+  @override
+  void initState() {
+    super.initState();
+    ingredients = widget.recipe.ingredients;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _IngredientsTabState extends State<IngredientsTab> {
                             color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w500))),
-                Text('Notes: ${ingredients[index].note}',
+                Text('Notes: ',
                     style: GoogleFonts.poppins(
                         textStyle: const TextStyle(
                       color: Color(0xFFC4C4C4),

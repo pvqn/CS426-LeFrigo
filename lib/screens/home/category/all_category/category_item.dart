@@ -3,13 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryItem extends StatelessWidget {
   final String text;
-  String image;
-  String id;
+  final String image;
+  final String id;
 
-  CategoryItem(
-      {super.key, this.id = '',
-      required this.text,
-      this.image = 'assets/images/welcome_bg.png'});
+  const CategoryItem({
+    super.key,
+    this.id = '',
+    required this.text,
+    this.image = 'assets/images/welcome_bg.png',
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -19,10 +19,10 @@ class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({super.key});
 
   @override
-  _UpdateProfileState createState() => _UpdateProfileState();
+  UpdateProfileState createState() => UpdateProfileState();
 }
 
-class _UpdateProfileState extends State<UpdateProfilePage> {
+class UpdateProfileState extends State<UpdateProfilePage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
 
@@ -30,12 +30,13 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  bool _isObscured = true;
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isObscured = !_isObscured;
-    });
-  }
+  // bool _isObscured = true;
+
+  // void _togglePasswordVisibility() {
+  //   setState(() {
+  //     _isObscured = !_isObscured;
+  //   });
+  // }
 
   void _onCountrySelected(Country country) {
     setState(() {
@@ -112,24 +113,22 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Widget _buildAvatarEditButton() {
-    return Container(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          const CircleAvatar(
-            radius: 70,
-            backgroundImage: AssetImage('assets/welcomeImg.png'),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const CircleAvatar(
+          radius: 70,
+          backgroundImage: AssetImage('assets/welcomeImg.png'),
+        ),
+        InkWell(
+          onTap: () {},
+          child: const Icon(
+            Icons.edit_outlined,
+            size: 40,
+            color: Colors.white,
           ),
-          InkWell(
-            onTap: () {},
-            child: const Icon(
-              Icons.edit_outlined,
-              size: 40,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -160,7 +159,8 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
                     : 'antihcmus@gmail.com',
                 hintStyle: GoogleFonts.poppins(fontSize: 13),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
@@ -192,29 +192,28 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
-            child: TextField(
-              readOnly: true,
-              controller: TextEditingController(
-                text: DateFormat('MMMM dd, yyyy').format(selectedDate),
+          TextField(
+            readOnly: true,
+            controller: TextEditingController(
+              text: DateFormat('MMMM dd, yyyy').format(selectedDate),
+            ),
+            style: GoogleFonts.poppins(fontSize: 13),
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                hoverColor: const Color(0xFFE25E3E),
+                icon: const Icon(Icons.calendar_today),
+                onPressed: () {
+                  _selectDate(context);
+                },
               ),
-              style: GoogleFonts.poppins(fontSize: 13),
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  hoverColor: const Color(0xFFE25E3E),
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () {
-                    _selectDate(context);
-                  },
-                ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              border: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
             ),
           ),
@@ -240,40 +239,38 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
-            child: GestureDetector(
-              onTap: () {
-                showCountryPicker(
-                  context: context,
-                  onSelect: _onCountrySelected,
-                );
-              },
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 12.0,
-                  ),
+          GestureDetector(
+            onTap: () {
+              showCountryPicker(
+                context: context,
+                onSelect: _onCountrySelected,
+              );
+            },
+            child: InputDecorator(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      _selectedCountry?.name ?? 'Select Country',
-                      style: GoogleFonts.poppins(fontSize: 13),
-                    ),
-                    const Icon(Icons.arrow_drop_down),
-                  ],
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 12.0,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    _selectedCountry?.name ?? 'Select Country',
+                    style: GoogleFonts.poppins(fontSize: 13),
+                  ),
+                  const Icon(Icons.arrow_drop_down),
+                ],
               ),
             ),
           ),
@@ -315,7 +312,8 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
       },
       child: Text(
         'Change password',
-        style: GoogleFonts.poppins(fontSize: 15, color: const Color(0xFF9E9D9D)),
+        style:
+            GoogleFonts.poppins(fontSize: 15, color: const Color(0xFF9E9D9D)),
       ),
     );
   }

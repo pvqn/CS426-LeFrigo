@@ -18,10 +18,10 @@ class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
 
   @override
-  _CategoryState createState() => _CategoryState();
+  CategoryState createState() => CategoryState();
 }
 
-class _CategoryState extends State<CategoryPage> {
+class CategoryState extends State<CategoryPage> {
   static const Color customColor = Color(0xFFE25E3E);
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _CategoryState extends State<CategoryPage> {
                 if (recipeProvider.isLoading) {
                   return const CircularProgressIndicator(); // Show loading indicator
                 } else {
-                  print('ok');
+                  // print('ok');
 
                   final categories = recipeProvider.categories;
                   return CategoryListView(categories: categories);

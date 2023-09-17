@@ -10,7 +10,7 @@ class AuthServiceException implements Exception {
 }
 
 class AuthService {
-  ApiService _apiService;
+  final ApiService _apiService;
 
   AuthService({required ApiService apiService}) : _apiService = apiService;
 

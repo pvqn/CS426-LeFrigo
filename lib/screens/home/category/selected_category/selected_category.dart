@@ -7,8 +7,9 @@ import 'package:lefrigo/providers/recipe_provider.dart';
 
 @RoutePage()
 class SelectCategoryScreen extends StatelessWidget {
-  String category;
-  SelectCategoryScreen({required this.category});
+  final String category;
+
+  const SelectCategoryScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,14 @@ class SelectCategoryScreen extends StatelessWidget {
 }
 
 class SelectCategory extends StatefulWidget {
-  String category;
-  SelectCategory({required this.category});
+  final String category;
+  const SelectCategory({super.key, required this.category});
 
   @override
-  _SelectCategoryState createState() => _SelectCategoryState();
+  SelectCategoryState createState() => SelectCategoryState();
 }
 
-class _SelectCategoryState extends State<SelectCategory> {
+class SelectCategoryState extends State<SelectCategory> {
   @override
   void initState() {
     super.initState();
@@ -88,7 +89,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       recipeProvider.recipesByCategory(widget.category);
 
                   return MyGridView(
-                    items_id: recipes,
+                    itemIdList: recipes,
                   );
                 }
               },

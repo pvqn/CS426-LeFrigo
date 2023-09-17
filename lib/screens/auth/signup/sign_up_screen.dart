@@ -19,10 +19,10 @@ class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  _SignUpState createState() => _SignUpState();
+  SignUpState createState() => SignUpState();
 }
 
-class _SignUpState extends State<SignUpPage> {
+class SignUpState extends State<SignUpPage> {
   static const Color customColor = Color(0xFFE25E3E);
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -149,15 +149,16 @@ class SignUpEmailInput extends StatelessWidget {
                   fontSize: 14,
                 )),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 12.0),
               ),
             ),
           ),
@@ -173,7 +174,8 @@ class SignUpPasswordInput extends StatelessWidget {
   final Function togglePasswordVisibility;
   final String label;
 
-  const SignUpPasswordInput({super.key, 
+  const SignUpPasswordInput({
+    super.key,
     required this.controller,
     required this.isObscured,
     required this.togglePasswordVisibility,
@@ -207,15 +209,16 @@ class SignUpPasswordInput extends StatelessWidget {
                   fontSize: 13,
                 )),
                 border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 12.0),
                 suffixIcon: IconButton(
                   icon: Icon(
                     isObscured ? Icons.visibility : Icons.visibility_off,
@@ -243,7 +246,6 @@ class SignUpButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           context.replaceRoute(const SetAccountRoute());
-          print('ok');
         },
         style: ButtonStyle(
           backgroundColor:
@@ -267,30 +269,28 @@ class SignInText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Already have an account?',
-              style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                fontSize: 15,
-              ))),
-          GestureDetector(
-            onTap: () {
-              context.replaceRoute(const LoginRoute());
-            },
-            child: Text(
-              ' Log in',
-              style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                fontSize: 15,
-                color: SignUpPage.customColor,
-              )),
-            ),
-          )
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Already have an account?',
+            style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+              fontSize: 15,
+            ))),
+        GestureDetector(
+          onTap: () {
+            context.replaceRoute(const LoginRoute());
+          },
+          child: Text(
+            ' Log in',
+            style: GoogleFonts.poppins(
+                textStyle: const TextStyle(
+              fontSize: 15,
+              color: SignUpPage.customColor,
+            )),
+          ),
+        )
+      ],
     );
   }
 }

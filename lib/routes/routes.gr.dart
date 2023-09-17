@@ -46,11 +46,10 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     RecipeRoute.name: (routeData) {
-      final args = routeData.argsAs<RecipeRouteArgs>(
-          orElse: () => const RecipeRouteArgs());
+      final args = routeData.argsAs<RecipeRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecipeScreen(key: args.key),
+        child: RecipeScreen(recipeid: args.recipeid),
       );
     },
     SelectCategoryRoute.name: (routeData) {
@@ -191,11 +190,11 @@ class NewPasswordRoute extends PageRouteInfo<void> {
 /// [RecipeScreen]
 class RecipeRoute extends PageRouteInfo<RecipeRouteArgs> {
   RecipeRoute({
-    Key? key,
+    required String recipeid,
     List<PageRouteInfo>? children,
   }) : super(
           RecipeRoute.name,
-          args: RecipeRouteArgs(key: key),
+          args: RecipeRouteArgs(recipeid: recipeid),
           initialChildren: children,
         );
 
@@ -205,13 +204,13 @@ class RecipeRoute extends PageRouteInfo<RecipeRouteArgs> {
 }
 
 class RecipeRouteArgs {
-  const RecipeRouteArgs({this.key});
+  const RecipeRouteArgs({required this.recipeid});
 
-  final Key? key;
+  final String recipeid;
 
   @override
   String toString() {
-    return 'RecipeRouteArgs{key: $key}';
+    return 'RecipeRouteArgs{recipeid: $recipeid}';
   }
 }
 

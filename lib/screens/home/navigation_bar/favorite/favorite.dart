@@ -103,14 +103,15 @@ class SearchBar extends StatelessWidget {
 }
 
 class FavoriteGridView extends StatelessWidget {
-  List<String> dummy = [];
+  final List<String> dummy = [];
 
   FavoriteGridView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: MyGridView(
-        items_id: dummy,
+        itemIdList: dummy,
       ),
     );
   }

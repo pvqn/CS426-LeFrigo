@@ -52,11 +52,9 @@ class ApiService {
     }
   }
 
-  Future<http.Response> getImageFromId({required String id}) async {
+  String getImageFromId({required String id}) {
     final url = Uri.http(_baseUrl, '/asset/$id');
 
-    final response = await http.get(url);
-
-    return response;
+    return url.toString();
   }
 }

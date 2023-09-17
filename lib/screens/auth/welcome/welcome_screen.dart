@@ -8,7 +8,7 @@ class WelcomeScreen extends StatelessWidget {
   static const Color customColor =
       Color(0xFFE25E3E); // Replace with your desired color code
 
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class WelcomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
 
     return const Column(
       children: [

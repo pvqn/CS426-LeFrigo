@@ -5,15 +5,14 @@ class IngredientTab extends StatefulWidget {
   const IngredientTab({super.key});
 
   @override
-  _IngredientState createState() => _IngredientState();
+  IngredientState createState() => IngredientState();
 }
 
-class _IngredientState extends State<IngredientTab> {
+class IngredientState extends State<IngredientTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: const Column(children: [
+    return const Column(children: [
       IngredientListView(),
-    ]));
+    ]);
   }
 }

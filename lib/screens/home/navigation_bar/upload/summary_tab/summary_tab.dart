@@ -3,26 +3,59 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:provider/provider.dart';
 
 class SummaryTab extends StatefulWidget {
   const SummaryTab({super.key});
 
   @override
-  _SummaryTabState createState() => _SummaryTabState();
+  SummaryTabState createState() => SummaryTabState();
 }
 
-class _SummaryTabState extends State<SummaryTab> {
+class SummaryTabState extends State<SummaryTab> {
   // string image?
   TextEditingController recipeName = TextEditingController();
   TextEditingController description = TextEditingController();
+
   TextEditingController totalTime = TextEditingController();
   TextEditingController serving = TextEditingController();
-  final List<String> categories = ['Category 1', 'Category 2', 'Category 3'];
-  String selectedCategory = 'Category 1'; // Set the default category
+  TextEditingController prepTime = TextEditingController();
+  TextEditingController cookTime = TextEditingController();
+
+  TextEditingController cal = TextEditingController();
+  TextEditingController fat = TextEditingController();
+  TextEditingController carb = TextEditingController();
+  TextEditingController protein = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<RecipeProvider>(context, listen: false).refreshCategory();
+    });
+  }
+
+  @override
+  void dispose() {
+    recipeName.dispose();
+    description.dispose();
+    totalTime.dispose();
+    serving.dispose();
+    prepTime.dispose();
+    cookTime.dispose();
+    cal.dispose();
+    fat.dispose();
+    carb.dispose();
+    protein.dispose();
+    super.dispose();
+  }
+
+  String selectedCategory = 'Dinner Recipes'; // Set the default category
 
   void _onCategoryChanged(String? newValue) {
     setState(() {
-      selectedCategory = newValue ?? 'Category 1'; // Handle null case
+      selectedCategory = newValue ?? 'Dinner Recipes'; // Handle null case
     });
   }
 
@@ -51,20 +84,72 @@ class _SummaryTabState extends State<SummaryTab> {
               labelText: 'Description',
             ),
             const SizedBox(height: 15),
-            InputFieldHorizontal(
-                controller: totalTime, labelText: 'Total time (minutes): '),
-            const SizedBox(height: 15),
-            InputFieldHorizontal(controller: serving, labelText: 'Servings: '),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InputFieldHorizontal(
+                    controller: totalTime, labelText: 'Total time: '),
+                const SizedBox(width: 5),
+                InputFieldHorizontal(
+                    controller: serving,
+                    hintText: ' ',
+                    labelText: 'Servings: '),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InputFieldHorizontal(
+                    controller: cookTime, labelText: 'Cook time: '),
+                const SizedBox(width: 5),
+                InputFieldHorizontal(
+                    controller: prepTime, labelText: 'Prep time: '),
+              ],
+            ),
             const SizedBox(height: 20),
             Text('Category',
                 style: GoogleFonts.poppins(
                     fontSize: 14, fontWeight: FontWeight.w500)),
             const SizedBox(height: 5),
-            CategoryDropdown(
-              selectedCategory: selectedCategory,
-              categories: categories,
-              onChanged: _onCategoryChanged,
+            Consumer<RecipeProvider>(builder: (context, recipeProvider, child) {
+              final categories = recipeProvider.categories;
+              return CategoryDropdown(
+                selectedCategory: selectedCategory,
+                categories: categories,
+                onChanged: _onCategoryChanged,
+              );
+            }),
+            const SizedBox(height: 20),
+            Text('Nutritions',
+                style: GoogleFonts.poppins(
+                    fontSize: 14, fontWeight: FontWeight.w500)),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InputFieldHorizontal(
+                  controller: cal,
+                  labelText: 'Calories: ',
+                  hintText: ' ',
+                ),
+                const SizedBox(width: 5),
+                InputFieldHorizontal(
+                    controller: carb, hintText: ' ', labelText: 'Carbs: '),
+              ],
             ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InputFieldHorizontal(
+                    controller: protein, labelText: 'Protein: ', hintText: ' '),
+                const SizedBox(width: 5),
+                InputFieldHorizontal(
+                    controller: fat, labelText: 'Fat: ', hintText: ' '),
+              ],
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
@@ -76,9 +161,14 @@ class InputFieldHorizontal extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
   final String labelText;
+  final String hintText;
 
   const InputFieldHorizontal(
-      {super.key, required this.controller, this.maxLines = 1, required this.labelText});
+      {super.key,
+      required this.controller,
+      this.maxLines = 1,
+      this.hintText = 'mins',
+      required this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -86,30 +176,30 @@ class InputFieldHorizontal extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-            child: Text(
-          labelText,
-          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
-        )),
-        const SizedBox(
-          height: 15,
-        ),
-        const SizedBox(
-          width: 5,
+        SizedBox(
+          width: 80,
+          child: Text(
+            labelText,
+            style:
+                GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
         ),
         SizedBox(
-            width: 200,
+            width: 80,
             child: TextField(
               controller: controller,
               maxLines: maxLines,
               decoration: InputDecoration(
+                  hintText: hintText,
+                  hintStyle: GoogleFonts.poppins(fontSize: 14),
                   border: OutlineInputBorder(
                     borderSide:
                         const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   )),
             ))
@@ -125,7 +215,8 @@ class InputField extends StatelessWidget {
   final String labelText;
 
   const InputField(
-      {super.key, required this.controller,
+      {super.key,
+      required this.controller,
       required this.hintText,
       this.maxLines = 1,
       required this.labelText});
@@ -149,7 +240,8 @@ class InputField extends StatelessWidget {
           decoration: InputDecoration(
               hintText: hintText,
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(
@@ -166,10 +258,10 @@ class ImageUploadWidget extends StatefulWidget {
   const ImageUploadWidget({super.key});
 
   @override
-  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
+  ImageUploadWidgetState createState() => ImageUploadWidgetState();
 }
 
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
+class ImageUploadWidgetState extends State<ImageUploadWidget> {
   File? _selectedImage;
 
   @override
@@ -229,7 +321,8 @@ class CategoryDropdown extends StatelessWidget {
   final String selectedCategory;
   final ValueChanged<String?> onChanged;
 
-  const CategoryDropdown({super.key, 
+  const CategoryDropdown({
+    super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onChanged,

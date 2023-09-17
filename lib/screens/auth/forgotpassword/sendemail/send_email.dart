@@ -21,10 +21,10 @@ class SendingEmailPage extends StatefulWidget {
   const SendingEmailPage({super.key});
 
   @override
-  _SendingEmailState createState() => _SendingEmailState();
+  SendingEmailState createState() => SendingEmailState();
 }
 
-class _SendingEmailState extends State<SendingEmailPage> {
+class SendingEmailState extends State<SendingEmailPage> {
   final TextEditingController _emailController = TextEditingController();
 
   @override
@@ -133,56 +133,54 @@ class EmailTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Email',
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Email',
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 5),
-          Consumer<AuthProvider>(builder: (context, auth, _) {
-            return SizedBox(
-              height: 43.0,
-              child: TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  hintText: 'Enter an email',
-                  hintStyle: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 13,
+        ),
+        const SizedBox(height: 5),
+        Consumer<AuthProvider>(builder: (context, auth, _) {
+          return SizedBox(
+            height: 43.0,
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: 'Enter an email',
+                hintStyle: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 13,
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color(0xFFD9D9D9),
+                    width: 2.0,
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xFFD9D9D9),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.black,
+                    width: 2.0,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 12.0,
-                  ),
-                  prefixIcon: const Icon(
-                    Icons.email,
-                  ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 12.0,
+                ),
+                prefixIcon: const Icon(
+                  Icons.email,
                 ),
               ),
-            );
-          }),
-        ],
-      ),
+            ),
+          );
+        }),
+      ],
     );
   }
 }

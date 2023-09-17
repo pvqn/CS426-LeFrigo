@@ -22,10 +22,10 @@ class MyNavigationBarApp extends StatefulWidget {
   const MyNavigationBarApp({super.key});
 
   @override
-  _MyNavigationBarAppState createState() => _MyNavigationBarAppState();
+  MyNavigationBarAppState createState() => MyNavigationBarAppState();
 }
 
-class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
+class MyNavigationBarAppState extends State<MyNavigationBarApp> {
   int _currentIndex = 0;
 
   final screens = [

@@ -7,13 +7,19 @@ class DirectionListView extends StatefulWidget {
   const DirectionListView({super.key});
 
   @override
-  _DirectionListViewState createState() => _DirectionListViewState();
+  DirectionListViewState createState() => DirectionListViewState();
 }
 
-class _DirectionListViewState extends State<DirectionListView> {
+class DirectionListViewState extends State<DirectionListView> {
   final TextEditingController _descriptionController = TextEditingController();
   int order = 1;
-  List<Direction> itemList = [];
+  final List<Direction> _itemList = [];
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +45,13 @@ class _DirectionListViewState extends State<DirectionListView> {
                   final newItem = Direction(
                       order: order++, description: _descriptionController.text);
                   setState(() {
-                    itemList.add(newItem);
+                    _itemList.add(newItem);
                     _descriptionController.clear();
                   });
                 }),
               ],
             ),
-            DirectionsList(itemList: itemList),
+            DirectionsList(itemList: _itemList),
             const SizedBox(height: 5),
             FinishButton(onPressed: () {})
           ],
@@ -68,7 +74,8 @@ class DirectionsList extends StatelessWidget {
         Text(
           'Directions',
           style: GoogleFonts.poppins(
-            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            textStyle:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(height: 10),
@@ -160,13 +167,15 @@ class InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String labelText;
-  int maxLines;
+  final int maxLines;
 
-  InputField(
-      {super.key, required this.controller,
-      required this.hintText,
-      required this.labelText,
-      required this.maxLines});
+  const InputField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.labelText,
+    required this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +197,8 @@ class InputField extends StatelessWidget {
               hintText: hintText,
               hintStyle: GoogleFonts.poppins(fontSize: 14),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(

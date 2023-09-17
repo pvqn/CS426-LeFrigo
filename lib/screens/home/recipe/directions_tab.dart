@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'model.dart';
+import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/services/get_it.dart';
 
 class DirectionsTab extends StatefulWidget {
-  const DirectionsTab({super.key});
+  final Recipe recipe;
+
+  const DirectionsTab({super.key, required this.recipe});
 
   @override
-  _DirectionsTabState createState() => _DirectionsTabState();
+  DirectionsTabState createState() => DirectionsTabState();
 }
 
-class _DirectionsTabState extends State<DirectionsTab> {
-  List<String> directions = [
-    dummy().description,
-    dummy().description,
-    dummy().description
-  ];
+class DirectionsTabState extends State<DirectionsTab> {
+  late List<String> _directions;
+  final _log = getIt<Logger>(param1: 'DirectionsTab');
+
+  @override
+  void initState() {
+    super.initState();
+    _directions = widget.recipe.directions;
+    _log.info(_directions);
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: directions.length,
+      itemCount: _directions.length,
       itemBuilder: (context, index) {
         return Container(
             margin: const EdgeInsets.all(10),
@@ -47,7 +53,7 @@ class _DirectionsTabState extends State<DirectionsTab> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(directions[index],
+                  Text(_directions[index],
                       style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                         color: Colors.black,

@@ -19,10 +19,10 @@ class VerifyCodePage extends StatefulWidget {
   const VerifyCodePage({super.key});
 
   @override
-  _VerifyCodeState createState() => _VerifyCodeState();
+  VerifyCodeState createState() => VerifyCodeState();
 }
 
-class _VerifyCodeState extends State<VerifyCodePage> {
+class VerifyCodeState extends State<VerifyCodePage> {
   final List<TextEditingController> _verifyController = List.generate(
     8, // Replace with the desired number of controllers
     (_) => TextEditingController(),

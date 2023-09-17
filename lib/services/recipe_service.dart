@@ -90,7 +90,13 @@ class RecipeService {
     );
 
     if (response.type == ApiResponseType.success) {
-      return;
+      final decode = jsonDecode(response.message ?? '{}');
+
+      if (decode['success'] == true) {
+        return;
+      } else {
+        throw RecipeServiceException(message: decode['message']);
+      }
     } else {
       throw const HttpException('Internet connection error');
     }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'model.dart';
+import 'package:lefrigo/models/recipe.dart';
 
 class SummaryTab extends StatelessWidget {
-  final dummy recipe = dummy();
+  final Recipe recipe;
 
-  SummaryTab({super.key});
+  const SummaryTab({super.key, required this.recipe});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -19,10 +20,10 @@ class SummaryTab extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Text(recipe.nameRecipe,
+            Text(recipe.name,
                 style: GoogleFonts.inter(
-                    textStyle:
-                        const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold))),
             const SizedBox(
               height: 20,
             ),
@@ -35,17 +36,17 @@ class SummaryTab extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                     child: Text(
-                  recipe.nameUser,
+                  recipe.author ?? 'LeFrigo User',
                   style: GoogleFonts.poppins(
-                      textStyle:
-                          const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 14)),
                 )),
                 const Icon(Icons.favorite, color: Colors.black, size: 24),
                 const SizedBox(
                   width: 5,
                 ),
                 Text(
-                  recipe.likes.toString(),
+                  recipe.numLiked.toString(),
                   style: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                           fontSize: 14,
@@ -59,26 +60,10 @@ class SummaryTab extends StatelessWidget {
             ),
             Text(recipe.description,
                 style: GoogleFonts.poppins(
-                    textStyle: const TextStyle(fontSize: 13, color: Colors.black))),
+                    textStyle:
+                        const TextStyle(fontSize: 13, color: Colors.black))),
             const SizedBox(
               height: 20,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Servings: ',
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black)),
-                ),
-                Text(
-                  recipe.serving.toString(),
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(fontSize: 15, color: Colors.black)),
-                )
-              ],
             ),
             const SizedBox(
               height: 20,
@@ -109,10 +94,10 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${recipe.cal}g',
+                      recipe.nutrition.calories,
                       style: GoogleFonts.poppins(
-                          textStyle:
-                              const TextStyle(color: Colors.black, fontSize: 14)),
+                          textStyle: const TextStyle(
+                              color: Colors.black, fontSize: 14)),
                     )
                   ],
                 ),
@@ -130,10 +115,10 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${recipe.fat}g',
+                      recipe.nutrition.fat,
                       style: GoogleFonts.poppins(
-                          textStyle:
-                              const TextStyle(color: Colors.black, fontSize: 14)),
+                          textStyle: const TextStyle(
+                              color: Colors.black, fontSize: 14)),
                     )
                   ],
                 ),
@@ -151,10 +136,10 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${recipe.carb}g',
+                      recipe.nutrition.carbs,
                       style: GoogleFonts.poppins(
-                          textStyle:
-                              const TextStyle(color: Colors.black, fontSize: 14)),
+                          textStyle: const TextStyle(
+                              color: Colors.black, fontSize: 14)),
                     )
                   ],
                 ),
@@ -172,10 +157,10 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${recipe.protein}g',
+                      recipe.nutrition.protein,
                       style: GoogleFonts.poppins(
-                          textStyle:
-                              const TextStyle(color: Colors.black, fontSize: 14)),
+                          textStyle: const TextStyle(
+                              color: Colors.black, fontSize: 14)),
                     )
                   ],
                 ),

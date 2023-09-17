@@ -7,19 +7,16 @@ class IngredientListView extends StatefulWidget {
   const IngredientListView({super.key});
 
   @override
-  _IngredientListViewState createState() => _IngredientListViewState();
+  IngredientListViewState createState() => IngredientListViewState();
 }
 
-class _IngredientListViewState extends State<IngredientListView> {
+class IngredientListViewState extends State<IngredientListView> {
   final TextEditingController _ingredientController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   String _selectedUnit = 'ounce';
   final List<String> unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
-  List<ingredient> itemList = [
-    ingredient(name: 'yogurt', note: '', quantity: '3', unit: 'ounce'),
-    ingredient(name: 'yogurt', note: '', quantity: '3', unit: 'ounce'),
-  ];
+  List<ingredient> itemList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +80,8 @@ class QuantityAndUnitInput extends StatelessWidget {
   final Function(String) onUnitChanged;
   final VoidCallback onAddButtonPressed;
 
-  const QuantityAndUnitInput({super.key, 
+  const QuantityAndUnitInput({
+    super.key,
     required this.quantityController,
     required this.selectedUnit,
     required this.unitList,
@@ -108,38 +106,36 @@ class QuantityAndUnitInput extends StatelessWidget {
             ),
             const SizedBox(width: 15),
             Expanded(
-              child: Container(
-                child: DropdownButtonFormField<String>(
-                  value: selectedUnit,
-                  onChanged: (String? newValue) {
-                    onUnitChanged(newValue!);
-                  },
-                  items: unitList.map((String unit) {
-                    return DropdownMenuItem<String>(
-                      value: unit,
-                      child: Text(' $unit',
-                          style: GoogleFonts.poppins(
-                              fontSize: 16)), // Customize text style
-                    );
-                  }).toList(),
-                  style: const TextStyle(
-                    color: Colors
-                        .black, // Customize the text color of the selected item
-                    fontSize:
-                        16.0, // Customize the text size of the selected item
+              child: DropdownButtonFormField<String>(
+                value: selectedUnit,
+                onChanged: (String? newValue) {
+                  onUnitChanged(newValue!);
+                },
+                items: unitList.map((String unit) {
+                  return DropdownMenuItem<String>(
+                    value: unit,
+                    child: Text(' $unit',
+                        style: GoogleFonts.poppins(
+                            fontSize: 16)), // Customize text style
+                  );
+                }).toList(),
+                style: const TextStyle(
+                  color: Colors
+                      .black, // Customize the text color of the selected item
+                  fontSize:
+                      16.0, // Customize the text size of the selected item
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(10.0), // Customize border radius
+                    borderSide: const BorderSide(
+                        color: Colors.black,
+                        width: 2.0), // Customize border color and width
                   ),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Customize border radius
-                      borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 2.0), // Customize border color and width
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 18.0,
-                        horizontal: 16.0), // Customize content padding
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 18.0,
+                      horizontal: 16.0), // Customize content padding
                 ),
               ),
             )
@@ -168,7 +164,8 @@ class IngredientsList extends StatelessWidget {
         Text(
           'Ingredients',
           style: GoogleFonts.poppins(
-            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            textStyle:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(height: 10),
@@ -227,7 +224,8 @@ class InputField extends StatelessWidget {
   final String labelText;
 
   const InputField(
-      {super.key, required this.controller,
+      {super.key,
+      required this.controller,
       required this.hintText,
       required this.labelText});
 
@@ -250,7 +248,8 @@ class InputField extends StatelessWidget {
               hintText: hintText,
               hintStyle: GoogleFonts.poppins(fontSize: 14),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(

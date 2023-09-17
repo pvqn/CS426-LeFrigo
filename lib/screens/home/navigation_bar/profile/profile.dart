@@ -5,15 +5,14 @@ import 'package:lefrigo/routes/routes.dart';
 import 'post_grid_view.dart';
 import 'model.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return const Center(
@@ -164,7 +163,8 @@ class UserStat extends StatelessWidget {
   final String label;
   final String value;
 
-  const UserStat({super.key, 
+  const UserStat({
+    super.key,
     required this.label,
     required this.value,
   });
@@ -198,10 +198,10 @@ class PostGridPage extends StatefulWidget {
   const PostGridPage({super.key});
 
   @override
-  _PostGridPageState createState() => _PostGridPageState();
+  PostGridPageState createState() => PostGridPageState();
 }
 
-class _PostGridPageState extends State<PostGridPage> {
+class PostGridPageState extends State<PostGridPage> {
   List<dummy> items = [
     dummy(),
     // Add more items as needed

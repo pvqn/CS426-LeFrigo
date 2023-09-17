@@ -60,10 +60,10 @@ class ResetPasswordForm extends StatefulWidget {
   const ResetPasswordForm({super.key});
 
   @override
-  _ResetPasswordFormState createState() => _ResetPasswordFormState();
+  ResetPasswordFormState createState() => ResetPasswordFormState();
 }
 
-class _ResetPasswordFormState extends State<ResetPasswordForm> {
+class ResetPasswordFormState extends State<ResetPasswordForm> {
   static const Color customColor = Color(0xFFE25E3E);
 
   final TextEditingController _passwordController = TextEditingController();
@@ -146,7 +146,8 @@ class ResetPasswordTextField extends StatelessWidget {
   final bool isObscured;
   final void Function() togglePasswordVisibility;
 
-  const ResetPasswordTextField({super.key, 
+  const ResetPasswordTextField({
+    super.key,
     required this.labelText,
     required this.hintText,
     required this.controller,
@@ -179,7 +180,8 @@ class ResetPasswordTextField extends StatelessWidget {
                 fontSize: 13,
               ),
               border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               focusedBorder: OutlineInputBorder(

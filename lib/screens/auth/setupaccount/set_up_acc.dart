@@ -20,10 +20,10 @@ class SetAccountPage extends StatefulWidget {
   const SetAccountPage({super.key});
 
   @override
-  _SetAccountState createState() => _SetAccountState();
+  SetAccountState createState() => SetAccountState();
 }
 
-class _SetAccountState extends State<SetAccountPage> {
+class SetAccountState extends State<SetAccountPage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
 
@@ -36,12 +36,12 @@ class _SetAccountState extends State<SetAccountPage> {
     super.dispose();
   }
 
-  bool _isObscured = true;
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isObscured = !_isObscured;
-    });
-  }
+  // bool _isObscured = true;
+  // void _togglePasswordVisibility() {
+  //   setState(() {
+  //     _isObscured = !_isObscured;
+  //   });
+  // }
 
   void _onCountrySelected(Country country) {
     setState(() {
@@ -165,34 +165,32 @@ class _SetAccountState extends State<SetAccountPage> {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
-            child: TextField(
-              readOnly: true,
-              controller: TextEditingController(
-                text: DateFormat('MMMM dd, yyyy').format(selectedDate),
+          TextField(
+            readOnly: true,
+            controller: TextEditingController(
+              text: DateFormat('MMMM dd, yyyy').format(selectedDate),
+            ),
+            style: GoogleFonts.poppins(
+              textStyle: const TextStyle(
+                fontSize: 13,
               ),
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 13,
-                ),
+            ),
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                hoverColor: const Color(0xFFE25E3E),
+                icon: const Icon(Icons.calendar_today),
+                onPressed: () {
+                  _selectDate(context);
+                },
               ),
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  hoverColor: const Color(0xFFE25E3E),
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () {
-                    _selectDate(context);
-                  },
-                ),
-                border: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
+              border: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                borderRadius: BorderRadius.circular(20.0),
               ),
             ),
           ),
@@ -217,45 +215,42 @@ class _SetAccountState extends State<SetAccountPage> {
             ),
           ),
           const SizedBox(height: 15),
-          Container(
-            child: GestureDetector(
-              onTap: () {
-                showCountryPicker(
-                  context: context,
-                  onSelect: _onCountrySelected,
-                );
-              },
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 12.0,
-                  ),
+          GestureDetector(
+            onTap: () {
+              showCountryPicker(
+                context: context,
+                onSelect: _onCountrySelected,
+              );
+            },
+            child: InputDecorator(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      _selectedCountry?.name ?? 'Select Country',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                          fontSize: 13,
-                        ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 12.0,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    _selectedCountry?.name ?? 'Select Country',
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        fontSize: 13,
                       ),
                     ),
-                    const Icon(Icons.arrow_drop_down),
-                  ],
-                ),
+                  ),
+                  const Icon(Icons.arrow_drop_down),
+                ],
               ),
             ),
           ),
