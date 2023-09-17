@@ -5,12 +5,10 @@ import 'package:lefrigo/routes/routes.dart';
 import 'post_grid_view.dart';
 import 'model.dart';
 
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'post_grid_view.dart';
-import 'model.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -18,23 +16,23 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: [
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
           ProfileHeader(),
-          const SizedBox(height: 30),
+          SizedBox(height: 30),
           UserStatistics(),
-          const SizedBox(height: 10),
-          const Divider(
+          SizedBox(height: 10),
+          Divider(
             height: 8,
             thickness: 2,
             indent: 20,
             endIndent: 20,
             color: Colors.grey,
           ),
-          const SizedBox(height: 15),
-          const Text(
+          SizedBox(height: 15),
+          Text(
             'Posts',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -42,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Color(0xFF173F4E),
             ),
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
           Expanded(child: PostGridPage()),
         ],
       ),
@@ -51,6 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -58,7 +58,7 @@ class ProfileHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(width: 20),
-        CircleAvatar(
+        const CircleAvatar(
           radius: 45,
           backgroundImage: AssetImage('assets/images/welcome_bg.png'),
         ),
@@ -70,7 +70,7 @@ class ProfileHeader extends StatelessWidget {
               Text(
                 'antihcmus',
                 style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
                     color: Colors.black,
@@ -81,7 +81,7 @@ class ProfileHeader extends StatelessWidget {
               Text(
                 'Vietnam',
                 style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontSize: 14,
                     color: Color(0xFFD9D9D9),
                   ),
@@ -91,7 +91,7 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 20),
-        EditProfileButton(),
+        const EditProfileButton(),
         const SizedBox(
           width: 15,
         )
@@ -101,6 +101,8 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class EditProfileButton extends StatelessWidget {
+  const EditProfileButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,7 +126,7 @@ class EditProfileButton extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          context.router.push(UpdateProfileRoute());
+          context.router.push(const UpdateProfileRoute());
         },
         child: const Icon(
           Icons.edit,
@@ -137,9 +139,11 @@ class EditProfileButton extends StatelessWidget {
 }
 
 class UserStatistics extends StatelessWidget {
+  const UserStatistics({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
@@ -160,7 +164,7 @@ class UserStat extends StatelessWidget {
   final String label;
   final String value;
 
-  const UserStat({
+  const UserStat({super.key, 
     required this.label,
     required this.value,
   });
@@ -191,6 +195,8 @@ class UserStat extends StatelessWidget {
 }
 
 class PostGridPage extends StatefulWidget {
+  const PostGridPage({super.key});
+
   @override
   _PostGridPageState createState() => _PostGridPageState();
 }

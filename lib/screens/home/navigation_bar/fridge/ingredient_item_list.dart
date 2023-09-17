@@ -3,12 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/screens/home/navigation_bar/fridge/ingredient_item.dart';
 
 class IngredientListView extends StatefulWidget {
+  const IngredientListView({super.key});
+
   @override
   _IngredientListViewState createState() => _IngredientListViewState();
 }
 
 class _IngredientListViewState extends State<IngredientListView> {
-  TextEditingController _ingredientController = TextEditingController();
+  final TextEditingController _ingredientController = TextEditingController();
   List<String> itemList = [];
 
   @override
@@ -30,7 +32,7 @@ class _IngredientListViewState extends State<IngredientListView> {
                   color: Colors.grey.withOpacity(0.5), // Shadow color
                   spreadRadius: 2, // Spread radius
                   blurRadius: 5, // Blur radius
-                  offset: Offset(0, 2), // Offset from the top
+                  offset: const Offset(0, 2), // Offset from the top
                 ),
               ],
             ),
@@ -44,20 +46,20 @@ class _IngredientListViewState extends State<IngredientListView> {
                       hintText: 'Add Ingredient',
                       hintStyle: GoogleFonts.poppins(fontSize: 14),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16.0),
+                      contentPadding: const EdgeInsets.all(16.0),
                     ),
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 InkWell(
                   onTap: () {},
-                  child: Icon(
+                  child: const Icon(
                     Icons.camera_alt,
                     color: Color(0xFFE25E3E),
                     size: 24,
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 InkWell(
                   onTap: () {
                     String newItem = _ingredientController.text;
@@ -68,28 +70,28 @@ class _IngredientListViewState extends State<IngredientListView> {
                       });
                     }
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle,
                     color: Color(0xFFE25E3E),
                     size: 24,
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
               ],
             ),
           ),
-          SizedBox(height: 35),
+          const SizedBox(height: 35),
           Container(
             width: 363.0,
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             child: Text(
               'Current Ingredients',
               style: GoogleFonts.poppins(
                   textStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             ),
           ),
-          Container(
+          SizedBox(
             width: 363.0,
             child: ListView.builder(
               shrinkWrap: true,

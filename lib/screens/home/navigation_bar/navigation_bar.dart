@@ -8,15 +8,19 @@ import 'package:auto_route/auto_route.dart';
 
 @RoutePage()
 class NavigationBarScreen extends StatelessWidget {
+  const NavigationBarScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyNavigationBarApp(),
     );
   }
 }
 
 class MyNavigationBarApp extends StatefulWidget {
+  const MyNavigationBarApp({super.key});
+
   @override
   _MyNavigationBarAppState createState() => _MyNavigationBarAppState();
 }
@@ -25,11 +29,11 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
   int _currentIndex = 0;
 
   final screens = [
-    HomePage(),
-    FridgePage(),
-    ThirdScreen(),
+    const HomePage(),
+    const FridgePage(),
+    const ThirdScreen(),
     FavoritePage(),
-    ProfilePage()
+    const ProfilePage()
   ];
   @override
   Widget build(BuildContext context) {
@@ -39,8 +43,8 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
     );
   }
 
-  Container buildMyNavigationBar(BuildContext context) {
-    return Container(
+  Widget buildMyNavigationBar(BuildContext context) {
+    return SizedBox(
       height: 60,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -52,12 +56,12 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
                 });
               },
               icon: _currentIndex == 0
-                  ? Icon(
+                  ? const Icon(
                       Icons.home_outlined,
                       color: Color(0xFFE25E3E),
                       size: 30,
                     )
-                  : Icon(Icons.home_outlined,
+                  : const Icon(Icons.home_outlined,
                       color: Color(0xFF202A44),
                       size: 30) // Replace with your desired icon
               ),
@@ -68,19 +72,20 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
                 });
               },
               icon: _currentIndex == 1
-                  ? Icon(Icons.shopping_basket_outlined,
+                  ? const Icon(Icons.shopping_basket_outlined,
                       color: Color(0xFFE25E3E), size: 30)
-                  : Icon(Icons.shopping_basket_outlined,
+                  : const Icon(Icons.shopping_basket_outlined,
                       color: Color(0xFF202A44),
                       size: 30) // Replace with your desired icon
               ),
           IconButton(
               onPressed: () {
-                context.router.push(UploadRoute());
+                context.router.push(const UploadRoute());
               },
               icon: _currentIndex == 2
-                  ? Icon(Icons.add_circle, color: Color(0xFFE25E3E), size: 30)
-                  : Icon(Icons.add_circle,
+                  ? const Icon(Icons.add_circle,
+                      color: Color(0xFFE25E3E), size: 30)
+                  : const Icon(Icons.add_circle,
                       color: Color(0xFF202A44),
                       size: 30) // Replace with your desired icon
               ),
@@ -91,9 +96,9 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
                 });
               },
               icon: _currentIndex == 3
-                  ? Icon(Icons.bookmark_outline,
+                  ? const Icon(Icons.bookmark_outline,
                       color: Color(0xFFE25E3E), size: 30)
-                  : Icon(Icons.bookmark_outline,
+                  : const Icon(Icons.bookmark_outline,
                       color: Color(0xFF202A44),
                       size: 30) // Replace with your desired icon
               ),
@@ -104,9 +109,9 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
                 });
               },
               icon: _currentIndex == 4
-                  ? Icon(Icons.person_2_outlined,
+                  ? const Icon(Icons.person_2_outlined,
                       color: Color(0xFFE25E3E), size: 30)
-                  : Icon(Icons.person_2_outlined,
+                  : const Icon(Icons.person_2_outlined,
                       color: Color(0xFF202A44),
                       size: 30) // Replace with your desired icon
               ),
@@ -117,27 +122,33 @@ class _MyNavigationBarAppState extends State<MyNavigationBarApp> {
 }
 
 class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Search Screen'),
     );
   }
 }
 
 class ThirdScreen extends StatelessWidget {
+  const ThirdScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Profile Screen'),
     );
   }
 }
 
 class FifthScreen extends StatelessWidget {
+  const FifthScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Profile Screen'),
     );
   }

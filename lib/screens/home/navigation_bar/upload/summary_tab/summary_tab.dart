@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class SummaryTab extends StatefulWidget {
+  const SummaryTab({super.key});
+
   @override
   _SummaryTabState createState() => _SummaryTabState();
 }
@@ -29,36 +30,36 @@ class _SummaryTabState extends State<SummaryTab> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 14),
+        margin: const EdgeInsets.symmetric(horizontal: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 2),
-            ImageUploadWidget(),
-            SizedBox(height: 15),
+            const SizedBox(height: 2),
+            const ImageUploadWidget(),
+            const SizedBox(height: 15),
             InputField(
               controller: recipeName,
               hintText: 'Enter recipe name',
               maxLines: 1,
               labelText: 'Recipe Name',
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             InputField(
               controller: description,
               hintText: 'Enter description',
               maxLines: 3,
               labelText: 'Description',
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             InputFieldHorizontal(
                 controller: totalTime, labelText: 'Total time (minutes): '),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             InputFieldHorizontal(controller: serving, labelText: 'Servings: '),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text('Category',
                 style: GoogleFonts.poppins(
                     fontSize: 14, fontWeight: FontWeight.w500)),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             CategoryDropdown(
               selectedCategory: selectedCategory,
               categories: categories,
@@ -76,8 +77,8 @@ class InputFieldHorizontal extends StatelessWidget {
   final int maxLines;
   final String labelText;
 
-  InputFieldHorizontal(
-      {required this.controller, this.maxLines = 1, required this.labelText});
+  const InputFieldHorizontal(
+      {super.key, required this.controller, this.maxLines = 1, required this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +91,13 @@ class InputFieldHorizontal extends StatelessWidget {
           labelText,
           style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
         )),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
-        Container(
+        SizedBox(
             width: 200,
             child: TextField(
               controller: controller,
@@ -104,11 +105,11 @@ class InputFieldHorizontal extends StatelessWidget {
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                        const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   )),
             ))
@@ -123,8 +124,8 @@ class InputField extends StatelessWidget {
   final int maxLines;
   final String labelText;
 
-  InputField(
-      {required this.controller,
+  const InputField(
+      {super.key, required this.controller,
       required this.hintText,
       this.maxLines = 1,
       required this.labelText});
@@ -139,7 +140,7 @@ class InputField extends StatelessWidget {
           labelText,
           style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         TextField(
@@ -148,11 +149,11 @@ class InputField extends StatelessWidget {
           decoration: InputDecoration(
               hintText: hintText,
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 2.0),
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               )),
         )
@@ -162,6 +163,8 @@ class InputField extends StatelessWidget {
 }
 
 class ImageUploadWidget extends StatefulWidget {
+  const ImageUploadWidget({super.key});
+
   @override
   _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
 }
@@ -180,11 +183,11 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
           child: DottedBorder(
             color: Colors.grey,
             borderType: BorderType.RRect,
-            radius: Radius.circular(20),
-            padding: EdgeInsets.all(6),
+            radius: const Radius.circular(20),
+            padding: const EdgeInsets.all(6),
             strokeWidth: 2,
-            dashPattern: [6, 3], // Adjust the dash pattern as needed
-            child: Container(
+            dashPattern: const [6, 3], // Adjust the dash pattern as needed
+            child: SizedBox(
               width: double.infinity,
               height: 200,
               child: Center(
@@ -198,7 +201,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : Column(
+                    : const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.add_a_photo, size: 60, color: Colors.grey),
@@ -226,7 +229,7 @@ class CategoryDropdown extends StatelessWidget {
   final String selectedCategory;
   final ValueChanged<String?> onChanged;
 
-  CategoryDropdown({
+  const CategoryDropdown({super.key, 
     required this.categories,
     required this.selectedCategory,
     required this.onChanged,
@@ -245,11 +248,11 @@ class CategoryDropdown extends StatelessWidget {
       }).toList(),
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+          borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 2.0),
+          borderSide: const BorderSide(color: Colors.black, width: 2.0),
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),

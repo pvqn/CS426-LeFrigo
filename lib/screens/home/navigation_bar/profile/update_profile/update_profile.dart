@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -8,13 +7,17 @@ import 'package:lefrigo/routes/routes.dart';
 
 @RoutePage()
 class UpdateProfileScreen extends StatelessWidget {
+  const UpdateProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return UpdateProfilePage();
+    return const UpdateProfilePage();
   }
 }
 
 class UpdateProfilePage extends StatefulWidget {
+  const UpdateProfilePage({super.key});
+
   @override
   _UpdateProfileState createState() => _UpdateProfileState();
 }
@@ -23,7 +26,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
 
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
@@ -61,25 +64,25 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
         child: Column(
           children: [
             _buildHeader(context),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildAvatarEditButton(),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             _buildTextField(
               'Full Name',
               _fullNameController,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildTextField(
               'Email',
               _emailController,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildDateOfBirthPicker(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildCountryPicker(),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             _buildConfirmButton(),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildChangePasswordLink(),
           ],
         ),
@@ -89,7 +92,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 40, left: 20),
+      margin: const EdgeInsets.only(top: 40, left: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -97,7 +100,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
             onTap: () {
               context.router.pop();
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back,
               size: 24,
               color: Colors.black,
@@ -113,13 +116,13 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 70,
             backgroundImage: AssetImage('assets/welcomeImg.png'),
           ),
           InkWell(
             onTap: () {},
-            child: Icon(
+            child: const Icon(
               Icons.edit_outlined,
               size: 40,
               color: Colors.white,
@@ -131,7 +134,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Widget _buildTextField(String labelText, TextEditingController controller) {
-    return Container(
+    return SizedBox(
       width: 350,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -140,14 +143,14 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
           Text(
             labelText,
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 15),
-          Container(
+          const SizedBox(height: 15),
+          SizedBox(
             height: 43.0,
             child: TextField(
               controller: controller,
@@ -157,11 +160,11 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
                     : 'antihcmus@gmail.com',
                 hintStyle: GoogleFonts.poppins(fontSize: 13),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
@@ -173,7 +176,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Widget _buildDateOfBirthPicker() {
-    return Container(
+    return SizedBox(
       width: 350,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -182,34 +185,34 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
           Text(
             'Date of Birth',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Container(
             child: TextField(
               readOnly: true,
               controller: TextEditingController(
-                text: "${DateFormat('MMMM dd, yyyy').format(selectedDate)}",
+                text: DateFormat('MMMM dd, yyyy').format(selectedDate),
               ),
               style: GoogleFonts.poppins(fontSize: 13),
               decoration: InputDecoration(
                 suffixIcon: IconButton(
-                  hoverColor: Color(0xFFE25E3E),
-                  icon: Icon(Icons.calendar_today),
+                  hoverColor: const Color(0xFFE25E3E),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () {
                     _selectDate(context);
                   },
                 ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
@@ -221,7 +224,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Widget _buildCountryPicker() {
-    return Container(
+    return SizedBox(
       width: 350,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -230,13 +233,13 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
           Text(
             'Country',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Container(
             child: GestureDetector(
               onTap: () {
@@ -249,14 +252,14 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                        const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 12.0,
                   ),
@@ -268,7 +271,7 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
                       _selectedCountry?.name ?? 'Select Country',
                       style: GoogleFonts.poppins(fontSize: 13),
                     ),
-                    Icon(Icons.arrow_drop_down),
+                    const Icon(Icons.arrow_drop_down),
                   ],
                 ),
               ),
@@ -280,25 +283,25 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Widget _buildConfirmButton() {
-    return Container(
+    return SizedBox(
       width: 350,
       height: 43,
       child: ElevatedButton(
         onPressed: () {
           // Add your button's onPressed behavior here
         },
-        child: Text(
-          'Confirm',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(fontSize: 15, color: Colors.white),
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
+          ),
+        ),
+        child: Text(
+          'Confirm',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(fontSize: 15, color: Colors.white),
           ),
         ),
       ),
@@ -308,11 +311,11 @@ class _UpdateProfileState extends State<UpdateProfilePage> {
   Widget _buildChangePasswordLink() {
     return GestureDetector(
       onTap: () {
-        context.router.push(ChangePasswordRoute());
+        context.router.push(const ChangePasswordRoute());
       },
       child: Text(
         'Change password',
-        style: GoogleFonts.poppins(fontSize: 15, color: Color(0xFF9E9D9D)),
+        style: GoogleFonts.poppins(fontSize: 15, color: const Color(0xFF9E9D9D)),
       ),
     );
   }

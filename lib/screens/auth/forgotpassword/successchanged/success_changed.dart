@@ -5,22 +5,26 @@ import 'package:lefrigo/routes/routes.dart';
 
 @RoutePage()
 class SuccessfulChangedScreen extends StatelessWidget {
+  const SuccessfulChangedScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SuccessfulChangedPage();
+    return const SuccessfulChangedPage();
   }
 }
 
 class SuccessfulChangedPage extends StatelessWidget {
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
+
+  const SuccessfulChangedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          child: SuccessContent(),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: const SuccessContent(),
         ),
       ),
     );
@@ -28,9 +32,11 @@ class SuccessfulChangedPage extends StatelessWidget {
 }
 
 class SuccessContent extends StatelessWidget {
+  const SuccessContent({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         SizedBox(
           height: 200,
@@ -48,9 +54,11 @@ class SuccessContent extends StatelessWidget {
 }
 
 class SuccessIcon extends StatelessWidget {
+  const SuccessIcon({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Icon(
+    return const Icon(
       Icons.verified,
       size: 150,
       color: SuccessfulChangedPage.customColor,
@@ -59,6 +67,8 @@ class SuccessIcon extends StatelessWidget {
 }
 
 class SuccessTitle extends StatelessWidget {
+  const SuccessTitle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -72,6 +82,8 @@ class SuccessTitle extends StatelessWidget {
 }
 
 class SuccessMessage extends StatelessWidget {
+  const SuccessMessage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -94,16 +106,17 @@ class SuccessMessage extends StatelessWidget {
 }
 
 class SuccessButton extends StatelessWidget {
+  const SuccessButton({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 43,
       child: ElevatedButton(
         onPressed: () {
-          context.router.push(LoginRoute());
+          context.router.push(const LoginRoute());
         },
-        child: Text('Done', style: GoogleFonts.poppins(fontSize: 15)),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
               SuccessfulChangedPage.customColor),
@@ -113,6 +126,7 @@ class SuccessButton extends StatelessWidget {
             ),
           ),
         ),
+        child: Text('Done', style: GoogleFonts.poppins(fontSize: 15)),
       ),
     );
   }

@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'model.dart';
 
 class IngredientsTab extends StatefulWidget {
+  const IngredientsTab({super.key});
+
   @override
   _IngredientsTabState createState() => _IngredientsTabState();
 }
@@ -24,18 +26,18 @@ class _IngredientsTabState extends State<IngredientsTab> {
       itemCount: ingredients.length,
       itemBuilder: (context, index) {
         return Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           width: 366,
           height: 58,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Color(0xFFE25E3E).withOpacity(0.2), // Border color
+              color: const Color(0xFFE25E3E).withOpacity(0.2), // Border color
               width: 1.0, // Border width
             ),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Row(children: [
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(
@@ -45,13 +47,13 @@ class _IngredientsTabState extends State<IngredientsTab> {
               children: [
                 Text(ingredients[index].name,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w500))),
-                Text('Notes: ' + ingredients[index].note,
+                Text('Notes: ${ingredients[index].note}',
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                       color: Color(0xFFC4C4C4),
                       fontSize: 14,
                     )))
@@ -60,17 +62,17 @@ class _IngredientsTabState extends State<IngredientsTab> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(''),
+                const Text(''),
                 Text(ingredients[index].quantity,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w500))),
-                Text(''),
+                const Text(''),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
           ]),

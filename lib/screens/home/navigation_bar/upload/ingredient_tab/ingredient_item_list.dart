@@ -4,14 +4,16 @@ import 'ingredient_item.dart';
 import 'model.dart';
 
 class IngredientListView extends StatefulWidget {
+  const IngredientListView({super.key});
+
   @override
   _IngredientListViewState createState() => _IngredientListViewState();
 }
 
 class _IngredientListViewState extends State<IngredientListView> {
-  TextEditingController _ingredientController = TextEditingController();
-  TextEditingController _noteController = TextEditingController();
-  TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _ingredientController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
   String _selectedUnit = 'ounce';
   final List<String> unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
   List<ingredient> itemList = [
@@ -23,7 +25,7 @@ class _IngredientListViewState extends State<IngredientListView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             InputField(
@@ -31,13 +33,13 @@ class _IngredientListViewState extends State<IngredientListView> {
               hintText: 'Name',
               labelText: 'New ingredient',
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             InputField(
               controller: _noteController,
               hintText: 'Note',
               labelText: 'Note',
             ),
-            SizedBox(height: 35),
+            const SizedBox(height: 35),
             QuantityAndUnitInput(
               quantityController: _quantityController,
               selectedUnit: _selectedUnit,
@@ -63,7 +65,7 @@ class _IngredientListViewState extends State<IngredientListView> {
                 });
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             IngredientsList(itemList: itemList),
@@ -81,7 +83,7 @@ class QuantityAndUnitInput extends StatelessWidget {
   final Function(String) onUnitChanged;
   final VoidCallback onAddButtonPressed;
 
-  const QuantityAndUnitInput({
+  const QuantityAndUnitInput({super.key, 
     required this.quantityController,
     required this.selectedUnit,
     required this.unitList,
@@ -96,7 +98,7 @@ class QuantityAndUnitInput extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
+            SizedBox(
               width: 100,
               child: InputField(
                 controller: quantityController,
@@ -104,7 +106,7 @@ class QuantityAndUnitInput extends StatelessWidget {
                 labelText: 'Quantity',
               ),
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Expanded(
               child: Container(
                 child: DropdownButtonFormField<String>(
@@ -115,12 +117,12 @@ class QuantityAndUnitInput extends StatelessWidget {
                   items: unitList.map((String unit) {
                     return DropdownMenuItem<String>(
                       value: unit,
-                      child: Text(' ' + unit,
+                      child: Text(' $unit',
                           style: GoogleFonts.poppins(
                               fontSize: 16)), // Customize text style
                     );
                   }).toList(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors
                         .black, // Customize the text color of the selected item
                     fontSize:
@@ -130,11 +132,11 @@ class QuantityAndUnitInput extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(
                           10.0), // Customize border radius
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                           color: Colors.black,
                           width: 2.0), // Customize border color and width
                     ),
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                         vertical: 18.0,
                         horizontal: 16.0), // Customize content padding
                   ),
@@ -143,7 +145,7 @@ class QuantityAndUnitInput extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [AddButton(onPressed: onAddButtonPressed)],
@@ -156,7 +158,7 @@ class QuantityAndUnitInput extends StatelessWidget {
 class IngredientsList extends StatelessWidget {
   final List<ingredient> itemList;
 
-  IngredientsList({required this.itemList});
+  const IngredientsList({super.key, required this.itemList});
 
   @override
   Widget build(BuildContext context) {
@@ -166,10 +168,10 @@ class IngredientsList extends StatelessWidget {
         Text(
           'Ingredients',
           style: GoogleFonts.poppins(
-            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.builder(
           shrinkWrap: true,
           itemCount: itemList.length,
@@ -186,31 +188,31 @@ class IngredientsList extends StatelessWidget {
 
 class AddButton extends StatelessWidget {
   final VoidCallback onPressed;
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
 
-  AddButton({required this.onPressed});
+  const AddButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 70,
       height: 43,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          'Add',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
+        child: Text(
+          'Add',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
             ),
           ),
         ),
@@ -224,8 +226,8 @@ class InputField extends StatelessWidget {
   final String hintText;
   final String labelText;
 
-  InputField(
-      {required this.controller,
+  const InputField(
+      {super.key, required this.controller,
       required this.hintText,
       required this.labelText});
 
@@ -239,7 +241,7 @@ class InputField extends StatelessWidget {
           labelText,
           style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         TextField(
@@ -248,11 +250,11 @@ class InputField extends StatelessWidget {
               hintText: hintText,
               hintStyle: GoogleFonts.poppins(fontSize: 14),
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 2.0),
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               )),
         )

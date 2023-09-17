@@ -4,11 +4,11 @@ import 'model.dart';
 
 class IngredientItem extends StatelessWidget {
   final ingredient item;
-  IngredientItem({required this.item});
+  const IngredientItem({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: const EdgeInsets.only(bottom: 15),
       width: double.infinity,
       height: 58,
       decoration: BoxDecoration(
@@ -19,7 +19,7 @@ class IngredientItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Row(children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Expanded(
@@ -29,13 +29,13 @@ class IngredientItem extends StatelessWidget {
           children: [
             Text(item.name,
                 style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w500))),
-            Text('Notes: ' + item.note,
+            Text('Notes: ${item.note}',
                 style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                   color: Color(0xFFC4C4C4),
                   fontSize: 14,
                 )))
@@ -44,17 +44,17 @@ class IngredientItem extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(''),
-            Text(item.quantity + ' ' + item.unit,
+            const Text(''),
+            Text('${item.quantity} ${item.unit}',
                 style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w500))),
-            Text(''),
+            const Text(''),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
       ]),

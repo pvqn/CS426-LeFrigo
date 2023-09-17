@@ -18,61 +18,64 @@ abstract class _$AppRouter extends RootStackRouter {
     CategoryRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: CategoryScreen(),
+        child: const CategoryScreen(),
       );
     },
     ChangePasswordRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: ChangePasswordScreen(),
+        child: const ChangePasswordScreen(),
       );
     },
     LoginRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: LoginScreen(),
+        child: const LoginScreen(),
       );
     },
     NavigationBarRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NavigationBarScreen(),
+        child: const NavigationBarScreen(),
       );
     },
     NewPasswordRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: NewPasswordScreen(),
+        child: const NewPasswordScreen(),
       );
     },
     RecipeRoute.name: (routeData) {
+      final args = routeData.argsAs<RecipeRouteArgs>(
+          orElse: () => const RecipeRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecipeScreen(),
+        child: RecipeScreen(key: args.key),
       );
     },
     SelectCategoryRoute.name: (routeData) {
+      final args = routeData.argsAs<SelectCategoryRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SelectCategoryScreen(),
+        child: SelectCategoryScreen(category: args.category),
       );
     },
     SendingEmailRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SendingEmailScreen(),
+        child: const SendingEmailScreen(),
       );
     },
     SetAccountRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SetAccountScreen(),
+        child: const SetAccountScreen(),
       );
     },
     SignUpRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SignUpScreen(),
+        child: const SignUpScreen(),
       );
     },
     SplashRoute.name: (routeData) {
@@ -84,25 +87,25 @@ abstract class _$AppRouter extends RootStackRouter {
     SuccessfulChangedRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: SuccessfulChangedScreen(),
+        child: const SuccessfulChangedScreen(),
       );
     },
     UpdateProfileRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UpdateProfileScreen(),
+        child: const UpdateProfileScreen(),
       );
     },
     UploadRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: UploadScreen(),
+        child: const UploadScreen(),
       );
     },
     VerifyCodeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: VerifyCodeScreen(),
+        child: const VerifyCodeScreen(),
       );
     },
     WelcomeRoute.name: (routeData) {
@@ -186,30 +189,59 @@ class NewPasswordRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [RecipeScreen]
-class RecipeRoute extends PageRouteInfo<void> {
-  const RecipeRoute({List<PageRouteInfo>? children})
-      : super(
+class RecipeRoute extends PageRouteInfo<RecipeRouteArgs> {
+  RecipeRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           RecipeRoute.name,
+          args: RecipeRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'RecipeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<RecipeRouteArgs> page = PageInfo<RecipeRouteArgs>(name);
+}
+
+class RecipeRouteArgs {
+  const RecipeRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'RecipeRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for
 /// [SelectCategoryScreen]
-class SelectCategoryRoute extends PageRouteInfo<void> {
-  const SelectCategoryRoute({List<PageRouteInfo>? children})
-      : super(
+class SelectCategoryRoute extends PageRouteInfo<SelectCategoryRouteArgs> {
+  SelectCategoryRoute({
+    required String category,
+    List<PageRouteInfo>? children,
+  }) : super(
           SelectCategoryRoute.name,
+          args: SelectCategoryRouteArgs(category: category),
           initialChildren: children,
         );
 
   static const String name = 'SelectCategoryRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<SelectCategoryRouteArgs> page =
+      PageInfo<SelectCategoryRouteArgs>(name);
+}
+
+class SelectCategoryRouteArgs {
+  const SelectCategoryRouteArgs({required this.category});
+
+  final String category;
+
+  @override
+  String toString() {
+    return 'SelectCategoryRouteArgs{category: $category}';
+  }
 }
 
 /// generated route for

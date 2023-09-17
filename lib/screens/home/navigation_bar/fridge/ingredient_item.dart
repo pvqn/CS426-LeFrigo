@@ -5,12 +5,12 @@ class IngredientItem extends StatelessWidget {
   final String text;
   final VoidCallback onRemove;
 
-  IngredientItem({required this.text, required this.onRemove});
+  const IngredientItem({super.key, required this.text, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         width: 363,
         height: 51,
         decoration: BoxDecoration(
@@ -22,24 +22,24 @@ class IngredientItem extends StatelessWidget {
         ),
         // Margin around the container
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Expanded(
-              child: Text('$text',
+              child: Text(text,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold)))),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           InkWell(
             onTap: onRemove,
-            child: Icon(
+            child: const Icon(
               Icons.remove_circle,
               color: Color(0xFFE25E3E),
               size: 24,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           )
         ]));

@@ -4,19 +4,23 @@ import 'package:google_fonts/google_fonts.dart';
 
 @RoutePage()
 class ChangePasswordScreen extends StatelessWidget {
+  const ChangePasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ChangePasswordPage();
+    return const ChangePasswordPage();
   }
 }
 
 class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
+
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
 }
 
 class _ChangePasswordState extends State<ChangePasswordPage> {
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordController1 = TextEditingController();
@@ -37,6 +41,14 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
     });
   }
 
+  void updatePassword() {
+    if (_passwordController1.text != _passwordController2.text) {
+      // Show snackbar to retype
+    } else {
+      //Provider.of<AuthProvider>(context, listen = false).update
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -46,28 +58,28 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
           child: Column(
             children: [
               _buildHeader(context),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               _buildPasswordField(
                 'Old Password',
                 _passwordController,
                 _isObscured,
                 () => _togglePasswordVisibility(0),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               _buildPasswordField(
                 'New Password',
                 _passwordController1,
                 _isObscured1,
                 () => _togglePasswordVisibility(1),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               _buildPasswordField(
                 'Retype New Password',
                 _passwordController2,
                 _isObscured2,
                 () => _togglePasswordVisibility(2),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               _buildContinueButton(),
             ],
           ),
@@ -78,7 +90,7 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 40, left: 20),
+        margin: const EdgeInsets.only(top: 40, left: 20),
         child: Column(
           children: [
             Row(
@@ -88,7 +100,7 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                   onTap: () {
                     context.router.pop();
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.arrow_back,
                     size: 24,
                     color: Colors.black,
@@ -96,13 +108,13 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 18,
             ),
             Text('Change your password',
                 style: GoogleFonts.inter(
                     textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                        const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           ],
         ));
   }
@@ -114,7 +126,7 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
     Function toggleVisibility,
   ) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 29),
+      margin: const EdgeInsets.only(left: 20, right: 29),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,14 +134,14 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
           Text(
             labelText,
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 15),
-          Container(
+          const SizedBox(height: 15),
+          SizedBox(
             height: 43.0,
             child: TextField(
               controller: controller,
@@ -138,21 +150,21 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
                 hintText: 'At least 8 characters',
                 hintStyle: GoogleFonts.poppins(fontSize: 13),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   vertical: 10.0,
                   horizontal: 12.0,
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     isObscured ? Icons.visibility : Icons.visibility_off,
-                    color: Color(0xFFD9D9D9),
+                    color: const Color(0xFFD9D9D9),
                   ),
                   onPressed: () => toggleVisibility(),
                 ),
@@ -166,24 +178,24 @@ class _ChangePasswordState extends State<ChangePasswordPage> {
 
   Widget _buildContinueButton() {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 29),
+      margin: const EdgeInsets.only(left: 20, right: 29),
       width: double.infinity,
       height: 43,
       child: ElevatedButton(
         onPressed: () {},
-        child: Text(
-          'Continue',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontSize: 15,
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
+          ),
+        ),
+        child: Text(
+          'Continue',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 15,
           ),
         ),
       ),

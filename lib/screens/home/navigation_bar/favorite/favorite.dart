@@ -3,20 +3,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/screens/home/custom_grid_view.dart';
 
 class FavoritePage extends StatelessWidget {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+
+  FavoritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
-          PageTitle(),
-          SizedBox(height: 25),
+          const PageTitle(),
+          const SizedBox(height: 25),
           SearchBar(controller: _searchController),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           Expanded(child: FavoriteGridView()),
         ],
       ),
@@ -25,13 +27,15 @@ class FavoritePage extends StatelessWidget {
 }
 
 class PageTitle extends StatelessWidget {
+  const PageTitle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Text(
         'Favorite',
         style: GoogleFonts.inter(
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Color(0xff173F4E),
@@ -45,7 +49,7 @@ class PageTitle extends StatelessWidget {
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
 
-  SearchBar({required this.controller});
+  const SearchBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -63,21 +67,21 @@ class SearchBar extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
-          Icon(
+          const Icon(
             Icons.search,
             size: 24,
           ),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
           Expanded(
@@ -99,10 +103,15 @@ class SearchBar extends StatelessWidget {
 }
 
 class FavoriteGridView extends StatelessWidget {
+  List<String> dummy = [];
+
+  FavoriteGridView({super.key});
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: MyGridView(),
+      child: MyGridView(
+        items_id: dummy,
+      ),
     );
   }
 }

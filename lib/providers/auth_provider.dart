@@ -6,6 +6,9 @@ enum AuthNotifierStatus {
   inauthenticated,
   logInSucess,
   logInFailed,
+  updatePasswordFailed,
+  sendPasswordResetEmailSuccess,
+  sendPasswordResetEmailFailed,
   logOut,
   unknown,
 }
@@ -119,6 +122,43 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
         status: AuthNotifierStatus.inauthenticated,
+        message: e.toString(),
+      );
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await _authService.forgotPassword(
+        email: email,
+      );
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.sendPasswordResetEmailSuccess,
+      );
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.sendPasswordResetEmailFailed,
+        message: e.toString(),
+      );
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> updatePassword(String oldPassword, String newPassword) async {
+    try {
+      _authService.changePassword(
+          oldPassword: oldPassword, newPassword: newPassword);
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.logOut,
+      );
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.updatePasswordFailed,
         message: e.toString(),
       );
     } finally {

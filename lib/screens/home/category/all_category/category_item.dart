@@ -3,15 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoryItem extends StatelessWidget {
   final String text;
-  final String image;
-  final String id;
+  String image;
+  String id;
 
-  CategoryItem({required this.id, required this.text, required this.image});
+  CategoryItem(
+      {super.key, this.id = '',
+      required this.text,
+      this.image = 'assets/images/welcome_bg.png'});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
       width: 350,
       height: 162,
       decoration: BoxDecoration(
@@ -37,10 +40,10 @@ class CategoryItem extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: Text(text,
                   style: GoogleFonts.inter(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                           color: Colors.white))),

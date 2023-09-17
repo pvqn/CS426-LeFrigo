@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:lefrigo/models/recipe.dart';
+
 import 'package:lefrigo/services/api_service.dart';
 
 class RecipeServiceException implements Exception {
@@ -19,7 +20,7 @@ class RecipeService {
     final response = await _apiService.get(path: '/categories');
 
     if (response.type == ApiResponseType.success) {
-      final categories = response.message as List<dynamic>;
+      final categories = jsonDecode(response.message ?? '[]') as List<dynamic>;
       final categoriesList = categories.map((e) => e.toString()).toList();
 
       return categoriesList;
@@ -30,10 +31,10 @@ class RecipeService {
 
   Future<List<String>> getListOfRecipesByCategory(
       {required String category}) async {
-    final response = await _apiService.get(path: '/recipes/$category');
+    final response = await _apiService.get(path: '/category/$category');
 
     if (response.type == ApiResponseType.success) {
-      final recipes = response.message as List<dynamic>;
+      final recipes = jsonDecode(response.message ?? '[]') as List<dynamic>;
       final recipesList = recipes.map((e) => e.toString()).toList();
 
       return recipesList;
@@ -57,7 +58,7 @@ class RecipeService {
     final response = await _apiService.get(path: '/recipe/search/$name');
 
     if (response.type == ApiResponseType.success) {
-      final recipes = response.message as List<dynamic>;
+      final recipes = jsonDecode(response.message ?? '[]') as List<dynamic>;
       final recipesList = recipes.map((e) => e.toString()).toList();
 
       return recipesList;
@@ -70,7 +71,7 @@ class RecipeService {
     final response = await _apiService.get(path: '/ingredients');
 
     if (response.type == ApiResponseType.success) {
-      final ingredients = response.message as List<dynamic>;
+      final ingredients = jsonDecode(response.message ?? '[]') as List<dynamic>;
       final ingredientsList = ingredients.map((e) => e.toString()).toList();
 
       return ingredientsList;

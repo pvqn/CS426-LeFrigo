@@ -8,7 +8,7 @@ class PostGridItem extends StatelessWidget {
   final dummy item;
   final VoidCallback onRemove;
 
-  PostGridItem({required this.item, required this.onRemove});
+  const PostGridItem({super.key, required this.item, required this.onRemove});
   void _showRemoveDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -18,7 +18,7 @@ class PostGridItem extends StatelessWidget {
             borderRadius:
                 BorderRadius.circular(20.0), // Set the border radius here
           ),
-          content: Container(
+          content: SizedBox(
             width: 337, // Set the desired width
             // Set the desired height
             child: Column(
@@ -32,7 +32,7 @@ class PostGridItem extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 20.0), // Add vertical space
+                const SizedBox(height: 20.0), // Add vertical space
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -41,10 +41,10 @@ class PostGridItem extends StatelessWidget {
                         Navigator.of(context).pop(); // Close the dialog
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white, // Set the button color
+                        backgroundColor: Colors.white, // Set the button color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.black),
+                          side: const BorderSide(color: Colors.black),
                         ),
                       ),
                       child: Text(
@@ -62,7 +62,7 @@ class PostGridItem extends StatelessWidget {
                         onRemove(); // Notify parent that removal is confirmed
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // Set the button color
+                        backgroundColor: Colors.red, // Set the button color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -93,7 +93,7 @@ class PostGridItem extends StatelessWidget {
         context.router.push(RecipeRoute());
       },
       child: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         width: 158,
         height: 280, // Set a fixed height
         decoration: BoxDecoration(
@@ -104,75 +104,75 @@ class PostGridItem extends StatelessWidget {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
+                    width: 27,
+                    height: 27,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         _showRemoveDialog(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.delete,
                         size: 20,
                         color: Color(0xFFFF0B0B),
                       ),
                     ),
-                    width: 27,
-                    height: 27,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
                   )
                 ],
               ),
-              Expanded(child: Text('')),
-              Container(
+              const Expanded(child: Text('')),
+              SizedBox(
                 width: double.infinity, // Expand to full width
                 child: Text(item.nameRecipe,
                     style: GoogleFonts.inter(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                             fontSize: 15,
                             color: Colors.white,
                             fontWeight: FontWeight.bold))),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity, // Expand to full width
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.favorite,
                       size: 20,
                       color: Colors.white,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(item.likes.toString(),
                         style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                                 fontSize: 13,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold))),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
             ],

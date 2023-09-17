@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'model.dart';
 
 class DirectionsTab extends StatefulWidget {
+  const DirectionsTab({super.key});
+
   @override
   _DirectionsTabState createState() => _DirectionsTabState();
 }
@@ -21,7 +23,7 @@ class _DirectionsTabState extends State<DirectionsTab> {
       itemCount: directions.length,
       itemBuilder: (context, index) {
         return Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             width: 366,
             decoration: BoxDecoration(
               border: Border.all(
@@ -31,23 +33,23 @@ class _DirectionsTabState extends State<DirectionsTab> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Step ' + (index + 1).toString(),
+                  Text('Step ${index + 1}',
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 13,
                               fontWeight: FontWeight.w500))),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(directions[index],
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 13,
                       ))),

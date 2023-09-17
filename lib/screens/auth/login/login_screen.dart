@@ -1,4 +1,4 @@
-import 'package:lefrigo/providers/auth_provider.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
 class _WelcomeBackPage extends StatefulWidget {
   static const Color customColor = Color(0xFFE25E3E);
 
-  const _WelcomeBackPage({super.key});
+  const _WelcomeBackPage();
 
   @override
   State<_WelcomeBackPage> createState() => _WelcomeBackPageState();
@@ -41,6 +41,16 @@ class _WelcomeBackPageState extends State<_WelcomeBackPage> {
     final authProvider = Provider.of<AuthProvider>(context);
     if (authProvider.currentStatus.status == AuthNotifierStatus.logInSucess) {
       context.router.replace(const NavigationBarRoute());
+
+      // final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      // userProvider.refreshUser().then((_) async {
+      //   if (userProvider.isUserInfoComplete) {
+      //     context.router.replace(const NavigationBarRoute());
+      //   } else {
+      //     context.router.replace(const SetAccountRoute());
+      //   }
+      // });
     } else if (authProvider.currentStatus.status ==
         AuthNotifierStatus.logInFailed) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -339,6 +349,12 @@ class GoogleSignInButton extends StatelessWidget {
         onPressed: () {
           // Handle Google Sign In
         },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: _WelcomeBackPage.customColor),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -353,16 +369,10 @@ class GoogleSignInButton extends StatelessWidget {
             Text(
               'Continue with Google',
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                       fontSize: 15, color: _WelcomeBackPage.customColor)),
             ),
           ],
-        ),
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: _WelcomeBackPage.customColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
         ),
       ),
     );
@@ -392,7 +402,7 @@ class SignUpText extends StatelessWidget {
           child: Text(
             ' Sign up',
             style: GoogleFonts.poppins(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 15,
                 color: _WelcomeBackPage.customColor,
               ),

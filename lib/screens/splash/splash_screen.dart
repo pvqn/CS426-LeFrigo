@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       context.router.replace(const NavigationBarRoute());
     } else if (authProvider.currentStatus.status ==
         AuthNotifierStatus.inauthenticated) {
-      context.router.replace(const WelcomeRoute());
+      context.router.replace(WelcomeRoute());
     }
 
     super.didChangeDependencies();

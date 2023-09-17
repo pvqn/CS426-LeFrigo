@@ -10,6 +10,8 @@ import 'ingredient_tab.dart';
 class RecipeScreen extends StatelessWidget {
   final dummy recipe = dummy();
 
+  RecipeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +21,7 @@ class RecipeScreen extends StatelessWidget {
           body: Column(
             children: [
               RecipeHeader(recipe: recipe),
-              RecipeTabsContent(),
+              const RecipeTabsContent(),
             ],
           ),
         ),
@@ -31,14 +33,14 @@ class RecipeScreen extends StatelessWidget {
 class RecipeHeader extends StatelessWidget {
   final dummy recipe;
 
-  RecipeHeader({required this.recipe});
+  const RecipeHeader({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(20.0),
             bottomRight: Radius.circular(20.0),
           ),
@@ -54,7 +56,7 @@ class RecipeHeader extends StatelessWidget {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               top: 40,
               left: 20,
               right: 20,
@@ -68,16 +70,16 @@ class RecipeHeader extends StatelessWidget {
                       onTap: () {
                         context.router.pop();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back,
                         size: 24,
                         color: Colors.white,
                       ),
                     ),
-                    Expanded(child: Text('')),
+                    const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: () {},
-                      child: Icon(
+                      child: const Icon(
                         Icons.favorite_outline,
                         size: 24,
                         color: Colors.white,
@@ -85,7 +87,7 @@ class RecipeHeader extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 170),
+                const SizedBox(height: 170),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -109,7 +111,7 @@ class RecipeHeader extends StatelessWidget {
         Text(
           label,
           style: GoogleFonts.inter(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontSize: 13,
@@ -119,7 +121,7 @@ class RecipeHeader extends StatelessWidget {
         Text(
           value,
           style: GoogleFonts.inter(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Colors.white,
               fontSize: 13,
             ),
@@ -131,25 +133,27 @@ class RecipeHeader extends StatelessWidget {
 }
 
 class RecipeTabsContent extends StatelessWidget {
+  const RecipeTabsContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: TabBar(
               labelColor: Colors.black,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: Colors.black,
               labelStyle: GoogleFonts.inter(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              tabs: [
+              tabs: const [
                 Tab(text: 'Summary'),
                 Tab(text: 'Ingredients'),
                 Tab(text: 'Directions'),
@@ -160,8 +164,8 @@ class RecipeTabsContent extends StatelessWidget {
             child: TabBarView(
               children: [
                 SummaryTab(),
-                IngredientsTab(),
-                DirectionsTab(),
+                const IngredientsTab(),
+                const DirectionsTab(),
               ],
             ),
           ),

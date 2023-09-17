@@ -4,12 +4,14 @@ import 'directions_item.dart';
 import 'model.dart';
 
 class DirectionListView extends StatefulWidget {
+  const DirectionListView({super.key});
+
   @override
   _DirectionListViewState createState() => _DirectionListViewState();
 }
 
 class _DirectionListViewState extends State<DirectionListView> {
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   int order = 1;
   List<Direction> itemList = [];
 
@@ -17,17 +19,17 @@ class _DirectionListViewState extends State<DirectionListView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             InputField(
               controller: _descriptionController,
               hintText: 'Enter description',
-              labelText: 'Step ' + order.toString(),
+              labelText: 'Step $order',
               maxLines: 5,
             ),
-            SizedBox(height: 15),
-            SizedBox(
+            const SizedBox(height: 15),
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -44,7 +46,7 @@ class _DirectionListViewState extends State<DirectionListView> {
               ],
             ),
             DirectionsList(itemList: itemList),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             FinishButton(onPressed: () {})
           ],
         ),
@@ -56,7 +58,7 @@ class _DirectionListViewState extends State<DirectionListView> {
 class DirectionsList extends StatelessWidget {
   final List<Direction> itemList;
 
-  DirectionsList({required this.itemList});
+  const DirectionsList({super.key, required this.itemList});
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +68,10 @@ class DirectionsList extends StatelessWidget {
         Text(
           'Directions',
           style: GoogleFonts.poppins(
-            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.builder(
           shrinkWrap: true,
           itemCount: itemList.length,
@@ -86,31 +88,31 @@ class DirectionsList extends StatelessWidget {
 
 class AddButton extends StatelessWidget {
   final VoidCallback onPressed;
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
 
-  AddButton({required this.onPressed});
+  const AddButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 70,
       height: 43,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          'Add',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
+        child: Text(
+          'Add',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
             ),
           ),
         ),
@@ -121,31 +123,31 @@ class AddButton extends StatelessWidget {
 
 class FinishButton extends StatelessWidget {
   final VoidCallback onPressed;
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
 
-  FinishButton({required this.onPressed});
+  const FinishButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 43,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          'Finish',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
+        child: Text(
+          'Finish',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
             ),
           ),
         ),
@@ -161,7 +163,7 @@ class InputField extends StatelessWidget {
   int maxLines;
 
   InputField(
-      {required this.controller,
+      {super.key, required this.controller,
       required this.hintText,
       required this.labelText,
       required this.maxLines});
@@ -176,7 +178,7 @@ class InputField extends StatelessWidget {
           labelText,
           style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         TextField(
@@ -186,11 +188,11 @@ class InputField extends StatelessWidget {
               hintText: hintText,
               hintStyle: GoogleFonts.poppins(fontSize: 14),
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                borderSide: const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 2.0),
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               )),
         )

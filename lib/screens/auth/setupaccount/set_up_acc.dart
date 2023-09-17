@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:lefrigo/routes/routes.dart';
+import 'package:lefrigo/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class SetAccountScreen extends StatelessWidget {
+  const SetAccountScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SetAccountPage();
+    return const SetAccountPage();
   }
 }
 
 class SetAccountPage extends StatefulWidget {
+  const SetAccountPage({super.key});
+
   @override
   _SetAccountState createState() => _SetAccountState();
 }
@@ -23,8 +27,14 @@ class _SetAccountState extends State<SetAccountPage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
 
-  static final Color customColor = Color(0xFFE25E3E);
+  static const Color customColor = Color(0xFFE25E3E);
   final TextEditingController _fullNameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    super.dispose();
+  }
 
   bool _isObscured = true;
   void _togglePasswordVisibility() {
@@ -60,13 +70,13 @@ class _SetAccountState extends State<SetAccountPage> {
         child: Column(
           children: [
             _buildHeader(),
-            SizedBox(height: 56),
+            const SizedBox(height: 56),
             _buildFullNameField(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildDateOfBirthField(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildCountryField(),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             _buildContinueButton(context),
           ],
         ),
@@ -76,14 +86,14 @@ class _SetAccountState extends State<SetAccountPage> {
 
   Widget _buildHeader() {
     return Container(
-      margin: EdgeInsets.only(top: 122),
+      margin: const EdgeInsets.only(top: 122),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Set up your account',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -95,7 +105,7 @@ class _SetAccountState extends State<SetAccountPage> {
   }
 
   Widget _buildFullNameField() {
-    return Container(
+    return SizedBox(
       width: 310,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -104,30 +114,31 @@ class _SetAccountState extends State<SetAccountPage> {
           Text(
             'Full Name',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
             ),
           ),
-          SizedBox(height: 15),
-          Container(
+          const SizedBox(height: 15),
+          SizedBox(
             height: 43.0,
             child: TextField(
               controller: _fullNameController,
               decoration: InputDecoration(
                 hintText: 'antihcmus',
                 hintStyle: GoogleFonts.poppins(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontSize: 14,
                   ),
                 ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
@@ -139,7 +150,7 @@ class _SetAccountState extends State<SetAccountPage> {
   }
 
   Widget _buildDateOfBirthField() {
-    return Container(
+    return SizedBox(
       width: 310,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -148,37 +159,38 @@ class _SetAccountState extends State<SetAccountPage> {
           Text(
             'Date of birth',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
               ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Container(
             child: TextField(
               readOnly: true,
               controller: TextEditingController(
-                text: "${DateFormat('MMMM dd, yyyy').format(selectedDate)}",
+                text: DateFormat('MMMM dd, yyyy').format(selectedDate),
               ),
               style: GoogleFonts.poppins(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 13,
                 ),
               ),
               decoration: InputDecoration(
                 suffixIcon: IconButton(
-                  hoverColor: Color(0xFFE25E3E),
-                  icon: Icon(Icons.calendar_today),
+                  hoverColor: const Color(0xFFE25E3E),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () {
                     _selectDate(context);
                   },
                 ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                  borderSide:
+                      const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
@@ -190,7 +202,7 @@ class _SetAccountState extends State<SetAccountPage> {
   }
 
   Widget _buildCountryField() {
-    return Container(
+    return SizedBox(
       width: 310,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -199,12 +211,12 @@ class _SetAccountState extends State<SetAccountPage> {
           Text(
             'Country',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 14,
               ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Container(
             child: GestureDetector(
               onTap: () {
@@ -217,14 +229,15 @@ class _SetAccountState extends State<SetAccountPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
+                        const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 12.0,
                   ),
@@ -235,12 +248,12 @@ class _SetAccountState extends State<SetAccountPage> {
                     Text(
                       _selectedCountry?.name ?? 'Select Country',
                       style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 13,
                         ),
                       ),
                     ),
-                    Icon(Icons.arrow_drop_down),
+                    const Icon(Icons.arrow_drop_down),
                   ],
                 ),
               ),
@@ -252,27 +265,41 @@ class _SetAccountState extends State<SetAccountPage> {
   }
 
   Widget _buildContinueButton(BuildContext context) {
-    return Container(
+    final userProvider = Provider.of<UserProvider>(context);
+
+    return SizedBox(
       width: 310,
       height: 43,
       child: ElevatedButton(
-        onPressed: () {
-          context.router.push(NavigationBarRoute());
+        onPressed: () async {
+          if (_fullNameController.text.isEmpty ||
+              _selectedCountry == null ||
+              selectedDate == DateTime.now()) {
+            // SHOW SNACKBAR
+
+            return;
+          }
+
+          await userProvider.updateUser(
+            username: _fullNameController.text,
+            country: _selectedCountry?.displayName,
+            dob: selectedDate,
+          );
         },
-        child: Text(
-          'Continue',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
+            ),
+          ),
+        ),
+        child: Text(
+          'Continue',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
             ),
           ),
         ),

@@ -35,11 +35,15 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
     };
 
 Details _$DetailsFromJson(Map<String, dynamic> json) => Details(
-      servings: json['Servings'] as String,
-      totalTime: json['Total Time'] as String,
+      cookTime: json['Cook Time'] as int,
+      prepTime: json['Prep Time'] as int,
+      servings: json['Servings'] as int,
+      totalTime: json['Total Time'] as int,
     );
 
 Map<String, dynamic> _$DetailsToJson(Details instance) => <String, dynamic>{
+      'Cook Time': instance.cookTime,
+      'Prep Time': instance.prepTime,
       'Servings': instance.servings,
       'Total Time': instance.totalTime,
     };

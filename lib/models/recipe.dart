@@ -55,18 +55,18 @@ class Recipe {
 
 @JsonSerializable()
 class Details {
-  // @JsonKey(name: 'Cook Time')
-  // final String cookTime;
-  // @JsonKey(name: 'Prep Time')
-  // final String prepTime;
+  @JsonKey(name: 'Cook Time')
+  final int cookTime;
+  @JsonKey(name: 'Prep Time')
+  final int prepTime;
   @JsonKey(name: 'Servings')
-  final String servings;
+  final int servings;
   @JsonKey(name: 'Total Time')
-  final String totalTime;
+  final int totalTime;
 
   Details({
-    // required this.cookTime,
-    // required this.prepTime,
+    required this.cookTime,
+    required this.prepTime,
     required this.servings,
     required this.totalTime,
   });
