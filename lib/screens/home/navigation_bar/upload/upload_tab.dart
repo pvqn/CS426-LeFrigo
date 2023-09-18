@@ -106,8 +106,7 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
 
-    print('ok geeeeeeeeee');
-  }
+
 
   @override
   Widget build(BuildContext context) {
