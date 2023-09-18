@@ -48,6 +48,7 @@ class UserProvider extends ChangeNotifier {
 
     _status = UserProviderMessage(UserProviderState.fetchComplete);
     notifyListeners();
+    _status = UserProviderMessage(UserProviderState.unknown);
   }
 
   Future<void> updateUser({
@@ -85,6 +86,7 @@ class UserProvider extends ChangeNotifier {
       );
     } finally {
       notifyListeners();
+      _status = UserProviderMessage(UserProviderState.unknown);
     }
   }
 }

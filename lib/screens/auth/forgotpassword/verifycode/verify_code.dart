@@ -9,7 +9,10 @@ import 'package:lefrigo/routes/routes.dart';
 
 @RoutePage()
 class VerifyCodeScreen extends StatefulWidget {
-  const VerifyCodeScreen({Key? key}) : super(key: key);
+  final String email;
+
+  const VerifyCodeScreen({Key? key, required this.email}) : super(key: key);
+
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
 }

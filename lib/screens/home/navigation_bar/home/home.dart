@@ -6,6 +6,7 @@ import 'package:lefrigo/routes/routes.dart';
 import 'package:provider/provider.dart';
 import 'category_list.dart';
 import 'popular_list.dart';
+import 'package:lefrigo/models/recipe_search.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -162,11 +163,16 @@ class NotificationIcon extends StatelessWidget {
   }
 }
 
-class SearchBar extends StatelessWidget {
-  final TextEditingController _searchController = TextEditingController();
-
+class SearchBar extends StatefulWidget {
   SearchBar({super.key});
 
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final TextEditingController _searchController = TextEditingController();
+  List<RecipeSearch> recipeSearch = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -190,24 +196,83 @@ class SearchBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(width: 10),
-          const Icon(
-            Icons.search,
-            size: 24,
-          ),
           const SizedBox(width: 5),
           Expanded(
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search Recipes',
-                hintStyle: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 14),
-                ),
-                border: InputBorder.none,
-              ),
+            child: FutureBuilder(
+              future: Provider.of<RecipeProvider>(context, listen: false)
+                  .getListofRecipeSearch(),
+              builder: ((context, snapshot) {
+                if (snapshot.hasData) {
+                  recipeSearch = snapshot.data as List<RecipeSearch>;
+                  return Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text.isEmpty) {
+                      return const Iterable<String>.empty();
+                    }
+                    return recipeSearch
+                        .where((recipe) => recipe.name.toLowerCase().contains(
+                              textEditingValue.text.toLowerCase(),
+                            ))
+                        .map((recipe) => recipe.name)
+                        .toList();
+                  }, onSelected: (String selectedRecipeName) {
+                    setState(() {
+                      _searchController.text = selectedRecipeName;
+                    });
+                  }, fieldViewBuilder: (BuildContext context,
+                          TextEditingController fieldTextEditingController,
+                          FocusNode fieldFocusNode,
+                          VoidCallback onFieldSubmitted) {
+                    return TextField(
+                      controller: fieldTextEditingController,
+                      focusNode: fieldFocusNode,
+                      onSubmitted: (String value) {
+                        onFieldSubmitted();
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Search Recipes',
+                        hintStyle: GoogleFonts.poppins(fontSize: 14),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16.0),
+                      ),
+                    );
+                  });
+                } else {
+                  return SizedBox(
+                    height: 5,
+                  );
+                }
+              }),
+            ),
+            // child: TextField(
+            //   controller: _searchController,
+            //   decoration: InputDecoration(
+            //     hintText: 'Search Recipes',
+            //     hintStyle: GoogleFonts.poppins(
+            //       textStyle: const TextStyle(fontSize: 14),
+            //     ),
+            //     border: InputBorder.none,
+            //   ),
+            // ),
+          ),
+          GestureDetector(
+            onTap: () {
+              String selectedRecipeName = _searchController.text;
+              // Find the selected recipe ID based on the selected recipe name.
+              RecipeSearch? selectedRecipe = recipeSearch.firstWhere(
+                (recipe) => recipe.name == selectedRecipeName,
+                orElse: () => throw UnimplementedError(),
+              );
+              context.router.push(RecipeRoute(recipeid: selectedRecipe.id));
+            },
+            child: Icon(
+              Icons.search,
+              size: 24,
             ),
           ),
+          SizedBox(
+            width: 10,
+          )
         ],
       ),
     );

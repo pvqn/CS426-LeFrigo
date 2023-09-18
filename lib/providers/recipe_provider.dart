@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/services/get_it.dart';
+import 'package:lefrigo/models/recipe_search.dart';
 
 enum RecipeProviderState {
   initial,
@@ -266,6 +267,18 @@ class RecipeProvider extends ChangeNotifier {
         error.toString(),
       );
       notifyListeners();
+    }
+  }
+   final List<RecipeSearch> _recipeSearch = [];
+  List<RecipeSearch> get recipeSearch => _recipeSearch;
+Future<List<RecipeSearch>> getListofRecipeSearch() async {
+    try {
+      final recipeSearchList = await _service.getAllRecipes();
+      _logging.info('Fetched Recipe Search: $recipeSearchList');
+      return recipeSearchList;
+    } catch (error) {
+      _logging.warning('Error fetching recipe search');
+      rethrow;
     }
   }
 }

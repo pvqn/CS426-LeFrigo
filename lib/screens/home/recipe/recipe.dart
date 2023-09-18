@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -52,18 +54,56 @@ class RecipeScreen extends StatelessWidget {
   }
 }
 
-class RecipeHeader extends StatelessWidget {
+class RecipeHeader extends StatefulWidget {
   final Recipe recipe;
 
   const RecipeHeader({super.key, required this.recipe});
 
+  @override
+  State<RecipeHeader> createState() => _RecipeHeaderState();
+}
+
+class _RecipeHeaderState extends State<RecipeHeader> {
+  ImageProvider<Object> _image =
+      const AssetImage('assets/images/food.png');
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.recipe.imageId != null) {
+      _loadImage(widget.recipe.imageId!);
+    }
+  }
+
+  Future<void> _loadImage(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        if (mounted) {
+          setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _image = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
 
     final userProvider = Provider.of<UserProvider>(context);
 
-    bool isLiked = userProvider.user.likes.contains(recipe.id);
+    bool isLiked = userProvider.user.likes.contains(widget.recipe.id);
     print(isLiked);
 
     return Stack(
@@ -81,10 +121,7 @@ class RecipeHeader extends StatelessWidget {
                       .withOpacity(0.5), // Adjust opacity to control darkness
                   BlendMode.darken,
                 ),
-                image: recipe.imageId != null
-                    ? NetworkImage(getIt.get<ApiService>().getImageFromId(
-                        id: recipe.imageId.toString())) as ImageProvider
-                    : const AssetImage('assets/images/food.png'),
+                image: _image,
                 fit: BoxFit.cover,
               ),
             ),
@@ -118,7 +155,7 @@ class RecipeHeader extends StatelessWidget {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: () => recipeProvider.likeAndRefreshRecipe(
-                        recipe.id!,
+                        widget.recipe.id!,
                         !isLiked,
                       ).then((_) => userProvider.refreshUser()),
                       child: Icon(
@@ -134,12 +171,12 @@ class RecipeHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildTimeInfo(
-                        'Prep Time:', '${recipe.details.prepTime} min'),
+                        'Prep Time:', '${widget.recipe.details.prepTime} min'),
                     _buildTimeInfo(
-                        'Cook Time:', '${recipe.details.cookTime} min'),
+                        'Cook Time:', '${widget.recipe.details.cookTime} min'),
                     _buildTimeInfo(
-                        'Total Time:', '${recipe.details.totalTime} min'),
-                    _buildTimeInfo('Servings:', '${recipe.details.servings}'),
+                        'Total Time:', '${widget.recipe.details.totalTime} min'),
+                    _buildTimeInfo('Servings:', '${widget.recipe.details.servings}'),
                   ],
                 )
               ],

@@ -123,8 +123,9 @@ class _UploadScreenState extends State<UploadScreen> {
           directions: directions,
           image: selectedImage!,
         )
-        .then((value) =>
+        .then((_) =>
             Provider.of<UserProvider>(context, listen: false).refreshUser());
+    context.router.pop();
 
     print('ok geeeeeeeeee');
   }
@@ -163,7 +164,6 @@ class _UploadScreenState extends State<UploadScreen> {
                       cal: cal,
                       selectedCategory: selectedCategory,
                       serving: serving,
-                      
                       prepTime: prepTime,
                       onUpdateImage: updateImage,
                     ),

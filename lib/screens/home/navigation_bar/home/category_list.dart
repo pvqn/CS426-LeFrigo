@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +43,7 @@ class _CategoryListState extends State<CategoryList> {
   }
 }
 
-class CategoryItem extends StatelessWidget {
+class CategoryItem extends StatefulWidget {
   final String text;
   final String id;
 
@@ -50,6 +52,41 @@ class CategoryItem extends StatelessWidget {
     required this.text,
     this.id = '',
   });
+
+  @override
+  State<CategoryItem> createState() => _CategoryItemState();
+}
+
+class _CategoryItemState extends State<CategoryItem> {
+  ImageProvider<Object> _image = const AssetImage('assets/images/food.png');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: widget.id);
+
+      if (image.type == ApiResponseType.success) {
+        if (mounted) {
+          setState(() {
+            String rawData = image.message!;
+            // To UInt8List
+            List<int> bytes = rawData.codeUnits;
+            // To Image
+            _image = Image.memory(Uint8List.fromList(bytes)).image;
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +104,7 @@ class CategoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: id != ''
-                    ? NetworkImage(getIt
-                        .get<ApiService>()
-                        .getImageFromId(id: id.toString()))
-                    : const AssetImage('assets/images/food.png')
-                        as ImageProvider,
+                image: _image,
                 fit: BoxFit.cover,
               ),
             ),
@@ -92,7 +124,7 @@ class CategoryItem extends StatelessWidget {
                   SizedBox(
                     width: 180,
                     child: Text(
-                      text,
+                      widget.text,
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         color: Colors.white,

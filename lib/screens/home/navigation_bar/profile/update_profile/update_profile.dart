@@ -31,7 +31,7 @@ class UpdateProfilePage extends StatefulWidget {
 class UpdateProfileState extends State<UpdateProfilePage> {
   DateTime selectedDate = DateTime.now();
   Country? _selectedCountry;
-  File? _selectedImage;
+  XFile? _selectedImage;
 
   static const Color customColor = Color(0xFFE25E3E);
   final TextEditingController _fullNameController = TextEditingController();
@@ -44,6 +44,56 @@ class UpdateProfileState extends State<UpdateProfilePage> {
   //     _isObscured = !_isObscured;
   //   });
   // }
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (authProvider.currentStatus.status == AuthNotifierStatus.logOut) {
+      Future.delayed(Duration.zero, () {
+        context.router
+            .pushAndPopUntil(const WelcomeRoute(), predicate: (_) => false);
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.logOutFailed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                authProvider.currentStatus.message ?? 'Something went wrong'),
+          ),
+        );
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updateUserSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Update user successfully'),
+          ),
+        );
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updateUserFailed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                authProvider.currentStatus.message ?? 'Something went wrong'),
+          ),
+        );
+      });
+    }
+
+    super.didChangeDependencies();
+  }
 
   void _onCountrySelected(Country country) {
     setState(() {
@@ -132,7 +182,7 @@ class UpdateProfileState extends State<UpdateProfilePage> {
                   'assets/images/welcome_bg.png') // Fallback image
               : kIsWeb
                   ? NetworkImage(_selectedImage!.path) as ImageProvider
-                  : FileImage(_selectedImage!),
+                  : FileImage(File(_selectedImage!.path)),
         ),
         InkWell(
           onTap: _pickImage,
@@ -147,25 +197,19 @@ class UpdateProfileState extends State<UpdateProfilePage> {
   }
 
   Future<void> _pickImage() async {
-    if (kIsWeb) {
-      final input = html.FileUploadInputElement()..accept = 'image/*';
-      input.click();
-      input.onChange.listen((event) {
-        final file = input.files!.first;
-        setState(() {
-          _selectedImage = File(html.Url.createObjectUrlFromBlob(file));
-        });
-      });
-    } else {
-      final picker = ImagePicker();
-      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final picker = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 500,
+      maxHeight: 500,
+    );
 
-      if (pickedImage != null) {
-        setState(() {
-          _selectedImage = File(pickedImage.path);
-        });
-      }
-    }
+    if (picker == null) return;
+
+    setState(() {
+      _selectedImage = picker;
+    });
+
+    print(_selectedImage!.path);
   }
 
   Widget _buildTextField(String labelText, TextEditingController controller) {
@@ -321,7 +365,19 @@ class UpdateProfileState extends State<UpdateProfilePage> {
       height: 43,
       child: ElevatedButton(
         onPressed: () {
-          // Add your button's onPressed behavior here
+          Provider.of<UserProvider>(context, listen: false)
+              .updateUser(
+            username: _fullNameController.text == ''
+                ? null
+                : _fullNameController.text,
+            email: _emailController.text == '' ? null : _emailController.text,
+            dob: selectedDate != DateTime.now() ? selectedDate : null,
+            country: _selectedCountry?.nameLocalized,
+            avatar: _selectedImage,
+          )
+              .then((_) {
+            Provider.of<UserProvider>(context, listen: false).refreshUser();
+          });
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),

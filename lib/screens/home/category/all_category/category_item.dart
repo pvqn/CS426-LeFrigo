@@ -1,8 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/services/get_it.dart';
 
-class CategoryItem extends StatelessWidget {
+class CategoryItem extends StatefulWidget {
   final String text;
   final String? image;
   final String id;
@@ -13,6 +15,43 @@ class CategoryItem extends StatelessWidget {
     required this.text,
     this.image,
   });
+
+  @override
+  State<CategoryItem> createState() => _CategoryItemState();
+}
+
+class _CategoryItemState extends State<CategoryItem> {
+  ImageProvider<Object> _image = const AssetImage('assets/images/food.png');
+
+  Future<void> _loadImage() async {
+    if (widget.image != null) {
+      final apiService = getIt.get<ApiService>();
+
+      try {
+        final image = await apiService.fetchImageFromId(id: widget.image!);
+
+        if (image.type == ApiResponseType.success) {
+          if (mounted) {
+            setState(() {
+              String rawData = image.message!;
+              // To UInt8List
+              List<int> bytes = rawData.codeUnits;
+              // To Image
+              _image = Image.memory(Uint8List.fromList(bytes)).image;
+            });
+          }
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +69,8 @@ class CategoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: image != null
-                    ? NetworkImage(getIt
-                        .get<ApiService>()
-                        .getImageFromId(id: image.toString()))
-                    : const AssetImage('assets/images/food.png')
-                        as ImageProvider, // Replace 'your_image.png' with your image asset path
+                image:
+                    _image, // Replace 'your_image.png' with your image asset path
                 fit: BoxFit.cover,
               ),
             ),
@@ -48,7 +83,7 @@ class CategoryItem extends StatelessWidget {
             right: 0,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              child: Text(text,
+              child: Text(widget.text,
                   style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.bold,

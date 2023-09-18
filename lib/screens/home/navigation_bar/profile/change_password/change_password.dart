@@ -44,6 +44,40 @@ class ChangePasswordState extends State<ChangePasswordPage> {
     });
   }
 
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _passwordController1.dispose();
+    _passwordController2.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updatePasswordSuccess) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        context.router.pushAndPopUntil(
+          const WelcomeRoute(),
+          predicate: (_) => false,
+        );
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updatePasswordFailed) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to update password'),
+          ),
+        );
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
   void updatePassword() {
     if (_passwordController1.text != _passwordController2.text) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/models/category.dart';
+import 'package:lefrigo/models/recipe_search.dart';
 
 import 'package:lefrigo/services/api_service.dart';
 
@@ -216,6 +217,20 @@ class RecipeService {
       } else {
         throw RecipeServiceException(message: decode['message']);
       }
+    } else {
+      throw const HttpException('Internet connection error');
+    }
+  }
+
+  Future<List<RecipeSearch>> getAllRecipes() async {
+    final response = await _apiService.get(path: '/recipe/search/a');
+
+    if (response.type == ApiResponseType.success) {
+      final recipesData = jsonDecode(response.message ?? '[]') as List<dynamic>;
+      final recipesList =
+          recipesData.map((e) => RecipeSearch.fromJson(e)).toList();
+
+      return recipesList;
     } else {
       throw const HttpException('Internet connection error');
     }

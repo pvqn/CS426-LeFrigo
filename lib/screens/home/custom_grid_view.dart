@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,19 +43,65 @@ class _MyGridViewState extends State<MyGridView> {
   }
 }
 
-class GridItem extends StatelessWidget {
+class GridItem extends StatefulWidget {
   final String item;
 
   const GridItem({super.key, required this.item});
+
+  @override
+  State<GridItem> createState() => _GridItemState();
+}
+
+class _GridItemState extends State<GridItem> {
+  ImageProvider<Object> _image = const AssetImage('assets/images/food.png');
+  bool _tryToFetchImage = false;
+
+  late Future<Recipe> _getRecipe;
+
+  @override
+  void initState() {
+    super.initState();
+    _getRecipe = Provider.of<RecipeProvider>(context, listen: false)
+        .getRecipeById(widget.item);
+  }
+
+  Future<void> _loadImage(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        if (mounted) {
+          setState(() {
+          String rawData = image.message!;
+
+          List<int> bytes = rawData.codeUnits;
+
+          if (mounted) _image = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
 
     return FutureBuilder<Recipe>(
-        future: recipeProvider.getRecipeById(item),
+        future: recipeProvider.getRecipeById(widget.item),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (!_tryToFetchImage) {
+              _tryToFetchImage = true;
+              if (snapshot.data!.imageId != null) {
+                _loadImage(snapshot.data!.imageId!);
+              }
+            }
+
             return Container(
               margin: const EdgeInsets.all(10),
               width: 158,
@@ -66,11 +114,7 @@ class GridItem extends StatelessWidget {
                         .withOpacity(0.5), // Adjust opacity to control darkness
                     BlendMode.darken,
                   ),
-                  image: snapshot.data!.imageId != null
-                      ? NetworkImage(getIt.get<ApiService>().getImageFromId(
-                              id: snapshot.data!.imageId.toString()))
-                          as ImageProvider
-                      : const AssetImage('assets/images/food.png'),
+                  image: _image,
                   fit: BoxFit.cover,
                 ),
               ),

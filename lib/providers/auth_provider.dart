@@ -12,6 +12,8 @@ enum AuthNotifierStatus {
   signUpFailed,
   updatePasswordSuccess,
   updatePasswordFailed,
+  updateUserSuccess,
+  updateUserFailed,
   sendPasswordResetEmailSuccess,
   sendPasswordResetEmailFailed,
   resetPasswordSuccess,

@@ -121,9 +121,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     VerifyCodeRoute.name: (routeData) {
+      final args = routeData.argsAs<VerifyCodeRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const VerifyCodeScreen(),
+        child: VerifyCodeScreen(
+          key: args.key,
+          email: args.email,
+        ),
       );
     },
     WelcomeRoute.name: (routeData) {
@@ -436,16 +440,40 @@ class UploadRouteArgs {
 
 /// generated route for
 /// [VerifyCodeScreen]
-class VerifyCodeRoute extends PageRouteInfo<void> {
-  const VerifyCodeRoute({List<PageRouteInfo>? children})
-      : super(
+class VerifyCodeRoute extends PageRouteInfo<VerifyCodeRouteArgs> {
+  VerifyCodeRoute({
+    Key? key,
+    required String email,
+    List<PageRouteInfo>? children,
+  }) : super(
           VerifyCodeRoute.name,
+          args: VerifyCodeRouteArgs(
+            key: key,
+            email: email,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'VerifyCodeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<VerifyCodeRouteArgs> page =
+      PageInfo<VerifyCodeRouteArgs>(name);
+}
+
+class VerifyCodeRouteArgs {
+  const VerifyCodeRouteArgs({
+    this.key,
+    required this.email,
+  });
+
+  final Key? key;
+
+  final String email;
+
+  @override
+  String toString() {
+    return 'VerifyCodeRouteArgs{key: $key, email: $email}';
+  }
 }
 
 /// generated route for
