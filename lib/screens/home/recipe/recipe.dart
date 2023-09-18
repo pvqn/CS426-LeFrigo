@@ -19,7 +19,7 @@ class RecipeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+    final recipeProvider = Provider.of<RecipeProvider>(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -61,35 +61,22 @@ class RecipeHeader extends StatefulWidget {
 }
 
 class _RecipeHeaderState extends State<RecipeHeader> {
-  bool _isLiked = false;
+  late bool _isLiked;
 
   @override
   void initState() {
     super.initState();
-    _isLiked = Provider.of<UserProvider>(context, listen: false)
+    _isLiked = Provider.of<UserProvider>(context)
         .user
         .likes
         .contains(widget.recipe.id);
-  }
 
-  @override
-  void didChangeDependencies() {
-    final recipeProvider = Provider.of<RecipeProvider>(context);
-
-    if (recipeProvider.stateNotifier.state ==
-        RecipeProviderState.likeRecipeSuccess) {
-      Provider.of<UserProvider>(context, listen: false).refreshUser();
-      setState(() {
-        _isLiked = !_isLiked;
-      });
-    }
-
-    super.didChangeDependencies();
+    print(_isLiked);
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipeProvider = Provider.of<RecipeProvider>(context);
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
 
     return Stack(
       children: [
@@ -142,9 +129,19 @@ class _RecipeHeaderState extends State<RecipeHeader> {
                     ),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: () {
-                        recipeProvider.likeAndRefreshRecipe(
-                            widget.recipe.id!, !_isLiked);
+                      onTap: () async {
+                        await recipeProvider.likeAndRefreshRecipe(
+                          widget.recipe.id!,
+                          !_isLiked,
+                        );
+
+                        final status = recipeProvider.stateNotifier.state;
+
+                        if (mounted && status == RecipeProviderState.likeRecipeSuccess) {
+                          setState(() {
+                            _isLiked = !_isLiked;
+                          });
+                        }
                       },
                       child: Icon(
                         _isLiked ? Icons.favorite : Icons.favorite_border,

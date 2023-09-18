@@ -31,7 +31,11 @@ class Recipe {
   final String? imageId;
 
   @JsonKey(includeFromJson: false)
-  final String? image;
+  String? image;
+
+  final String? user_avatar;
+
+  final String? username;
 
   Recipe({
     this.id,
@@ -46,6 +50,8 @@ class Recipe {
     required this.directions,
     this.imageId,
     this.image,
+    this.user_avatar,
+    this.username,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

@@ -103,10 +103,16 @@ class _RecipeItemWidgetState extends State<RecipeItemWidget> {
                     child: Row(
                       children: [
                         const SizedBox(width: 5),
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 20,
-                          backgroundImage:
-                              AssetImage('assets/images/welcome_bg.png'),
+                          backgroundImage: snapshot.data!.user_avatar != null
+                              ? NetworkImage(getIt
+                                  .get<ApiService>()
+                                  .getImageFromId(
+                                      id: snapshot.data!.user_avatar
+                                          .toString())) as ImageProvider
+                              : const AssetImage(
+                                  'assets/images/welcome_bg.png'),
                         ),
                         Expanded(
                           child: Row(
@@ -115,7 +121,7 @@ class _RecipeItemWidgetState extends State<RecipeItemWidget> {
                             children: [
                               const SizedBox(width: 13),
                               Text(
-                                'antihcmus',
+                                snapshot.data?.username ?? 'antihcmus',
                                 style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   color: Colors.white,

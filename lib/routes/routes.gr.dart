@@ -60,6 +60,7 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ResultScreen(
+          key: args.key,
           text: args.text,
           ingredients: args.ingredients,
         ),
@@ -243,12 +244,14 @@ class RecipeRouteArgs {
 /// [ResultScreen]
 class ResultRoute extends PageRouteInfo<ResultRouteArgs> {
   ResultRoute({
+    Key? key,
     required String text,
     required List<String> ingredients,
     List<PageRouteInfo>? children,
   }) : super(
           ResultRoute.name,
           args: ResultRouteArgs(
+            key: key,
             text: text,
             ingredients: ingredients,
           ),
@@ -262,9 +265,12 @@ class ResultRoute extends PageRouteInfo<ResultRouteArgs> {
 
 class ResultRouteArgs {
   const ResultRouteArgs({
+    this.key,
     required this.text,
     required this.ingredients,
   });
+
+  final Key? key;
 
   final String text;
 
@@ -272,7 +278,7 @@ class ResultRouteArgs {
 
   @override
   String toString() {
-    return 'ResultRouteArgs{text: $text, ingredients: $ingredients}';
+    return 'ResultRouteArgs{key: $key, text: $text, ingredients: $ingredients}';
   }
 }
 

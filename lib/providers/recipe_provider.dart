@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/services/get_it.dart';
@@ -15,6 +18,8 @@ enum RecipeProviderState {
   fetchPopularRecipesFailure,
   fetchLikedRecipesSuccess,
   fetchLikedRecipesFailure,
+  uploadRecipeSuccess,
+  uploadRecipeFailure
 }
 
 class RecipeProviderStateNotifier extends ChangeNotifier {
@@ -74,9 +79,11 @@ class RecipeProvider extends ChangeNotifier {
       for (final category in categories) {
         _recipeCache[category.name] = {};
         _recipeCache[category.name]['imageId'] = category.image;
-      }
+        _recipeCache[category.name]['recipes'] = category.recipes;
 
-      _logging.info('Fetched Categories: $categories');
+        _logging.info(
+            'Fetched Categories: $category with imageId ${imageIdsOfCategory(category.name)}');
+      }
 
       _stateNotifier.setState(RecipeProviderState.fetchCategoriesSuccess);
       notifyListeners();
@@ -89,53 +96,6 @@ class RecipeProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // Future<void> refreshListOfCategories() async {
-  //   _stateNotifier.resetState();
-
-  //   try {
-  //     final categories = await _service.getListOfCategories();
-
-  //     _recipeCache.clear();
-  //     for (final category in categories) {
-  //       _recipeCache[category.] = [];
-  //     }
-
-  //     _logging.info('Fetched Categories: $categories');
-
-  //     _stateNotifier.setState(RecipeProviderState.fetchCategoriesSuccess);
-  //   } catch (error) {
-  //     _logging.warning('Error fetching categories: $error');
-  //     _stateNotifier.setState(
-  //       RecipeProviderState.fetchCategoriesFailure,
-  //       error.toString(),
-  //     );
-  //   }
-  // }
-
-  // @Deprecated('Use refreshListOfCategories instead')
-  // Future<void> refreshCategory() async {
-  //   _isLoading = true;
-  //   notifyListeners();
-
-  //   try {
-  //     final categories = await _service.getListOfCategories();
-
-  //     _recipeCache.clear();
-  //     for (final category in categories) {
-  //       _recipeCache[category] = [];
-  //     }
-
-  //     _logging.info('Fetched Categories: $categories');
-
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   } catch (error) {
-  //     _logging.warning('Error fetching categories: $error');
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
 
   List<String> _popularRecipesId = [];
   List<String> get popularRecipes => _popularRecipesId;
@@ -165,43 +125,32 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  // Future<void> refreshListOfRecipesByCategory(
-  //     {required String category}) async {
-  //   _stateNotifier.resetState();
+  Future<void> uploadRecipe(Recipe recipe, File image) async {
+    try {
+      String base64Image;
 
-  //   try {
-  //     final recipes =
-  //         await _service.getListOfRecipesByCategory(category: category);
+      final bytes = await image.readAsBytes();
+      base64Image = base64Encode(bytes);
 
-  //     _recipeCache[category] = recipes;
-
-  //     _logging.info('Fetched Recipes: $recipes');
-
-  //     _stateNotifier.setState(RecipeProviderState.fetchRecipesListSuccess);
-  //   } catch (error) {
-  //     _logging.warning('Error fetching recipes: $error');
-  //     _stateNotifier.setState(
-  //       RecipeProviderState.fetchRecipesListFailure,
-  //       error.toString(),
-  //     );
-  //   }
-  // }
-
-  // @Deprecated('Use refreshListOfRecipesByCategory instead')
-  // Future<void> refreshListOfRecipe(String category) async {
-  //   _isLoading = true;
-  //   notifyListeners();
-
-  //   final recipes =
-  //       await _service.getListOfRecipesByCategory(category: category);
-
-  //   _recipeCache.remove(category);
-
-  //   _recipeCache[category] = recipes;
-
-  //   _isLoading = false;
-  //   notifyListeners();
-  // }
+      await _service.uploadRecipe(
+          name: recipe.name,
+          description: recipe.description,
+          category: recipe.category,
+          details: recipe.details,
+          nutrition: recipe.nutrition,
+          ingredients: recipe.ingredients,
+          steps: recipe.directions,
+          encodedImage: base64Image);
+      _logging.info('upload recipe');
+      _stateNotifier.setState(RecipeProviderState.uploadRecipeSuccess);
+      notifyListeners();
+    } catch (error) {
+      _logging.warning('error uploading recipe');
+      _stateNotifier.setState(
+          RecipeProviderState.uploadRecipeFailure, error.toString());
+      notifyListeners();
+    }
+  }
 
   Future<void> likeAndRefreshRecipe(String recipeId, bool isLike) async {
     try {
@@ -223,19 +172,6 @@ class RecipeProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // @Deprecated('Use likeAndRefreshRecipe instead')
-  // Future<void> likeRecipe(String recipeId) async {
-  //   await _service.likeRecipe(recipeId: recipeId);
-  // }
-
-  // @Deprecated('Use likeAndRefreshRecipe instead')
-  // Future<void> refreshListOfLikedRecipes() async {
-  //   _isLoading = true;
-  //   notifyListeners();
-
-  //   throw UnimplementedError();
-  // }
 
   Future<Recipe> getRecipeById(String recipeId) async {
     try {
@@ -261,7 +197,7 @@ class RecipeProvider extends ChangeNotifier {
 
       _stateNotifier.setState(RecipeProviderState.fetchPopularRecipesSuccess);
       notifyListeners();
-      
+
       _logging.info('Fetched Popular Recipes: $recipes');
       return recipes;
     } catch (error) {
@@ -284,6 +220,24 @@ class RecipeProvider extends ChangeNotifier {
       return recipes;
     } catch (error) {
       _logging.warning('Error suggesting recipes: $error');
+      rethrow;
+    }
+  }
+
+  List<String> _ingredients = [];
+  List<String> get ingredients => _ingredients;
+
+  List<String> _unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
+  List<String> get unitList => _unitList;
+
+  Future<List<String>> getListOfIngredients() async {
+    try {
+      final ingredients = await _service.getListOfIngredients();
+
+      _logging.info('Fetched Ingredients: $ingredients');
+      return ingredients;
+    } catch (error) {
+      _logging.warning('Error fetching ingredients: $error');
       rethrow;
     }
   }

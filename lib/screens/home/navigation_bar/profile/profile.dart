@@ -230,12 +230,22 @@ class PostGridPageState extends State<PostGridPage> {
   late List<String> items;
 
   @override
+  void initState() {
+    items = widget.user.posts;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PostGridView(
-        items: widget.user.posts,
+        items: items,
         onRemove: (int index) {
           setState(() {
+            // Provider.of(context, listen: false)
+            //     .removeRecipe(widget.user.posts[index]);
+            // Provider.of<UserProvider>(context, listen: false).refreshUser();
+
             items.removeAt(index);
           });
         },

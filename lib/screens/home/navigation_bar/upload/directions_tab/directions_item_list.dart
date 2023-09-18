@@ -4,10 +4,10 @@ import 'directions_item.dart';
 import 'model.dart';
 
 class DirectionListView extends StatefulWidget {
-  const DirectionListView({super.key, required this.itemList});
+  DirectionListView({required this.itemList, required this.onPressedButton});
 
-  final List<Direction> itemList;
-
+  List<Direction> itemList;
+  final Function onPressedButton;
   @override
   DirectionListViewState createState() => DirectionListViewState();
 }
@@ -18,10 +18,15 @@ class DirectionListViewState extends State<DirectionListView> {
   late List<Direction> _itemList;
 
   @override
+  void initState() {
+    super.initState();
+    _itemList = widget.itemList;
+  }
+
+  @override
   void dispose() {
     _descriptionController.dispose();
     super.dispose();
-    _itemList = widget.itemList;
   }
 
   @override
@@ -56,7 +61,9 @@ class DirectionListViewState extends State<DirectionListView> {
             ),
             DirectionsList(itemList: _itemList),
             const SizedBox(height: 5),
-            FinishButton(onPressed: () {})
+            FinishButton(onPressed: () {
+              widget.onPressedButton();
+            })
           ],
         ),
       ),
@@ -71,6 +78,7 @@ class DirectionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('ok');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

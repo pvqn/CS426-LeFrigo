@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/providers/providers.dart';
@@ -101,6 +103,12 @@ class PostGridItem extends StatelessWidget {
               );
             }
 
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error'),
+              );
+            }
+
             return Container(
               margin: const EdgeInsets.all(10),
               width: 158,
@@ -110,8 +118,8 @@ class PostGridItem extends StatelessWidget {
                 image: DecorationImage(
                   image: snapshot.data?.imageId == null
                       ? const AssetImage('assets/images/food.jpg')
-                      : NetworkImage(getIt<ApiService>().getImageFromId(
-                          id: snapshot.data!.imageId!)) as ImageProvider,
+                      : MemoryImage(Uint8List.fromList(
+                          snapshot.data!.image!.codeUnits)) as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),

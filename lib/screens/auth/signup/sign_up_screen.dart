@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lefrigo/routes/routes.dart';
+import 'package:lefrigo/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
+
 
 @RoutePage()
 class SignUpScreen extends StatelessWidget {
@@ -40,6 +43,33 @@ class SignUpState extends State<SignUpPage> {
     setState(() {
       _isObscured1 = !_isObscured1;
     });
+  }
+
+  void onPress() {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _passwordController1.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (_passwordController.text != _passwordController1.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password does not match'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    Provider.of<AuthProvider>(context, listen: false).login(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
   }
 
   @override

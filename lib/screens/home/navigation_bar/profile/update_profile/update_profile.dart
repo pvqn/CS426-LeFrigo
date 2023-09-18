@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
 import 'dart:io' show File;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
 
 @RoutePage()
@@ -345,7 +347,10 @@ class UpdateProfileState extends State<UpdateProfilePage> {
       height: 43,
       child: ElevatedButton(
         onPressed: () {
-          // Add your button's onPressed behavior here
+          // Provider.of<AuthProvider>(context, listen: false).logout();
+
+          // context.router
+          //     .pushAndPopUntil(WelcomeRoute(), predicate: (_) => false);
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),

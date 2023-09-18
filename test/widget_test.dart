@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lefrigo/models/partial_user.dart';
 import 'package:lefrigo/services/get_it.dart';
@@ -33,5 +35,22 @@ void main() {
     print('user: $user');
 
     expect(user, isNotEmpty);
+  });
+
+  test('convert request to image', () async {
+    // Get ApiService
+    final apiService = getIt<ApiService>();
+
+    final pathFromId = '/asset/64f7082a417d19c0b3b39aa0';
+
+    // final response = await apiService.get(path: pathFromId);
+
+    // print(response.message!.length);
+
+    // final path = Uri.http('52.192.217.234:8888', pathFromId);
+
+    // final response2 = await http.get(path);
+
+    // print(response2.bodyBytes.runtimeType);
   });
 }

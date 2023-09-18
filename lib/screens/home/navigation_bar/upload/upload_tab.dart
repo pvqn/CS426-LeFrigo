@@ -1,16 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/providers/providers.dart';
+import 'package:lefrigo/screens/home/navigation_bar/upload/directions_tab/model.dart';
+import 'package:provider/provider.dart';
 import 'summary_tab/summary_tab.dart';
 import 'ingredient_tab/ingredient_tab.dart';
 import 'directions_tab/directions_tab.dart';
 import 'dart:io' show File;
 import 'ingredient_tab/model.dart';
-import 'directions_tab/model.dart';
 
 @RoutePage()
 class UploadScreen extends StatefulWidget {
-  const UploadScreen({super.key});
+  UploadScreen({super.key});
 
   @override
   State<UploadScreen> createState() => _UploadScreenState();
@@ -57,6 +60,55 @@ class _UploadScreenState extends State<UploadScreen> {
     super.dispose();
   }
 
+  void uploadRecipe() {
+    // List<Ingredients> ingredients=[];
+    // for (int i=0; i<itemListIng.length; ++i)
+    // {
+    //   ingredients.add(new Ingredients(name: itemListIng[i].name, quantity: itemListIng[i].quantity, unit:itemListIng[i].unit));
+    // }
+    // List<String> directions=[];
+    // for (int i=0; i<itemListDir.length; ++i)
+    // {
+    //   ingredients.add(new Ingredients(name: ingredients[i].name, quantity: ingredients[i].quantity, unit:ingredients[i].unit));
+    // } directionsi=0; itemListDir[i].description    {
+    //   directions.add(itemListDir[i].description);
+    // }
+
+    final ingredients = itemListIng
+        .map((e) => Ingredients(name: e.name, quantity: e.quantity))
+        .toList();
+
+    final directions = itemListDir.map((e) => e.description).toList();
+
+    Provider.of<RecipeProvider>(context).uploadRecipe(
+      Recipe(
+          name: recipeName.text,
+          description: description.text,
+          category: selectedCategory,
+          details: Details(
+            totalTime: int.parse(totalTime.text),
+            servings: int.parse(serving.text),
+            prepTime: int.parse(prepTime.text),
+            cookTime: int.parse(cookTime.text),
+          ),
+          nutrition: Nutrition(
+            calories: cal.text,
+            fat: fat.text,
+            carbs: carb.text,
+            protein: protein.text,
+          ),
+          ingredients: ingredients,
+          directions: directions),
+      selectedImage!,
+    );
+
+    print('ok geeeeeeeeee');
+  }
+
+
+    print('ok geeeeeeeeee');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,6 +143,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     ),
                     DirectionsTab(
                       itemList: itemListDir,
+                      onPressedButton: uploadRecipe,
                     )
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:lefrigo/models/recipe.dart';
+import 'package:lefrigo/services/get_it.dart';
 
 class SummaryTab extends StatelessWidget {
   final Recipe recipe;
@@ -29,14 +30,17 @@ class SummaryTab extends StatelessWidget {
             ),
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/images/welcome_bg.png'),
+                  backgroundImage: recipe.user_avatar != null
+                      ? NetworkImage(getIt<ApiService>().getImageFromId(
+                          id: recipe.user_avatar!)) as ImageProvider
+                      : const AssetImage('assets/images/welcome_bg.png'),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                     child: Text(
-                  recipe.author ?? 'LeFrigo User',
+                  recipe.username ?? 'LeFrigo User',
                   style: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 14)),

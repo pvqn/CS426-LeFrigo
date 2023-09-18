@@ -9,6 +9,8 @@ enum AuthNotifierStatus {
   updatePasswordFailed,
   sendPasswordResetEmailSuccess,
   sendPasswordResetEmailFailed,
+  resetPasswordSuccess,
+  resetPasswordFailed,
   logOut,
   unknown,
 }
@@ -142,6 +144,25 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
         status: AuthNotifierStatus.sendPasswordResetEmailFailed,
+        message: e.toString(),
+      );
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> resetPassword(String email, String code, String password) async {
+    try {
+      _authService.resetPassword(
+          email: email,  
+          code: code, 
+          password: password);
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.resetPasswordSuccess,
+      );
+    } catch (e) {
+      _currentStatus = AuthNotifierMessage(
+        status: AuthNotifierStatus.resetPasswordFailed,
         message: e.toString(),
       );
     } finally {

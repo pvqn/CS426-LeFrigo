@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:provider/provider.dart';
 import 'ingredient_item.dart';
 import 'model.dart';
 
 class IngredientListView extends StatefulWidget {
-  final List<ingredient> itemList;
+  List<ingredient> itemList;
 
-  const IngredientListView({super.key, required this.itemList});
+  IngredientListView({required this.itemList});
 
   @override
   IngredientListViewState createState() => IngredientListViewState();
@@ -14,12 +16,29 @@ class IngredientListView extends StatefulWidget {
 
 class IngredientListViewState extends State<IngredientListView> {
   late List<ingredient> itemList = widget.itemList;
-
   final TextEditingController _ingredientController = TextEditingController();
+
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   String _selectedUnit = 'ounce';
+  String _selectedIng = 'Butter';
   final List<String> unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
+
+  // Create a list of ingredient names for autocomplete
+  List<String> ingredientNames = [
+    'Butter',
+    'Flour',
+    'Sugar',
+    'Salt',
+    // Add more ingredient names here
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    print('ok');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +47,66 @@ class IngredientListViewState extends State<IngredientListView> {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            InputField(
-              controller: _ingredientController,
-              hintText: 'Name',
-              labelText: 'New ingredient',
+            // Autocomplete text field for ingredient name
+            Card(
+              margin: EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(10.0), // Add rounded corners
+              ),
+              child: FutureBuilder(
+                  future: Provider.of<RecipeProvider>(context, listen: false)
+                      .getListOfIngredients(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final ingredientList = snapshot.data as List<String>;
+                      print(ingredientList);
+                      return Autocomplete<String>(
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return const Iterable<String>.empty();
+                          }
+                          return ingredientList.where((String ingredient) {
+                            return ingredient
+                                .toLowerCase()
+                                .contains(textEditingValue.text.toLowerCase());
+                          });
+                        },
+                        onSelected: (String ingredient) {
+                          setState(() {
+                            _selectedIng = ingredient;
+                          });
+                        },
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController fieldTextEditingController,
+                            FocusNode fieldFocusNode,
+                            VoidCallback onFieldSubmitted) {
+                          return TextField(
+                              controller: fieldTextEditingController,
+                              focusNode: fieldFocusNode,
+                              onSubmitted: (String value) {
+                                onFieldSubmitted();
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Ingredient',
+                                hintStyle: GoogleFonts.poppins(fontSize: 14),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFFD9D9D9), width: 2.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black, width: 2.0),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ));
+                        },
+                      );
+                    } else {
+                      return const Text('No data');
+                    }
+                  }),
             ),
             const SizedBox(height: 15),
             InputField(
@@ -51,7 +126,7 @@ class IngredientListViewState extends State<IngredientListView> {
               },
               onAddButtonPressed: () {
                 final newItem = ingredient(
-                  name: _ingredientController.text,
+                  name: _selectedIng,
                   note: _noteController.text,
                   quantity: _quantityController.text,
                   unit: _selectedUnit,

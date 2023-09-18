@@ -12,13 +12,27 @@ class RecipeCategory extends Equatable {
   final String? image;
 
   @JsonKey(includeFromJson: false)
+  final String? imageByte;
+
   final List<String>? recipes;
 
   const RecipeCategory({
     required this.name,
     this.image,
+    this.imageByte,
     this.recipes,
   });
+
+  RecipeCategory copyWith({
+    String? imageByte,
+  }) {
+    return RecipeCategory(
+      name: name,
+      image: image,
+      imageByte: imageByte ?? this.imageByte,
+      recipes: recipes,
+    );
+  }
 
   factory RecipeCategory.fromJson(Map<String, dynamic> json) =>
       _$RecipeCategoryFromJson(json);

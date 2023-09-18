@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lefrigo/screens/home/navigation_bar/fridge/ingredient_item.dart';
+import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:provider/provider.dart';
+import 'ingredient_item.dart';
 
 class IngredientListView extends StatefulWidget {
   final List<String> itemList;
 
-  const IngredientListView({super.key, required this.itemList});
+  IngredientListView({required this.itemList});
 
   @override
   IngredientListViewState createState() => IngredientListViewState();
@@ -14,6 +16,15 @@ class IngredientListView extends StatefulWidget {
 class IngredientListViewState extends State<IngredientListView> {
   final TextEditingController _ingredientController = TextEditingController();
   late final List<String> itemList = widget.itemList;
+
+  // Create a list of ingredient names for Autocomplete
+  List<String> ingredientNames = [
+    'Onions',
+    'Flour',
+    'Sugar',
+    'Salt',
+    // Add more ingredient names here
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +53,56 @@ class IngredientListViewState extends State<IngredientListView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _ingredientController,
-                    decoration: InputDecoration(
-                      hintText: 'Add Ingredient',
-                      hintStyle: GoogleFonts.poppins(fontSize: 14),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.all(16.0),
-                    ),
-                  ),
+                  child: FutureBuilder(
+                      future:
+                          Provider.of<RecipeProvider>(context, listen: false)
+                              .getListOfIngredients(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final ingredientList = snapshot.data as List<String>;
+                          print(ingredientList);
+                          return Autocomplete<String>(
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<String>.empty();
+                              }
+                              return ingredientList.where((String ingredient) {
+                                return ingredient.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase());
+                              });
+                            },
+                            onSelected: (String ingredient) {
+                              setState(() {
+                                _ingredientController.text = ingredient;
+                              });
+                            },
+                            fieldViewBuilder: (BuildContext context,
+                                TextEditingController
+                                    fieldTextEditingController,
+                                FocusNode fieldFocusNode,
+                                VoidCallback onFieldSubmitted) {
+                              return TextField(
+                                controller: fieldTextEditingController,
+                                focusNode: fieldFocusNode,
+                                onSubmitted: (String value) {
+                                  onFieldSubmitted();
+                                },
+                                decoration: InputDecoration(
+                                  hintText: 'Add Ingredient',
+                                  hintStyle: GoogleFonts.poppins(fontSize: 14),
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.all(16.0),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return SizedBox(
+                            height: 5,
+                          );
+                        }
+                      }),
                 ),
                 const SizedBox(width: 5),
                 InkWell(
