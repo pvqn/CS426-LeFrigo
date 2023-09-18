@@ -70,7 +70,7 @@ class FridgeAppBar extends StatelessWidget {
 
 class FindRecipeButton extends StatelessWidget {
   final List<String> ingredients;
-  const FindRecipeButton({required this.ingredients});
+  const FindRecipeButton({super.key, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {

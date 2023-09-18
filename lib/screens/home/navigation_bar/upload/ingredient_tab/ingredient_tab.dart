@@ -3,8 +3,9 @@ import 'ingredient_item_list.dart';
 import 'model.dart';
 
 class IngredientTab extends StatefulWidget {
-  IngredientTab({super.key, required this.itemList});
-  List<ingredient> itemList;
+  const IngredientTab({super.key, required this.itemList});
+  
+  final List<ingredient> itemList;
 
   @override
   IngredientState createState() => IngredientState();

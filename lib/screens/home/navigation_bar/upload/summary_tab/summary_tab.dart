@@ -37,7 +37,8 @@ class SummaryTab extends StatefulWidget {
       protein;
   String selectedCategory;
   SummaryTab(
-      {required this.recipeName,
+      {super.key,
+      required this.recipeName,
       required this.description,
       required this.totalTime,
       required this.serving,
@@ -272,15 +273,15 @@ class InputField extends StatelessWidget {
 }
 
 class ImageUploadWidget extends StatefulWidget {
-  ImageUploadWidget({required this.selectedImage});
+  const ImageUploadWidget({super.key, required this.selectedImage});
 
   final File? selectedImage;
 
   @override
-  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
+  ImageUploadWidgetState createState() => ImageUploadWidgetState();
 }
 
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
+class ImageUploadWidgetState extends State<ImageUploadWidget> {
   File? _selectedImage;
   @override
   void initState() {

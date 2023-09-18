@@ -27,8 +27,8 @@ class IngredientsTabState extends State<IngredientsTab> {
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           width: 366,
-          height: 58,
           decoration: BoxDecoration(
             border: Border.all(
               color: const Color(0xFFE25E3E).withOpacity(0.2), // Border color

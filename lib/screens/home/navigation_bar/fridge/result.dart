@@ -9,7 +9,8 @@ import 'package:lefrigo/providers/recipe_provider.dart';
 class ResultScreen extends StatelessWidget {
   final String text;
   final List<String> ingredients;
-  const ResultScreen({required this.text, required this.ingredients});
+  const ResultScreen(
+      {super.key, required this.text, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class Result extends StatefulWidget {
   final String text;
   final List<String> ingredients;
 
-  const Result({required this.text, required this.ingredients});
+  const Result({super.key, required this.text, required this.ingredients});
 
   @override
   ResultState createState() => ResultState();

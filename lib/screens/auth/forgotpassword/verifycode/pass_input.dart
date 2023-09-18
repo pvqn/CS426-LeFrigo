@@ -42,11 +42,11 @@ class PasswordInput extends StatelessWidget {
               ),
               border: OutlineInputBorder(
                 borderSide:
-                    BorderSide(color: const Color(0xFFD9D9D9), width: 2.0),
+                    const BorderSide(color: Color(0xFFD9D9D9), width: 2.0),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black, width: 2.0),
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               contentPadding:

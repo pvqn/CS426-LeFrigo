@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
+import 'package:provider/provider.dart';
 import 'favorite/favorite.dart';
 import 'fridge/fridge.dart';
 import 'profile/profile.dart';
@@ -26,16 +28,32 @@ class MyNavigationBarApp extends StatefulWidget {
 class MyNavigationBarAppState extends State<MyNavigationBarApp> {
   int _currentIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final recipeProvider =
+          Provider.of<RecipeProvider>(context, listen: false);
+      recipeProvider.refreshListOfCategories();
+      recipeProvider.refreshListOfPopularRecipes();
+
+      final UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      userProvider.refreshUser();
+    });
+  }
+
   final screens = [
     const HomePage(),
     const FridgePage(),
     const ThirdScreen(),
-    FavoritePage(),
+    const FavoritePage(),
     const ProfilePage()
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(                                                                        
+    return Scaffold(
       body: screens[_currentIndex],
       bottomNavigationBar: buildMyNavigationBar(context),
     );

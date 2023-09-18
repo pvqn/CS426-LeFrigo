@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lefrigo/models/recipe.dart';
 import 'post_grid_item.dart';
 
 class PostGridView extends StatelessWidget {

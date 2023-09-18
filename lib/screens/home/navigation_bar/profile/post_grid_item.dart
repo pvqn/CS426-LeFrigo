@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
-import 'model.dart';
 
 class PostGridItem extends StatelessWidget {
   final String item;

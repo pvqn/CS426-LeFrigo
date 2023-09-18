@@ -3,8 +3,9 @@ import 'directions_item_list.dart';
 import 'model.dart';
 
 class DirectionsTab extends StatefulWidget {
-  DirectionsTab({required this.itemList});
-  List<Direction> itemList;
+  const DirectionsTab({super.key, required this.itemList});
+  
+  final List<Direction> itemList;
 
   @override
   DirectionsState createState() => DirectionsState();

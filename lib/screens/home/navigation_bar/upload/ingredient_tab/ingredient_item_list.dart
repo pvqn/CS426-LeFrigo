@@ -4,9 +4,9 @@ import 'ingredient_item.dart';
 import 'model.dart';
 
 class IngredientListView extends StatefulWidget {
-  List<ingredient> itemList;
+  final List<ingredient> itemList;
 
-  IngredientListView({required this.itemList});
+  const IngredientListView({super.key, required this.itemList});
 
   @override
   IngredientListViewState createState() => IngredientListViewState();

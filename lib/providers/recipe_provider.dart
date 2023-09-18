@@ -241,7 +241,7 @@ class RecipeProvider extends ChangeNotifier {
     try {
       final recipe = await _service.getRecipeById(id: recipeId);
 
-      _logging.info('Fetched Recipe: $recipe');
+      _logging.info('Fetched Recipe: ${recipe.id}');
       return recipe;
     } catch (error) {
       _logging.warning('Error fetching recipe: $error');
@@ -261,7 +261,8 @@ class RecipeProvider extends ChangeNotifier {
 
       _stateNotifier.setState(RecipeProviderState.fetchPopularRecipesSuccess);
       notifyListeners();
-      print(recipes);
+      
+      _logging.info('Fetched Popular Recipes: $recipes');
       return recipes;
     } catch (error) {
       _logging.warning('Error fetching popular recipes: $error');

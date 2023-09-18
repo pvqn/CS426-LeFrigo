@@ -2,14 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/models/user.dart';
 import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/routes/routes.dart';
 import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
 import 'post_grid_view.dart';
-import 'model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

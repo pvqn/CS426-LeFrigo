@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
+import 'package:lefrigo/providers/user_provider.dart';
 import 'package:lefrigo/services/api_service.dart';
 import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
@@ -50,13 +51,46 @@ class RecipeScreen extends StatelessWidget {
   }
 }
 
-class RecipeHeader extends StatelessWidget {
+class RecipeHeader extends StatefulWidget {
   final Recipe recipe;
 
   const RecipeHeader({super.key, required this.recipe});
 
   @override
+  State<RecipeHeader> createState() => _RecipeHeaderState();
+}
+
+class _RecipeHeaderState extends State<RecipeHeader> {
+  bool _isLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = Provider.of<UserProvider>(context, listen: false)
+        .user
+        .likes
+        .contains(widget.recipe.id);
+  }
+
+  @override
+  void didChangeDependencies() {
+    final recipeProvider = Provider.of<RecipeProvider>(context);
+
+    if (recipeProvider.stateNotifier.state ==
+        RecipeProviderState.likeRecipeSuccess) {
+      Provider.of<UserProvider>(context, listen: false).refreshUser();
+      setState(() {
+        _isLiked = !_isLiked;
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final recipeProvider = Provider.of<RecipeProvider>(context);
+
     return Stack(
       children: [
         ClipRRect(
@@ -72,11 +106,10 @@ class RecipeHeader extends StatelessWidget {
                       .withOpacity(0.5), // Adjust opacity to control darkness
                   BlendMode.darken,
                 ),
-                image: recipe.imageId != null
+                image: widget.recipe.imageId != null
                     ? NetworkImage(getIt.get<ApiService>().getImageFromId(
-                        id: recipe.imageId.toString())) as ImageProvider
-                    : const AssetImage('assets/images/food.png')
-                        as ImageProvider,
+                        id: widget.recipe.imageId.toString())) as ImageProvider
+                    : const AssetImage('assets/images/food.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -109,9 +142,12 @@ class RecipeHeader extends StatelessWidget {
                     ),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.favorite_outline,
+                      onTap: () {
+                        recipeProvider.likeAndRefreshRecipe(
+                            widget.recipe.id!, !_isLiked);
+                      },
+                      child: Icon(
+                        _isLiked ? Icons.favorite : Icons.favorite_border,
                         size: 24,
                         color: Colors.white,
                       ),
@@ -123,12 +159,13 @@ class RecipeHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildTimeInfo(
-                        'Prep Time:', '${recipe.details.prepTime} min'),
+                        'Prep Time:', '${widget.recipe.details.prepTime} min'),
                     _buildTimeInfo(
-                        'Cook Time:', '${recipe.details.cookTime} min'),
+                        'Cook Time:', '${widget.recipe.details.cookTime} min'),
+                    _buildTimeInfo('Total Time:',
+                        '${widget.recipe.details.totalTime} min'),
                     _buildTimeInfo(
-                        'Total Time:', '${recipe.details.totalTime} min'),
-                    _buildTimeInfo('Servings:', '${recipe.details.servings}'),
+                        'Servings:', '${widget.recipe.details.servings}'),
                   ],
                 )
               ],

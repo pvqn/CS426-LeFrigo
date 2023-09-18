@@ -4,7 +4,7 @@ import 'model.dart';
 
 class IngredientItem extends StatelessWidget {
   final ingredient item;
-  IngredientItem({super.key, required this.item});
+  const IngredientItem({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
     return Container(

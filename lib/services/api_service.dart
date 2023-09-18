@@ -14,7 +14,7 @@ class ApiResponse {
 class ApiService {  
   final String _baseUrl = '52.192.217.234:8888'; //'43.207.138.171:8888';
 
-  String token = '';
+  String token = '33e22a4919f6e1ea8d59a96803f6faeab02605afcc43aa2107deb4fc0ea5eebc';
 
   Future<ApiResponse> get({required String path}) async {
     final url = Uri.http(_baseUrl, path);

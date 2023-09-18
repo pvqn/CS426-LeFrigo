@@ -5,7 +5,7 @@ import 'package:lefrigo/screens/home/navigation_bar/fridge/ingredient_item.dart'
 class IngredientListView extends StatefulWidget {
   final List<String> itemList;
 
-  const IngredientListView({required this.itemList});
+  const IngredientListView({super.key, required this.itemList});
 
   @override
   IngredientListViewState createState() => IngredientListViewState();

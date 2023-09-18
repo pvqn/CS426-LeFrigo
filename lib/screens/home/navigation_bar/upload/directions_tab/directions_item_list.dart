@@ -4,9 +4,9 @@ import 'directions_item.dart';
 import 'model.dart';
 
 class DirectionListView extends StatefulWidget {
-  DirectionListView({super.key, required this.itemList});
+  const DirectionListView({super.key, required this.itemList});
 
-  List<Direction> itemList;
+  final List<Direction> itemList;
 
   @override
   DirectionListViewState createState() => DirectionListViewState();
