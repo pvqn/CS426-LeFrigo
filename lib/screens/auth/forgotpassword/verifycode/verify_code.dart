@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lefrigo/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 import 'pass_input.dart';
 import 'verify_input.dart';
 import 'package:lefrigo/routes/routes.dart';
@@ -8,32 +10,87 @@ import 'package:lefrigo/routes/routes.dart';
 @RoutePage()
 class VerifyCodeScreen extends StatefulWidget {
   const VerifyCodeScreen({Key? key}) : super(key: key);
-
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
 }
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
+  late TextEditingController passwordController = TextEditingController();
+  late TextEditingController passwordController1 = TextEditingController();
+  late List<TextEditingController> verificationCodeControllers = List.generate(
+    8,
+    (_) => TextEditingController(),
+  );
+  bool isObscured = true;
+  bool isObscured1 = true;
+
+  void togglePasswordVisibility() {
+    isObscured = !isObscured;
+  }
+
+  void togglePasswordVisibility1() {
+    isObscured1 = !isObscured1;
+  }
+
+  void resetPassword() {
+    bool hasEmpty =
+        passwordController.text.isEmpty | passwordController1.text.isEmpty;
+    for (int i = 0; i < 8; ++i) {
+      hasEmpty = hasEmpty | verificationCodeControllers[i].text.isEmpty;
+    }
+
+    if (hasEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (passwordController.text != passwordController1.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password does not match'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    String code = '';
+    for (int i = 0; i < 8; ++i) {
+      code = code + verificationCodeControllers[i].text;
+    }
+    Provider.of<AuthProvider>(context, listen: false).resetPassword(
+      email: 'codechl02@gmail.com',
+      password: passwordController.text,
+      code: code,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    final authProvider = Provider.of<AuthProvider>(context);
+    if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.resetPasswordSuccess) {
+      authProvider.resetStatus();
+      context.router.replace(const SuccessfulChangedRoute());
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.resetPasswordFailed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Invalid or expired code'),
+          duration: Duration(seconds: 2),
+        ));
+      });
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController passwordController1 = TextEditingController();
-    final List<TextEditingController> verificationCodeControllers =
-        List.generate(
-      8,
-      (_) => TextEditingController(),
-    );
-    bool isObscured = true;
-    bool isObscured1 = true;
-
-    void togglePasswordVisibility() {
-      isObscured = !isObscured;
-    }
-
-    void togglePasswordVisibility1() {
-      isObscured1 = !isObscured1;
-    }
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -96,9 +153,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 height: 43,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    context.router.push(const SuccessfulChangedRoute());
-                  },
+                  onPressed: resetPassword,
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                         const Color(0xFFE25E3E)),

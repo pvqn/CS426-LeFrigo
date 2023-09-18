@@ -201,18 +201,14 @@ class _ElevatedEmailButtonState extends State<ElevatedEmailButton> {
 
     if (auth.currentStatus.status ==
         AuthNotifierStatus.sendPasswordResetEmailSuccess) {
+      auth.resetStatus();
       context.router.push(const VerifyCodeRoute());
     } else if (auth.currentStatus.status ==
         AuthNotifierStatus.sendPasswordResetEmailFailed) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Failed to send reset code',
-            style: GoogleFonts.poppins(fontSize: 15),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Failed to send reset code'),
+        duration: Duration(seconds: 2),
+      ));
     }
 
     super.didChangeDependencies();

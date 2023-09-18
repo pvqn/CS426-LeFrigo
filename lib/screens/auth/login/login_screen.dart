@@ -41,6 +41,7 @@ class _WelcomeBackPageState extends State<_WelcomeBackPage> {
     final authProvider = Provider.of<AuthProvider>(context);
     if (authProvider.currentStatus.status == AuthNotifierStatus.logInSucess) {
       context.router.replace(const NavigationBarRoute());
+      authProvider.resetStatus();
     } else if (authProvider.currentStatus.status ==
         AuthNotifierStatus.logInFailed) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:lefrigo/services/get_it.dart';
 
@@ -6,12 +8,16 @@ enum AuthNotifierStatus {
   inauthenticated,
   logInSucess,
   logInFailed,
+  signUpSuccess,
+  signUpFailed,
+  updatePasswordSuccess,
   updatePasswordFailed,
   sendPasswordResetEmailSuccess,
   sendPasswordResetEmailFailed,
   resetPasswordSuccess,
   resetPasswordFailed,
   logOut,
+  logOutFailed,
   unknown,
 }
 
@@ -42,6 +48,12 @@ class AuthProvider extends ChangeNotifier {
   AuthNotifierMessage _currentStatus;
 
   AuthNotifierMessage get currentStatus => _currentStatus;
+
+  void resetStatus() {
+    _currentStatus = const AuthNotifierMessage(
+      status: AuthNotifierStatus.unknown,
+    );
+  }
 
   Future<void> onAppStarted() async {
     final token = await _credentialService.getToken();
@@ -97,19 +109,26 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     try {
       await _authService.logout();
+
+      _authService.token = '';
+      await _credentialService.deleteToken();
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.logOut,
+      );
+
+      log('Logout success');
+
+      notifyListeners();
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
-        status: AuthNotifierStatus.authenticated,
+        status: AuthNotifierStatus.logOutFailed,
         message: e.toString(),
       );
-    }
 
-    _authService.token = '';
-    await _credentialService.deleteToken();
-    _currentStatus = const AuthNotifierMessage(
-      status: AuthNotifierStatus.inauthenticated,
-    );
-    notifyListeners();
+      log('Logout failed');
+
+      notifyListeners();
+    }
   }
 
   Future<void> register({
@@ -121,9 +140,12 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
+      _currentStatus = const AuthNotifierMessage(
+        status: AuthNotifierStatus.signUpSuccess,
+      );
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
-        status: AuthNotifierStatus.inauthenticated,
+        status: AuthNotifierStatus.signUpFailed,
         message: e.toString(),
       );
     } finally {
@@ -151,12 +173,13 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> resetPassword(String email, String code, String password) async {
+  Future<void> resetPassword(
+      {required String email,
+      required String code,
+      required String password}) async {
     try {
-      _authService.resetPassword(
-          email: email,  
-          code: code, 
-          password: password);
+      await _authService.resetPassword(
+          email: email, code: code, password: password);
       _currentStatus = const AuthNotifierMessage(
         status: AuthNotifierStatus.resetPasswordSuccess,
       );
@@ -172,10 +195,10 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> updatePassword(String oldPassword, String newPassword) async {
     try {
-      _authService.changePassword(
+      await _authService.changePassword(
           oldPassword: oldPassword, newPassword: newPassword);
       _currentStatus = const AuthNotifierMessage(
-        status: AuthNotifierStatus.logOut,
+        status: AuthNotifierStatus.updatePasswordSuccess,
       );
     } catch (e) {
       _currentStatus = AuthNotifierMessage(
