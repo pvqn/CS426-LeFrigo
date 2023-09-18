@@ -1,4 +1,5 @@
-import 'dart:io' show File;
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -6,11 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:lefrigo/providers/recipe_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:universal_html/html.dart'
-    as html; // Import the universal_html package
 
 class SummaryTab extends StatefulWidget {
-  late final File? selectedImage;
   // TextEditingController recipeName = TextEditingController();
   // TextEditingController description = TextEditingController();
 
@@ -25,6 +23,8 @@ class SummaryTab extends StatefulWidget {
   // TextEditingController protein = TextEditingController();
   // String selectedCategory = 'Dinner Recipes';
 
+  final Function(XFile) onUpdateImage;
+
   TextEditingController recipeName,
       description,
       totalTime,
@@ -36,20 +36,21 @@ class SummaryTab extends StatefulWidget {
       carb,
       protein;
   String selectedCategory;
-  SummaryTab(
-      {super.key,
-      required this.recipeName,
-      required this.description,
-      required this.totalTime,
-      required this.serving,
-      required this.prepTime,
-      required this.cookTime,
-      required this.cal,
-      required this.fat,
-      required this.carb,
-      required this.protein,
-      required this.selectedImage,
-      required this.selectedCategory});
+  SummaryTab({
+    super.key,
+    required this.recipeName,
+    required this.description,
+    required this.totalTime,
+    required this.serving,
+    required this.prepTime,
+    required this.cookTime,
+    required this.cal,
+    required this.fat,
+    required this.carb,
+    required this.protein,
+    required this.selectedCategory,
+    required this.onUpdateImage,
+  });
 
   @override
   SummaryTabState createState() => SummaryTabState();
@@ -82,7 +83,7 @@ class SummaryTabState extends State<SummaryTab> {
           children: [
             const SizedBox(height: 2),
             ImageUploadWidget(
-              selectedImage: widget.selectedImage,
+              onChange: widget.onUpdateImage,
             ),
             const SizedBox(height: 15),
             InputField(
@@ -273,41 +274,45 @@ class InputField extends StatelessWidget {
 }
 
 class ImageUploadWidget extends StatefulWidget {
-  const ImageUploadWidget({super.key, required this.selectedImage});
+  const ImageUploadWidget({super.key, required this.onChange});
 
-  final File? selectedImage;
+  final Function(XFile) onChange;
 
   @override
   ImageUploadWidgetState createState() => ImageUploadWidgetState();
 }
 
 class ImageUploadWidgetState extends State<ImageUploadWidget> {
-  File? _selectedImage;
-  @override
-  void initState() {
-    _selectedImage = widget.selectedImage;
-  }
+  XFile? _selectedImage;
 
   Future<void> _pickImage() async {
-    if (kIsWeb) {
-      final input = html.FileUploadInputElement()..accept = 'image/*';
-      input.click();
-      input.onChange.listen((event) {
-        final file = input.files!.first;
-        setState(() {
-          _selectedImage = File(html.Url.createObjectUrlFromBlob(file));
-        });
-      });
-    } else {
-      final picker = ImagePicker();
-      final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    _selectedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 400,
+      maxHeight: 600,
+    );
 
-      if (pickedImage != null) {
-        setState(() {
-          _selectedImage = File(pickedImage.path);
-        });
-      }
+    if (_selectedImage != null) {
+      widget.onChange(_selectedImage!);
     }
+
+    // if (kIsWeb) {
+    //   final input = html.FileUploadInputElement()..accept = 'image/*';
+    //   input.click();
+    //   input.onChange.listen((event) {
+    //     final file = input.files!.first;
+    //     widget.onChange(file);
+    //   });
+    // } else {
+    //   final picker = ImagePicker();
+    //   final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    //   if (pickedImage != null) {
+    //     setState(() {
+    //       _selectedImage = File(pickedImage.path);
+    //     });
+    //   }
+    // }
   }
 
   @override
@@ -338,7 +343,7 @@ class ImageUploadWidgetState extends State<ImageUploadWidget> {
                               )
                             : Image.file(
                                 width: double.infinity,
-                                _selectedImage!,
+                                File(_selectedImage!.path),
                                 fit: BoxFit.cover,
                               ),
                       )

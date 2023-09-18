@@ -30,11 +30,13 @@ class Recipe {
   @JsonKey(includeToJson: false)
   final String? imageId;
 
-  @JsonKey(includeFromJson: false)
-  String? image;
+  @JsonKey(includeFromJson: false, includeToJson: true)
+  final String? image;
 
+  @JsonKey(includeToJson: false)
   final String? user_avatar;
 
+  @JsonKey(includeToJson: false)
   final String? username;
 
   Recipe({

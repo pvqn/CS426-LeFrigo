@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/services/get_it.dart';
 
@@ -19,7 +20,8 @@ enum RecipeProviderState {
   fetchLikedRecipesSuccess,
   fetchLikedRecipesFailure,
   uploadRecipeSuccess,
-  uploadRecipeFailure
+  uploadRecipeFailure,
+  deleteRecipeSuccess,
 }
 
 class RecipeProviderStateNotifier extends ChangeNotifier {
@@ -125,23 +127,32 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadRecipe(Recipe recipe, File image) async {
+  Future<void> uploadRecipe({
+    required String name,
+    required String description,
+    required String category,
+    required Details details,
+    required List<Ingredients> ingredients,
+    required Nutrition nutrition,
+    required List<String> directions,
+    required XFile image,
+  }) async {
     try {
-      String base64Image;
-
       final bytes = await image.readAsBytes();
-      base64Image = base64Encode(bytes);
+      final base64Image = base64Encode(bytes);
 
       await _service.uploadRecipe(
-          name: recipe.name,
-          description: recipe.description,
-          category: recipe.category,
-          details: recipe.details,
-          nutrition: recipe.nutrition,
-          ingredients: recipe.ingredients,
-          steps: recipe.directions,
-          encodedImage: base64Image);
-      _logging.info('upload recipe');
+        name: name,
+        description: description,
+        category: category,
+        details: details,
+        nutrition: nutrition,
+        ingredients: ingredients,
+        steps: directions,
+        encodedImage: base64Image,
+      );
+
+      _logging.info('upload recipe $name');
       _stateNotifier.setState(RecipeProviderState.uploadRecipeSuccess);
       notifyListeners();
     } catch (error) {
@@ -224,10 +235,10 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  List<String> _ingredients = [];
+  final List<String> _ingredients = [];
   List<String> get ingredients => _ingredients;
 
-  List<String> _unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
+  final List<String> _unitList = ['ounce', 'gram', 'cup', 'tablespoon'];
   List<String> get unitList => _unitList;
 
   Future<List<String>> getListOfIngredients() async {
@@ -239,6 +250,22 @@ class RecipeProvider extends ChangeNotifier {
     } catch (error) {
       _logging.warning('Error fetching ingredients: $error');
       rethrow;
+    }
+  }
+
+  Future<void> deleteRecipe({required String recipeId}) async {
+    try {
+      await _service.deleteRecipe(recipeId: recipeId);
+      _logging.info('Deleted recipe with id: $recipeId');
+      _stateNotifier.setState(RecipeProviderState.deleteRecipeSuccess);
+      notifyListeners();
+    } catch (error) {
+      _logging.warning('Error deleting recipe: $error');
+      _stateNotifier.setState(
+        RecipeProviderState.deleteRecipeSuccess,
+        error.toString(),
+      );
+      notifyListeners();
     }
   }
 }

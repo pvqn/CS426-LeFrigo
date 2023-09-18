@@ -20,6 +20,7 @@ class RecipeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -51,32 +52,19 @@ class RecipeScreen extends StatelessWidget {
   }
 }
 
-class RecipeHeader extends StatefulWidget {
+class RecipeHeader extends StatelessWidget {
   final Recipe recipe;
 
   const RecipeHeader({super.key, required this.recipe});
 
   @override
-  State<RecipeHeader> createState() => _RecipeHeaderState();
-}
-
-class _RecipeHeaderState extends State<RecipeHeader> {
-  late bool _isLiked;
-
-  @override
-  void initState() {
-    super.initState();
-    _isLiked = Provider.of<UserProvider>(context)
-        .user
-        .likes
-        .contains(widget.recipe.id);
-
-    print(_isLiked);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+
+    final userProvider = Provider.of<UserProvider>(context);
+
+    bool isLiked = userProvider.user.likes.contains(recipe.id);
+    print(isLiked);
 
     return Stack(
       children: [
@@ -93,9 +81,9 @@ class _RecipeHeaderState extends State<RecipeHeader> {
                       .withOpacity(0.5), // Adjust opacity to control darkness
                   BlendMode.darken,
                 ),
-                image: widget.recipe.imageId != null
+                image: recipe.imageId != null
                     ? NetworkImage(getIt.get<ApiService>().getImageFromId(
-                        id: widget.recipe.imageId.toString())) as ImageProvider
+                        id: recipe.imageId.toString())) as ImageProvider
                     : const AssetImage('assets/images/food.png'),
                 fit: BoxFit.cover,
               ),
@@ -129,22 +117,12 @@ class _RecipeHeaderState extends State<RecipeHeader> {
                     ),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: () async {
-                        await recipeProvider.likeAndRefreshRecipe(
-                          widget.recipe.id!,
-                          !_isLiked,
-                        );
-
-                        final status = recipeProvider.stateNotifier.state;
-
-                        if (mounted && status == RecipeProviderState.likeRecipeSuccess) {
-                          setState(() {
-                            _isLiked = !_isLiked;
-                          });
-                        }
-                      },
+                      onTap: () => recipeProvider.likeAndRefreshRecipe(
+                        recipe.id!,
+                        !isLiked,
+                      ).then((_) => userProvider.refreshUser()),
                       child: Icon(
-                        _isLiked ? Icons.favorite : Icons.favorite_border,
+                        isLiked ? Icons.favorite : Icons.favorite_border,
                         size: 24,
                         color: Colors.white,
                       ),
@@ -156,13 +134,12 @@ class _RecipeHeaderState extends State<RecipeHeader> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildTimeInfo(
-                        'Prep Time:', '${widget.recipe.details.prepTime} min'),
+                        'Prep Time:', '${recipe.details.prepTime} min'),
                     _buildTimeInfo(
-                        'Cook Time:', '${widget.recipe.details.cookTime} min'),
-                    _buildTimeInfo('Total Time:',
-                        '${widget.recipe.details.totalTime} min'),
+                        'Cook Time:', '${recipe.details.cookTime} min'),
                     _buildTimeInfo(
-                        'Servings:', '${widget.recipe.details.servings}'),
+                        'Total Time:', '${recipe.details.totalTime} min'),
+                    _buildTimeInfo('Servings:', '${recipe.details.servings}'),
                   ],
                 )
               ],

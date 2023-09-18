@@ -34,8 +34,7 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'nutrition': instance.nutrition,
       'ingredients': instance.ingredients,
       'directions': instance.directions,
-      'user_avatar': instance.user_avatar,
-      'username': instance.username,
+      'image': instance.image,
     };
 
 Details _$DetailsFromJson(Map<String, dynamic> json) => Details(

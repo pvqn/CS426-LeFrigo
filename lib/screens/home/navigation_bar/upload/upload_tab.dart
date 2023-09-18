@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/providers/providers.dart';
 import 'package:lefrigo/screens/home/navigation_bar/upload/directions_tab/model.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'summary_tab/summary_tab.dart';
 import 'ingredient_tab/ingredient_tab.dart';
 import 'directions_tab/directions_tab.dart';
-import 'dart:io' show File;
 import 'ingredient_tab/model.dart';
 
 @RoutePage()
@@ -20,7 +20,7 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  File? selectedImage;
+  XFile? selectedImage;
   List<ingredient> itemListIng = [];
   List<Direction> itemListDir = [];
 
@@ -80,8 +80,30 @@ class _UploadScreenState extends State<UploadScreen> {
 
     final directions = itemListDir.map((e) => e.description).toList();
 
-    Provider.of<RecipeProvider>(context).uploadRecipe(
-      Recipe(
+    print('${selectedImage?.path}');
+
+    Provider.of<RecipeProvider>(context, listen: false)
+        .uploadRecipe(
+          // Recipe(
+          //     name: recipeName.text,
+          //     description: description.text,
+          //     category: selectedCategory,
+          //     details: Details(
+          //       totalTime: int.parse(totalTime.text),
+          //       servings: int.parse(serving.text),
+          //       prepTime: int.parse(prepTime.text),
+          //       cookTime: int.parse(cookTime.text),
+          //     ),
+          //     nutrition: Nutrition(
+          //       calories: cal.text,
+          //       fat: fat.text,
+          //       carbs: carb.text,
+          //       protein: protein.text,
+          //     ),
+          //     ingredients: ingredients,
+          //     directions: directions),
+          // selectedImage!,
+
           name: recipeName.text,
           description: description.text,
           category: selectedCategory,
@@ -98,15 +120,22 @@ class _UploadScreenState extends State<UploadScreen> {
             protein: protein.text,
           ),
           ingredients: ingredients,
-          directions: directions),
-      selectedImage!,
-    );
+          directions: directions,
+          image: selectedImage!,
+        )
+        .then((value) =>
+            Provider.of<UserProvider>(context, listen: false).refreshUser());
 
     print('ok geeeeeeeeee');
   }
 
-
-
+  void updateImage(XFile image) {
+    setState(() {
+      selectedImage = image;
+      print('updateImage');
+      print(selectedImage?.path);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +163,9 @@ class _UploadScreenState extends State<UploadScreen> {
                       cal: cal,
                       selectedCategory: selectedCategory,
                       serving: serving,
-                      selectedImage: selectedImage,
+                      
                       prepTime: prepTime,
+                      onUpdateImage: updateImage,
                     ),
                     IngredientTab(
                       itemList: itemListIng,

@@ -113,9 +113,11 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     UploadRoute.name: (routeData) {
+      final args = routeData.argsAs<UploadRouteArgs>(
+          orElse: () => const UploadRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const UploadScreen(),
+        child: UploadScreen(key: args.key),
       );
     },
     VerifyCodeRoute.name: (routeData) {
@@ -406,16 +408,30 @@ class UpdateProfileRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [UploadScreen]
-class UploadRoute extends PageRouteInfo<void> {
-  const UploadRoute({List<PageRouteInfo>? children})
-      : super(
+class UploadRoute extends PageRouteInfo<UploadRouteArgs> {
+  UploadRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           UploadRoute.name,
+          args: UploadRouteArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'UploadRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<UploadRouteArgs> page = PageInfo<UploadRouteArgs>(name);
+}
+
+class UploadRouteArgs {
+  const UploadRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'UploadRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

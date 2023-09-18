@@ -97,108 +97,104 @@ class PostGridItem extends StatelessWidget {
       child: FutureBuilder(
           future: Provider.of<RecipeProvider>(context).getRecipeById(item),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.hasData) {
+              return Container(
+                margin: const EdgeInsets.all(10),
+                width: 158,
+                height: 280, // Set a fixed height
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: snapshot.data?.imageId == null
+                        ? const AssetImage('assets/images/food.jpg')
+                        : NetworkImage(getIt.get<ApiService>().getImageFromId(
+                                id: snapshot.data!.imageId.toString()))
+                            as ImageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 27,
+                            height: 27,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                _showRemoveDialog(context);
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                size: 20,
+                                color: Color(0xFFFF0B0B),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const Expanded(child: Text('')),
+                      SizedBox(
+                        width: double.infinity, // Expand to full width
+                        child: Text(snapshot.data!.name,
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold))),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        width: double.infinity, // Expand to full width
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(snapshot.data!.numLiked.toString(),
+                                style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold))),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error'),
-              );
-            }
-
-            return Container(
-              margin: const EdgeInsets.all(10),
-              width: 158,
-              height: 280, // Set a fixed height
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  image: snapshot.data?.imageId == null
-                      ? const AssetImage('assets/images/food.jpg')
-                      : MemoryImage(Uint8List.fromList(
-                          snapshot.data!.image!.codeUnits)) as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: 27,
-                          height: 27,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              _showRemoveDialog(context);
-                            },
-                            child: const Icon(
-                              Icons.delete,
-                              size: 20,
-                              color: Color(0xFFFF0B0B),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const Expanded(child: Text('')),
-                    SizedBox(
-                      width: double.infinity, // Expand to full width
-                      child: Text(snapshot.data!.name,
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                      width: double.infinity, // Expand to full width
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          const Icon(
-                            Icons.favorite,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(snapshot.data!.numLiked.toString(),
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold))),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                  ],
-                ),
-              ),
-            );
           }),
     );
   }

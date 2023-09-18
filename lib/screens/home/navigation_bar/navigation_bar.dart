@@ -96,7 +96,7 @@ class MyNavigationBarAppState extends State<MyNavigationBarApp> {
               ),
           IconButton(
               onPressed: () {
-                context.router.push(const UploadRoute());
+                context.router.push(UploadRoute());
               },
               icon: _currentIndex == 2
                   ? const Icon(Icons.add_circle,

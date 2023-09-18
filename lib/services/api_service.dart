@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -51,8 +50,8 @@ class ApiService {
     try {
       final response = await http.post(
         url,
-        headers: {
-          'Authorization': token,
+        headers: { 
+          if (token != '') 'Authorization': token,
           'Content-Type': 'application/json',
         },
         body: jsonEncode(data ?? "{}"),

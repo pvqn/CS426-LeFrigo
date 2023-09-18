@@ -230,9 +230,11 @@ class PostGridPageState extends State<PostGridPage> {
   late List<String> items;
 
   @override
-  void initState() {
-    items = widget.user.posts;
-    super.initState();
+  void didChangeDependencies() {
+    final userProvider = Provider.of<UserProvider>(context);
+    items = userProvider.user.posts;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -242,9 +244,11 @@ class PostGridPageState extends State<PostGridPage> {
         items: items,
         onRemove: (int index) {
           setState(() {
-            // Provider.of(context, listen: false)
-            //     .removeRecipe(widget.user.posts[index]);
-            // Provider.of<UserProvider>(context, listen: false).refreshUser();
+            Provider.of<RecipeProvider>(context, listen: false)
+                .deleteRecipe(recipeId: widget.user.posts[index])
+                .then((value) {
+              Provider.of<UserProvider>(context, listen: false).refreshUser();
+            });
 
             items.removeAt(index);
           });
