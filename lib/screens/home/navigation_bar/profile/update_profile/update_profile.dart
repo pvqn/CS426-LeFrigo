@@ -56,6 +56,8 @@ class UpdateProfileState extends State<UpdateProfilePage> {
   void didChangeDependencies() {
     final authProvider = Provider.of<AuthProvider>(context);
 
+    print('${authProvider.currentStatus.status == AuthNotifierStatus.logOut}');
+
     if (authProvider.currentStatus.status == AuthNotifierStatus.logOut) {
       Future.delayed(Duration.zero, () {
         context.router
@@ -403,7 +405,7 @@ class UpdateProfileState extends State<UpdateProfilePage> {
       height: 43,
       child: ElevatedButton(
         onPressed: () {
-          // Provider.of<AuthProvider>(context, listen: false).logout();
+          Provider.of<AuthProvider>(context, listen: false).logout();
 
           // context.router
           //     .pushAndPopUntil(WelcomeRoute(), predicate: (_) => false);
