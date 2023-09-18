@@ -13,9 +13,9 @@ class ApiResponse {
 
 class ApiService {
   final String _baseUrl = '52.192.217.234:8888'; //'43.207.138.171:8888';
+  static const int maxRetry = 5;
 
-  String token =
-      '46a1e3822d785a1335caaff4e74ae24e697d07866f0ce0b7f6c9ab884ac296b2';
+  String token = '';
 
   Future<ApiResponse> get({required String path}) async {
     final url = Uri.http(_baseUrl, path);
@@ -36,7 +36,7 @@ class ApiService {
       }
     } catch (_) {
       count = count + 1;
-      if (count == 3) {
+      if (count == maxRetry) {
         rethrow;
       }
     }
@@ -47,10 +47,11 @@ class ApiService {
     final url = Uri.http(_baseUrl, path);
 
     var count = 0;
+
     try {
       final response = await http.post(
         url,
-        headers: { 
+        headers: {
           if (token != '') 'Authorization': token,
           'Content-Type': 'application/json',
         },
@@ -64,7 +65,7 @@ class ApiService {
       }
     } catch (_) {
       count = count + 1;
-      if (count == 3) {
+      if (count == maxRetry) {
         rethrow;
       }
     }
@@ -94,12 +95,12 @@ class ApiService {
       }
     } catch (_) {
       count = count + 1;
-      if (count == 3) {
+      if (count == maxRetry) {
         rethrow;
       }
     }
     return ApiResponse(ApiResponseType.failed);
   }
-  
+
   String getImagePathFromId({required String id}) => '/asset/$id';
 }

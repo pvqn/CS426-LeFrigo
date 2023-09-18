@@ -45,6 +45,37 @@ class UpdateProfileState extends State<UpdateProfilePage> {
   //   });
   // }
 
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (authProvider.currentStatus.status == AuthNotifierStatus.logOut) {
+      Future.delayed(Duration.zero, () {
+        context.router
+            .pushAndPopUntil(const WelcomeRoute(), predicate: (_) => false);
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.logOutFailed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                authProvider.currentStatus.message ?? 'Something went wrong'),
+          ),
+        );
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
   void _onCountrySelected(Country country) {
     setState(() {
       _selectedCountry = country;
@@ -68,33 +99,36 @@ class UpdateProfileState extends State<UpdateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 20),
-            _buildAvatarEditButton(),
-            const SizedBox(height: 40),
-            _buildTextField(
-              'Full Name',
-              _fullNameController,
-            ),
-            const SizedBox(height: 16),
-            _buildTextField(
-              'Email',
-              _emailController,
-            ),
-            const SizedBox(height: 16),
-            _buildDateOfBirthPicker(),
-            const SizedBox(height: 16),
-            _buildCountryPicker(),
-            const SizedBox(height: 40),
-            _buildConfirmButton(),
-            const SizedBox(height: 10),
-            _buildLogOutButton(),
-            const SizedBox(height: 10),
-            _buildChangePasswordLink(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              _buildHeader(context),
+              const SizedBox(height: 20),
+              _buildAvatarEditButton(),
+              const SizedBox(height: 40),
+              _buildTextField(
+                'Full Name',
+                _fullNameController,
+              ),
+              const SizedBox(height: 16),
+              _buildTextField(
+                'Email',
+                _emailController,
+              ),
+              const SizedBox(height: 16),
+              _buildDateOfBirthPicker(),
+              const SizedBox(height: 16),
+              _buildCountryPicker(),
+              const SizedBox(height: 40),
+              _buildConfirmButton(),
+              const SizedBox(height: 10),
+              _buildLogOutButton(),
+              const SizedBox(height: 10),
+              _buildChangePasswordLink(),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
@@ -347,10 +381,7 @@ class UpdateProfileState extends State<UpdateProfilePage> {
       height: 43,
       child: ElevatedButton(
         onPressed: () {
-          // Provider.of<AuthProvider>(context, listen: false).logout();
-
-          // context.router
-          //     .pushAndPopUntil(WelcomeRoute(), predicate: (_) => false);
+          Provider.of<AuthProvider>(context, listen: false).logout();
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),

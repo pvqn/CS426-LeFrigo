@@ -54,7 +54,7 @@ class UserService {
     assert(_apiService.token != '');
 
     final response = await _apiService.post(
-      path: '/user',
+      path: '/user/profile',
       data: PartialUser(
         username: username,
         email: email,
@@ -65,10 +65,10 @@ class UserService {
     );
 
     if (response.type == ApiResponseType.success) {
-      final decode = jsonDecode(response.message!);
+      final decode = jsonDecode(response.message!) as Map<String, dynamic>;
 
       if (decode['success'] == true) {
-        final user = User.fromJson(decode['user']);
+        final user = User.fromJson(decode['data']);
         return user;
       } else {
         throw UserServiceException(message: decode['message']);

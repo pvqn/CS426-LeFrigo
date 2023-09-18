@@ -44,6 +44,38 @@ class ChangePasswordState extends State<ChangePasswordPage> {
     });
   }
 
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _passwordController1.dispose();
+    _passwordController2.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updatePasswordSuccess) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        context.router.pushAndPopUntil(
+          const WelcomeRoute(),
+          predicate: (_) => false,
+        );
+      });
+    } else if (authProvider.currentStatus.status ==
+        AuthNotifierStatus.updatePasswordFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password update failed'),
+        ),
+      );
+    }
+
+    super.didChangeDependencies();
+  }
+
   void updatePassword() {
     if (_passwordController1.text != _passwordController2.text) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,30 +85,7 @@ class ChangePasswordState extends State<ChangePasswordPage> {
       );
     } else {
       Provider.of<AuthProvider>(context, listen: false)
-          .updatePassword(_passwordController.text, _passwordController1.text)
-          .then((_) {
-        if (Provider.of<AuthProvider>(context, listen: false)
-                .currentStatus
-                .status ==
-            AuthNotifierStatus.logOut) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content:
-                  Text('Password updated successfully. Please login again'),
-            ),
-          );
-          context.router.pushAndPopUntil(
-            const WelcomeRoute(),
-            predicate: (_) => false,
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Password update failed'),
-            ),
-          );
-        }
-      });
+          .updatePassword(_passwordController.text, _passwordController1.text);
     }
   }
 
@@ -214,7 +223,7 @@ class ChangePasswordState extends State<ChangePasswordPage> {
       width: double.infinity,
       height: 43,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: updatePassword,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

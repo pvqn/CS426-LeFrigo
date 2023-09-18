@@ -16,9 +16,9 @@ class VerifyCodeScreen extends StatefulWidget {
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   Widget build(BuildContext context) {
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController passwordController1 = TextEditingController();
-    final List<TextEditingController> verificationCodeControllers =
+    late TextEditingController passwordController = TextEditingController();
+    late TextEditingController passwordController1 = TextEditingController();
+    late List<TextEditingController> verificationCodeControllers =
         List.generate(
       8,
       (_) => TextEditingController(),
@@ -32,6 +32,18 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
 
     void togglePasswordVisibility1() {
       isObscured1 = !isObscured1;
+    }
+
+    void resetPassword() {
+      bool hasEmpty = false;
+      for (int i = 0; i < 8; ++i) {
+        hasEmpty = hasEmpty | verificationCodeControllers[i].text.isEmpty;
+      }
+
+      String code = '';
+      for (int i = 0; i < 8; ++i) {
+        code = code + verificationCodeControllers[i].text;
+      }
     }
 
     return Scaffold(

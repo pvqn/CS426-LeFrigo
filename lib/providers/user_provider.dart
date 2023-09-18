@@ -26,10 +26,6 @@ class UserProvider extends ChangeNotifier {
 
   UserProvider() : _userService = getIt<UserService>();
 
-  bool _isLoading = false;
-
-  bool get isLoading => _isLoading;
-
   User _user = User.empty;
 
   User get user => _user;
@@ -57,9 +53,6 @@ class UserProvider extends ChangeNotifier {
     DateTime? dob,
     XFile? avatar,
   }) async {
-    _isLoading = true;
-    notifyListeners();
-
     String? base64Image;
 
     if (avatar != null) {

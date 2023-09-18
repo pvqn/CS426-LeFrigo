@@ -99,8 +99,8 @@ class AuthService {
     );
 
     if (response.type == ApiResponseType.success) {
-      final Map<String, dynamic> changePasswordResBody =
-          jsonDecode(response.message ?? '{}');
+      final changePasswordResBody =
+          jsonDecode(response.message!) as Map<String, dynamic>;
 
       if (changePasswordResBody['success'] == false) {
         throw AuthServiceException(changePasswordResBody['message']);

@@ -1,16 +1,24 @@
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lefrigo/providers/providers.dart';
+import 'package:lefrigo/routes/routes.dart';
 import 'package:lefrigo/services/get_it.dart';
 import 'package:provider/provider.dart';
 
-class PostGridItem extends StatelessWidget {
+class PostGridItem extends StatefulWidget {
   final String item;
   final VoidCallback onRemove;
 
   const PostGridItem({super.key, required this.item, required this.onRemove});
+
+  @override
+  State<PostGridItem> createState() => _PostGridItemState();
+}
+
+class _PostGridItemState extends State<PostGridItem> {
   void _showRemoveDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -61,7 +69,7 @@ class PostGridItem extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop(); // Close the dialog
-                        onRemove(); // Notify parent that removal is confirmed
+                        widget.onRemove(); // Notify parent that removal is confirmed
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, // Set the button color
@@ -88,16 +96,46 @@ class PostGridItem extends StatelessWidget {
     );
   }
 
+  ImageProvider<Object> _image = const AssetImage('assets/images/food.png');
+  bool _isImageLoaded = false;
+
+  Future<void> _loadImages(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _image = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //context.router.push(RecipeRoute());
+        context.router.push(RecipeRoute(recipeid: widget.item));
       },
       child: FutureBuilder(
-          future: Provider.of<RecipeProvider>(context).getRecipeById(item),
+          future: Provider.of<RecipeProvider>(context).getRecipeById(widget.item),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (!_isImageLoaded) {
+                _isImageLoaded = true;
+                if (snapshot.data!.imageId != null) {
+                  _loadImages(snapshot.data!.imageId!);
+                }
+              }
+
               return Container(
                 margin: const EdgeInsets.all(10),
                 width: 158,
@@ -105,11 +143,7 @@ class PostGridItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
-                    image: snapshot.data?.imageId == null
-                        ? const AssetImage('assets/images/food.jpg')
-                        : NetworkImage(getIt.get<ApiService>().getImageFromId(
-                                id: snapshot.data!.imageId.toString()))
-                            as ImageProvider,
+                    image: _image,
                     fit: BoxFit.cover,
                   ),
                 ),

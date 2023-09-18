@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -55,12 +57,56 @@ class RecipeItemWidget extends StatefulWidget {
 
 class _RecipeItemWidgetState extends State<RecipeItemWidget> {
   Future<Recipe>? _recipe;
+  ImageProvider<Object> _image = const AssetImage('assets/images/food.png');
+  ImageProvider<Object> _avatar =
+      const AssetImage('assets/images/welcome_bg.png');
+  bool _tryToFetchImage = false;
 
   @override
   void initState() {
     super.initState();
     _recipe = Provider.of<RecipeProvider>(context, listen: false)
         .getRecipeById(widget.item);
+  }
+
+  Future<void> _loadImage(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _image = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _loadAvatar(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _avatar = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -73,6 +119,16 @@ class _RecipeItemWidgetState extends State<RecipeItemWidget> {
         future: _recipe,
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            if (!_tryToFetchImage) {
+              _tryToFetchImage = true;
+              if (snapshot.data!.imageId != null) {
+                _loadImage(snapshot.data!.imageId.toString());
+              }
+              if (snapshot.data!.user_avatar != null) {
+                _loadAvatar(snapshot.data!.user_avatar.toString());
+              }
+            }
+
             return Stack(
               children: [
                 Container(
@@ -84,11 +140,7 @@ class _RecipeItemWidgetState extends State<RecipeItemWidget> {
                             0.5), // Adjust opacity to control darkness
                         BlendMode.darken,
                       ),
-                      image: snapshot.data!.imageId != null
-                          ? NetworkImage(getIt.get<ApiService>().getImageFromId(
-                                  id: snapshot.data!.imageId.toString()))
-                              as ImageProvider
-                          : const AssetImage('assets/images/food.png'),
+                      image: _image,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -105,14 +157,7 @@ class _RecipeItemWidgetState extends State<RecipeItemWidget> {
                         const SizedBox(width: 5),
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: snapshot.data!.user_avatar != null
-                              ? NetworkImage(getIt
-                                  .get<ApiService>()
-                                  .getImageFromId(
-                                      id: snapshot.data!.user_avatar
-                                          .toString())) as ImageProvider
-                              : const AssetImage(
-                                  'assets/images/welcome_bg.png'),
+                          backgroundImage: _avatar,
                         ),
                         Expanded(
                           child: Row(

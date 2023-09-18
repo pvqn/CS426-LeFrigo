@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:lefrigo/providers/providers.dart';
+import 'package:lefrigo/routes/routes.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -42,6 +43,25 @@ class SetAccountState extends State<SetAccountPage> {
   //     _isObscured = !_isObscured;
   //   });
   // }
+
+  @override
+  void didChangeDependencies() {
+    final userProvider = Provider.of<UserProvider>(context);
+
+    if (userProvider.status.state == UserProviderState.updateSuccessed) {
+      context.router
+          .pushAndPopUntil(const NavigationBarRoute(), predicate: (_) => false);
+    } else if (userProvider.status.state == UserProviderState.updateFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              userProvider.status.message ?? 'Something went wrong. Try again'),
+        ),
+      );
+    }
+
+    super.didChangeDependencies();
+  }
 
   void _onCountrySelected(Country country) {
     setState(() {
@@ -270,16 +290,18 @@ class SetAccountState extends State<SetAccountPage> {
           if (_fullNameController.text.isEmpty ||
               _selectedCountry == null ||
               selectedDate == DateTime.now()) {
-            // SHOW SNACKBAR
-
-            return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please fill in all fields'),
+              ),
+            );
+          } else {
+            await userProvider.updateUser(
+              username: _fullNameController.text,
+              country: _selectedCountry?.name,
+              dob: selectedDate,
+            );
           }
-
-          await userProvider.updateUser(
-            username: _fullNameController.text,
-            country: _selectedCountry?.displayName,
-            dob: selectedDate,
-          );
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(customColor),

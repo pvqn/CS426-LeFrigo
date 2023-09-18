@@ -8,49 +8,23 @@ import 'package:lefrigo/models/partial_user.dart';
 import 'package:lefrigo/services/get_it.dart';
 
 void main() {
-  setUpAll(() async => await configureDependencies());
+  setUpAll(() async {
+    await configureDependencies();
 
-  test('user with token success', () async {
-    final userService = getIt<UserService>();
-
-    final user = await userService.getCurrentUser();
-
-    expect(user, isNotEmpty);
+    final apiService = getIt.get<ApiService>();
+    apiService.token =
+        '574b84387b97612a50de9eaaa24e462c09fa445afbdc181f72536943596c8552';
   });
 
-  test('parsing the user profile upload', () {
-    String username = 'test';
-    String country = 'test';
-    DateTime dob = DateTime.now();
+  test('update user', () async {
+    final userService = getIt.get<UserService>();
 
-    File image = File('assets/images/google.png');
+    final user = await userService.updateUser(
+      username: 'user1',
+      dob: DateTime.now(),
+      country: 'VN',
+    );
 
-    final user = PartialUser(
-      username: username,
-      country: country,
-      dob: dob,
-      avatar: base64Encode(image.readAsBytesSync()),
-    ).toJson();
-
-    print('user: $user');
-
-    expect(user, isNotEmpty);
-  });
-
-  test('convert request to image', () async {
-    // Get ApiService
-    final apiService = getIt<ApiService>();
-
-    final pathFromId = '/asset/64f7082a417d19c0b3b39aa0';
-
-    // final response = await apiService.get(path: pathFromId);
-
-    // print(response.message!.length);
-
-    // final path = Uri.http('52.192.217.234:8888', pathFromId);
-
-    // final response2 = await http.get(path);
-
-    // print(response2.bodyBytes.runtimeType);
+    expect(user.username, 'user1');
   });
 }

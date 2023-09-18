@@ -5,7 +5,6 @@ import 'package:lefrigo/routes/routes.dart';
 import 'package:lefrigo/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-
 @RoutePage()
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -46,30 +45,59 @@ class SignUpState extends State<SignUpPage> {
   }
 
   void onPress() {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _passwordController1.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          duration: Duration(seconds: 2),
-        ),
+    if (_emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _passwordController1.text.isEmpty) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please fill in all fields'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      });
+    } else if (_passwordController.text != _passwordController1.text) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password does not match'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      });
+    } else {
+      Provider.of<AuthProvider>(context, listen: false).register(
+        email: _emailController.text,
+        password: _passwordController.text,
       );
-      return;
     }
+  }
 
-    if (_passwordController.text != _passwordController1.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password does not match'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
+  @override
+  void didChangeDependencies() {
+    if (Provider.of<AuthProvider>(context).currentStatus.status ==
+        AuthNotifierStatus.signUpSuccess) {
+      context.replaceRoute(const LoginRoute());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sign up successfully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      });
+    } else if (Provider.of<AuthProvider>(context).currentStatus.status ==
+        AuthNotifierStatus.signUpFailed) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sign up failed'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      });
     }
-
-    Provider.of<AuthProvider>(context, listen: false).login(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
+    super.didChangeDependencies();
   }
 
   @override
@@ -97,7 +125,7 @@ class SignUpState extends State<SignUpPage> {
                 togglePasswordVisibility: _togglePasswordVisibility1,
               ),
               const SizedBox(height: 50),
-              const SignUpButton(),
+              SignUpButton(onPress: onPress),
               const SizedBox(height: 20),
               const SignInText(),
             ],
@@ -266,7 +294,9 @@ class SignUpPasswordInput extends StatelessWidget {
 }
 
 class SignUpButton extends StatelessWidget {
-  const SignUpButton({super.key});
+  final VoidCallback onPress;
+
+  const SignUpButton({super.key, required this.onPress});
 
   @override
   Widget build(BuildContext context) {
@@ -274,9 +304,7 @@ class SignUpButton extends StatelessWidget {
       width: 310,
       height: 43,
       child: ElevatedButton(
-        onPressed: () {
-          context.replaceRoute(const SetAccountRoute());
-        },
+        onPressed: onPress,
         style: ButtonStyle(
           backgroundColor:
               MaterialStateProperty.all<Color>(SignUpPage.customColor),

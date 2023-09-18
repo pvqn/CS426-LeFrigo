@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,10 +62,46 @@ class ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends StatefulWidget {
   final User user;
 
   const ProfileHeader({super.key, required this.user});
+
+  @override
+  State<ProfileHeader> createState() => _ProfileHeaderState();
+}
+
+class _ProfileHeaderState extends State<ProfileHeader> {
+  ImageProvider<Object> _avatar =
+      const AssetImage('assets/images/welcome_bg.png');
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.user.avatar != null) {
+      _loadImage(widget.user.avatar!);
+    }
+  }
+
+  Future<void> _loadImage(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _avatar = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +112,7 @@ class ProfileHeader extends StatelessWidget {
         const SizedBox(width: 20),
         CircleAvatar(
           radius: 45,
-          backgroundImage: user.avatar != null
-              ? NetworkImage(
-                  getIt<ApiService>().getImageFromId(id: user.avatar!),
-                ) as ImageProvider
-              : const AssetImage('assets/images/avaStar.png'),
+          backgroundImage: _avatar,
         ),
         const SizedBox(width: 15),
         Expanded(
@@ -86,7 +120,7 @@ class ProfileHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user.username!,
+                widget.user.username!,
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -97,7 +131,7 @@ class ProfileHeader extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                user.country ?? 'Vietnam',
+                widget.user.country ?? 'Vietnam',
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 14,

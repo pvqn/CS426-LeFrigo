@@ -1,13 +1,50 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:lefrigo/models/recipe.dart';
 import 'package:lefrigo/services/get_it.dart';
 
-class SummaryTab extends StatelessWidget {
+class SummaryTab extends StatefulWidget {
   final Recipe recipe;
 
   const SummaryTab({super.key, required this.recipe});
+
+  @override
+  State<SummaryTab> createState() => _SummaryTabState();
+}
+
+class _SummaryTabState extends State<SummaryTab> {
+  ImageProvider<Object> _image = const AssetImage('assets/images/welcome_bg.png');
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.recipe.user_avatar != null) {
+      _loadImage(widget.recipe.user_avatar!);
+    }
+  }
+
+  Future<void> _loadImage(String imageId) async {
+    final apiService = getIt.get<ApiService>();
+
+    try {
+      final image = await apiService.fetchImageFromId(id: imageId);
+
+      if (image.type == ApiResponseType.success) {
+        setState(() {
+          String rawData = image.message!;
+          // To UInt8List
+          List<int> bytes = rawData.codeUnits;
+          // To Image
+          _image = Image.memory(Uint8List.fromList(bytes)).image;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +58,7 @@ class SummaryTab extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Text(recipe.name,
+            Text(widget.recipe.name,
                 style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold))),
@@ -32,15 +69,12 @@ class SummaryTab extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: recipe.user_avatar != null
-                      ? NetworkImage(getIt<ApiService>().getImageFromId(
-                          id: recipe.user_avatar!)) as ImageProvider
-                      : const AssetImage('assets/images/welcome_bg.png'),
+                  backgroundImage: _image,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                     child: Text(
-                  recipe.username ?? 'LeFrigo User',
+                  widget.recipe.username ?? 'LeFrigo User',
                   style: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 14)),
@@ -50,7 +84,7 @@ class SummaryTab extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  recipe.numLiked.toString(),
+                  widget.recipe.numLiked.toString(),
                   style: GoogleFonts.poppins(
                       textStyle: const TextStyle(
                           fontSize: 14,
@@ -62,7 +96,7 @@ class SummaryTab extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Text(recipe.description,
+            Text(widget.recipe.description,
                 style: GoogleFonts.poppins(
                     textStyle:
                         const TextStyle(fontSize: 13, color: Colors.black))),
@@ -98,7 +132,7 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      recipe.nutrition.calories,
+                      widget.recipe.nutrition.calories,
                       style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                               color: Colors.black, fontSize: 14)),
@@ -119,7 +153,7 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      recipe.nutrition.fat,
+                      widget.recipe.nutrition.fat,
                       style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                               color: Colors.black, fontSize: 14)),
@@ -140,7 +174,7 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      recipe.nutrition.carbs,
+                      widget.recipe.nutrition.carbs,
                       style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                               color: Colors.black, fontSize: 14)),
@@ -161,7 +195,7 @@ class SummaryTab extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      recipe.nutrition.protein,
+                      widget.recipe.nutrition.protein,
                       style: GoogleFonts.poppins(
                           textStyle: const TextStyle(
                               color: Colors.black, fontSize: 14)),
